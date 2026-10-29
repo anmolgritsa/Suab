@@ -1,0 +1,119 @@
+/* ==========================================================================
+   index.css — design tokens, reset and the app shell
+   --------------------------------------------------------------------------
+   The colour palette comes from the reference mockups:
+   - page background  #f5fafd  (very light blue)
+   - primary blue     #2e83f9  (buttons, icons, active states)
+   - soft borders     #d8e7fa  (input outlines)
+   - secondary text   #7f8eb5  (placeholders, subtitles)
+   ========================================================================== */
+
+/* ---- design tokens (CSS custom properties) ---- */
+:root {
+  --blue: #2e83f9;
+  --blue-dark: #1b6ef5;
+  --blue-soft: #e8f2fe;
+  --bg: #f5fafd;
+  --bg-outside: #e9f1f8;
+  --card: #fdfeff;
+  --border: #d8e7fa;
+  --text: #17233b;
+  --text-soft: #7f8eb5;
+  --danger: #e5484d;
+  --success: #2fb344;
+  /* Attendance screen state colours (from mockup 4):
+     coral = "not at location", purple = "location switched off". */
+  --coral: #f96d7f;
+  --coral-dark: #e85a6d;
+  --coral-soft: #fde5ea;
+  --purple: #8f7bfa;
+  --purple-dark: #7a66f0;
+  --purple-soft: #e6e0fd;
+  --radius-card: 24px;
+  --radius-input: 14px;
+  --radius-key: 20px;
+  --shadow-card: 0 10px 30px rgba(23, 35, 59, 0.07);
+  /* System fonts only — no extra downloads, feels native on iPhone. */
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+/* ---- minimal reset ---- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg-outside);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+input {
+  font-family: inherit;
+}
+
+/* ---- app shell ----------------------------------------------------------
+   On phones the app fills the whole screen. On larger screens it is
+   constrained to a phone-like column (430px) and centred, so the demo
+   still looks right on a desktop browser. */
+#root {
+  display: flex;
+  justify-content: center;
+}
+
+.app-frame {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100dvh; /* full height, respects iPhone dynamic island area */
+  background: var(--bg);
+  position: relative;
+  overflow: hidden; /* decorative shapes stay inside the frame */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- decorative background shapes (pure CSS, no images) ---- */
+.decor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Soft blue blob behind the logo. */
+.decor--blue {
+  top: -90px;
+  left: -90px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+}
+
+/* Diagonal grey-blue band used on the login mockup corners. */
+.decor--corner {
+  top: -110px;
+  left: -140px;
+  width: 300px;
+  height: 220px;
+  background: linear-gradient(135deg, #dbe6f2 0%, #eef4fa 70%);
+  transform: rotate(35deg);
+  border-radius: 40px;
+  opacity: 0.7;
+}
