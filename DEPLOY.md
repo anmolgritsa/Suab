@@ -16,9 +16,10 @@ are also available from the **Actions** tab ("Deploy to GitHub Pages" →
 ### 1. Create the deploy repository
 
 Create a **public** repo named `Suab-deploy` under `anmolgritsa`
-(github.com/new → Repository name `Suab-deploy` → Public → ✅ Add a README).
-The initial commit matters: the workflow checks the repo out before
-publishing, and an empty repo cannot be checked out.
+(github.com/new → Repository name `Suab-deploy` → Public). It can be
+completely empty — the workflow creates the `gh-pages` branch itself on the
+first deploy, so no initial commit is needed. (Adding a README is harmless
+if you prefer a non-empty repo.)
 
 ### 2. Enable GitHub Pages on the deploy repo
 
@@ -65,10 +66,13 @@ first Pages build).
 - `vite.config.js` sets `base: '/Suab-deploy/'`, so all built asset URLs
   match the Pages sub-path. Local dev, `vite preview` and the browser test
   scripts are unaffected — they read the resolved URL from the Vite server.
-- The workflow checks out `Suab-deploy` with `DEPLOY_TOKEN`, wipes its
-  `gh-pages` branch (except `.git`), copies in `dist/`, adds `.nojekyll`
-  (serve files as-is, skip Jekyll) and pushes. Unchanged builds skip the
-  commit entirely.
+- The workflow builds with Vite, then
+  [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages)
+  publishes `dist/` to the `gh-pages` branch of `Suab-deploy` using the
+  `DEPLOY_TOKEN` PAT. It creates the branch from scratch on the first deploy
+  (an empty repo cannot be checked out, which is why the publish is not done
+  with a plain checkout + push), adds `.nojekyll` (serve files as-is, skip
+  Jekyll) and skips the push entirely when the build output is unchanged.
 - Only read permission is granted to the source repo; the cross-repo push
   authenticates purely with the PAT.
 
@@ -77,23 +81,6 @@ first Pages build).
 | Symptom | Cause / fix |
 | --- | --- |
 | Workflow fails with `401` / `Authentication failed` | `DEPLOY_TOKEN` missing, expired, or lacks **Contents: Read and write** on `Suab-deploy` |
-| Workflow fails checking out `Suab-deploy` | The deploy repo has no commits — initialise it with a README (step 1) |
+| `fatal: couldn't find remote ref refs/heads/main` at "Check out the deploy repository" | Only affects the old checkout-based workflow — an empty deploy repo has no branch to check out. The current workflow publishes with `peaceiris/actions-gh-pages`, which creates `gh-pages` on an empty repo; make sure the latest `deploy.yml` is pushed, then re-run |
 | 404 on the live site | Pages still points at the wrong branch (step 2), or the deploy ran before Pages was enabled — re-run the workflow |
 | Assets 404 but the page loads | `base` in `vite.config.js` doesn't match the Pages path — keep it `/Suab-deploy/` |
-
-## Alternative: deploy with an action
-
-If you prefer a dedicated action over the manual checkout + push, steps 2–3
-of the workflow can be replaced with `peaceiris/actions-gh-pages`:
-
-```yaml
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          personal_token: ${{ secrets.DEPLOY_TOKEN }}
-          external_repository: anmolgritsa/Suab-deploy
-          publish_branch: gh-pages
-          publish_dir: ./dist
-```
-
-The same `DEPLOY_TOKEN` secret is used either way.

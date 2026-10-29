@@ -7,13 +7,18 @@
 #
 # How it works
 #   1. Build the app with Vite (vite.config.js already sets base '/Suab-deploy/').
-#   2. Check out the PUBLIC deploy repo using the DEPLOY_TOKEN secret.
-#   3. Replace the content of its gh-pages branch with dist/ and push.
+#   2. Publish dist/ to the gh-pages branch of the PUBLIC deploy repo with
+#      peaceiris/actions-gh-pages, authenticating with the DEPLOY_TOKEN secret.
 #
-# The built-in GITHUB_TOKEN is scoped to THIS repository only and cannot push
-# to another repo, so the push authenticates with a Personal Access Token
-# stored as the DEPLOY_TOKEN secret (repo scope on Suab-deploy). One-time
-# setup — deploy repo, Pages branch and the secret — is documented in DEPLOY.md.
+# Why peaceiris instead of checkout + push:
+#   The built-in GITHUB_TOKEN is scoped to THIS repository only and cannot
+#   push to another repo, so a PAT (DEPLOY_TOKEN secret) is required. And an
+#   empty deploy repo cannot be checked out at all — actions/checkout fails
+#   with "couldn't find remote ref refs/heads/main" because there is no
+#   branch yet. peaceiris only runs `git ls-remote` (which succeeds on an
+#   empty repo) and creates the gh-pages branch from scratch on the first
+#   deploy. One-time setup — deploy repo, Pages branch and the secret — is
+#   documented in DEPLOY.md.
 # ============================================================================
 
 name: Deploy to GitHub Pages
@@ -52,51 +57,18 @@ jobs:
       - name: Build
         run: npm run build   # base '/Suab-deploy/' comes from vite.config.js
 
-      # ---- 2. Check out the public deploy repo -------------------------------
-      # actions/checkout stores DEPLOY_TOKEN in the local git config of the
-      # ./deploy working copy, so the plain `git push` in the next step
-      # authenticates with it automatically — no extra credential wiring.
-      - name: Check out the deploy repository
-        uses: actions/checkout@v4
-        with:
-          repository: anmolgritsa/Suab-deploy
-          token: ${{ secrets.DEPLOY_TOKEN }}   # PAT with access to Suab-deploy
-          path: deploy
-
-      # ---- 3. Publish dist/ to the gh-pages branch ---------------------------
+      # ---- 2. Publish dist/ to the gh-pages branch of Suab-deploy ------------
+      # Works even when Suab-deploy is completely empty: on the first run the
+      # action creates the gh-pages branch itself. Unchanged build output is
+      # skipped automatically (no empty commits on docs-only pushes).
       - name: Publish to the gh-pages branch
-        run: |
-          set -euo pipefail
-          cd deploy
-
-          # Switch to the gh-pages branch GitHub Pages serves, creating it
-          # on the very first deploy if it does not exist yet.
-          if git ls-remote --exit-code --heads origin gh-pages >/dev/null 2>&1; then
-            git fetch origin gh-pages
-            git switch gh-pages
-          else
-            echo "gh-pages branch does not exist yet — creating it"
-            git switch --orphan gh-pages
-          fi
-
-          # Empty the branch (keep .git), then copy in the fresh build.
-          find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          cp -r ../dist/* .
-
-          # .nojekyll makes GitHub Pages serve the files as-is instead of
-          # running unnecessary Jekyll processing over them.
-          touch .nojekyll
-
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-
-          # Skip the commit when the build output is unchanged
-          # (e.g. a docs-only push to main).
-          if git diff --cached --quiet; then
-            echo "Build output identical to the last deploy — nothing to publish."
-          else
-            git commit -m "Deploy ${GITHUB_SHA:0:7} from anmolgritsa/Suab@main"
-            git push origin gh-pages
-            echo "Published to https://anmolgritsa.github.io/Suab-deploy/"
-          fi
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          # A PAT with Contents: Read and write on Suab-deploy — required for
+          # cross-repo pushes (GITHUB_TOKEN cannot leave this repository).
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          external_repository: anmolgritsa/Suab-deploy
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          enable_jekyll: false   # adds .nojekyll — serve the files as-is
+          commit_message: "Deploy ${{ github.sha }} from anmolgritsa/Suab@main"
