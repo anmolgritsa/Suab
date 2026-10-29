@@ -191,17 +191,17 @@ const ATT_FLOW = `
   // check-in — now via the Machine Allotment screen, which must be
   // confirmed before the shift starts.
   buttonByText('Check In').click();
-  for (let i = 0; i < 20 && !document.querySelector('.allotment'); i += 1) {
+  for (let i = 0; i < 20 && !document.querySelector('.allot'); i += 1) {
     await sleep(100);
   }
   out.allotment = {
-    shown: Boolean(document.querySelector('.allotment')),
-    title: document.querySelector('.allotment .screen__title')?.textContent.trim() ?? null,
-    machine: document.querySelector('.allotment .machine-card__name')?.textContent.trim() ?? null,
+    shown: Boolean(document.querySelector('.allot')),
+    title: document.querySelector('.allot .screen__title')?.textContent.trim() ?? null,
+    machine: document.querySelector('.allot .allot-card__value')?.textContent.trim() ?? null,
   };
-  Array.from(document.querySelectorAll('.allotment button'))
-    .find((b) => b.textContent.trim() === 'Confirm & Start Shift').click();
-  for (let i = 0; i < 20 && !document.querySelector('.home'); i += 1) {
+  Array.from(document.querySelectorAll('.allot button'))
+    .find((b) => b.textContent.trim() === 'Next').click();
+  for (let i = 0; i < 20 && !document.querySelector('.home:not(.allot)'); i += 1) {
     await sleep(100);
   }
   out.home = {
@@ -259,7 +259,7 @@ function check(data, today) {
     console.log((pass ? 'PASS ' : 'FAIL ') + label + (detail ? '  [' + detail + ']' : ''))
     if (!pass) failures.push(label)
   }
-  const { steps, state1, state2, state3, afterGoTo, afterTurnOn, home, record, afterReload, toastShown } = data
+  const { steps, state1, state2, state3, afterGoTo, afterTurnOn, allotment, home, record, afterReload, toastShown } = data
 
   // The auth walk still works end to end.
   ok('attendance screen shown after Login', steps[0].attendance)
@@ -290,7 +290,7 @@ function check(data, today) {
   ok('state3 "Turn On Location" returns to at-location', afterTurnOn.title === 'Mark Attendance')
 
   // --- check-in -> allotment -> homepage + record ---
-  ok('check-in opens the machine allotment', allotment.shown && allotment.title === 'Machine Allotment', JSON.stringify(allotment))
+  ok('check-in opens the machine allotment', allotment.shown && allotment.title === "Today's Machine", JSON.stringify(allotment))
   ok('allotment shows today\'s machine', typeof allotment.machine === 'string' && allotment.machine.length > 0, allotment.machine)
   ok('allotment confirm lands on the homepage', home.shown && home.cards.length === 3, JSON.stringify(home.cards))
   ok('attendance record saved to localStorage', Boolean(record), JSON.stringify(record))

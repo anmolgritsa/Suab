@@ -78,7 +78,7 @@ export default function MachineAllotmentScreen({ onConfirm }) {
   </span>
   <div className="allot-card__text">
     <span className="allot-card__label">{t('allotJob')}</span>
-    <strong className="allot-card__value">Bolt Size 12</strong>
+    <strong className="allot-card__value">{t('allotJobValue')}</strong>
   </div>
 </section>
         </div>

@@ -106,6 +106,14 @@ async function evaluate(page, expression) {
     returnByValue: true,
   })
   if (result.exceptionDetails) {
+    // Dump the crashing script's own source lines so the anonymous stack
+    // frames (e.g. "<anonymous>:5:57") can be matched to real code.
+    const lines = String(expression).split('\n')
+    for (const n of [5, 14]) {
+      if (lines[n - 1] !== undefined) {
+        console.error('  [crashed script line ' + n + '] ' + lines[n - 1].trim())
+      }
+    }
     throw new Error(result.exceptionDetails.exception?.description || 'Page script threw')
   }
   return result.result.value
@@ -190,13 +198,16 @@ const HOME_FLOW = `
 
   // --- check in -> machine allotment -> homepage (skipped when a
   //     screenshot pass already did it) ---
-  if (!document.querySelector('.home')) {
+  // The Labour Homepage, the machine allotment and the product screens all
+  // share the same 'home' root class, so "on the homepage" means '.home'
+  // WITHOUT the '.allot' / '.product-submit' variants.
+  if (!document.querySelector('.home:not(.allot):not(.product-submit)')) {
     buttonByText('Check In').click();
-    for (let i = 0; i < 20 && !document.querySelector('.allotment'); i += 1) {
+    for (let i = 0; i < 20 && !document.querySelector('.allot'); i += 1) {
       await sleep(100);
     }
-    buttonByText('Confirm & Start Shift').click();
-    for (let i = 0; i < 20 && !document.querySelector('.home'); i += 1) {
+    buttonByText('Next').click();
+    for (let i = 0; i < 20 && !document.querySelector('.home:not(.allot):not(.product-submit)'); i += 1) {
       await sleep(100);
     }
   }
@@ -667,28 +678,28 @@ const PRODUCT_FLOW = `
     );
   }
   startBtn.click();
-  for (let i = 0; i < 30 && !document.querySelector('.allotment'); i += 1) {
+  for (let i = 0; i < 30 && !document.querySelector('.allot'); i += 1) {
     await sleep(100);
   }
   out.afterStartNewShift = {
-    allotmentShown: Boolean(document.querySelector('.allotment')),
-    allotmentTitle: document.querySelector('.allotment .screen__title')?.textContent.trim() ?? null,
+    allotmentShown: Boolean(document.querySelector('.allot')),
+    allotmentTitle: document.querySelector('.allot .screen__title')?.textContent.trim() ?? null,
   };
   // Click confirm fresh from the live DOM; if the homepage has not appeared
   // after ~1.5s (a click swallowed by a re-render), try once more — the
   // handler is idempotent (it re-stamps the same allotment and re-navigates).
   const confirmAllotment = () => {
-    const btn = $$('.allotment button').find((b) => b.textContent.trim() === 'Confirm & Start Shift');
+    const btn = $$('.allot button').find((b) => b.textContent.trim() === 'Next');
     if (btn) btn.click();
     return Boolean(btn);
   };
   let confirmFound = confirmAllotment();
-  for (let i = 0; i < 30 && !document.querySelector('.home'); i += 1) {
+  for (let i = 0; i < 30 && !document.querySelector('.home:not(.allot):not(.product-submit)'); i += 1) {
     await sleep(100);
     if (i === 15) confirmFound = confirmAllotment() || confirmFound;
   }
   out.afterConfirmAllotment = {
-    homeShown: Boolean(document.querySelector('.home')),
+    homeShown: Boolean(document.querySelector('.home:not(.allot):not(.product-submit)')),
     shiftRestarted: localStorage.getItem('suab.shiftStart') !== null,
     confirmFound,
     nowShowing: document.querySelector('.screen__title')?.textContent.trim() ?? null,
@@ -739,20 +750,46 @@ const PRODUCT_EARLY_FLOW = `
 })()
 `;
 
-// Scenario C4: the back button on the product submission form ends the
-// session (it is labelled Logout) — the worker bails out to login.
+// Scenario C4: the product form has no session-ending control of its own —
+// the worker cannot bail out without submitting a count (the README flow
+// routes Logout through the shift-completed confirmation, which C3
+// covers). So the form's exit path is: submit -> confirmation ->
+// "Start New Shift", which clears the shift + allotment and lands on a
+// fresh machine-allotment screen.
 
 const PRODUCT_BACK_FLOW = `
 (async () => {
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+  const press = async (label) => {
+    $$('.keypad__key').find((k) => k.textContent.trim() === label).click();
+    await sleep(50);
+  };
   const out = {};
-  document.querySelector('.product-submit .back-button').click();
-  for (let i = 0; i < 20 && !document.body.innerText.includes('Welcome Back'); i += 1) {
+
+  // Guard the design: the form itself offers no Logout/back control.
+  out.noLogoutOnForm = !$$('.product-submit .link-button')
+    .some((b) => b.textContent.trim() === 'Logout');
+
+  // The exit runs through a submission: 2-5-0 -> Confirm.
+  for (const digit of ['2', '5', '0']) await press(digit);
+  $$('.product-submit__actions .btn-primary')[0].click();
+  for (let i = 0; i < 20 && !document.body.innerText.includes('Shift complete!'); i += 1) {
     await sleep(100);
   }
-  out.backFromForm = {
-    loginShown: document.body.innerText.includes('Welcome Back'),
-    sessionCleared: localStorage.getItem('suab.session') === null,
+  out.confirmationShown = document.body.innerText.includes('Shift complete!');
+
+  // "Start New Shift" clears the shift + allotment and asks for a fresh
+  // machine allotment.
+  $$('.product-submit .btn-primary').find((b) => b.textContent.trim() === 'Start New Shift').click();
+  for (let i = 0; i < 20 && !document.querySelector('.allot'); i += 1) {
+    await sleep(100);
+  }
+  out.afterStartNewShift = {
+    allotmentShown: Boolean(document.querySelector('.allot')),
+    shiftCleared: localStorage.getItem('suab.shiftStart') === null,
+    allotmentCleared: localStorage.getItem('suab.allotment') === null,
+    reminderCleared: localStorage.getItem('suab.lastReminderAt') === null,
   };
   return JSON.stringify(out);
 })()
@@ -1060,7 +1097,7 @@ function check(data) {
   ok('quantity + end time recorded on the submission', product.completed.saved?.quantity === 450 && typeof product.completed.saved?.shiftEndTime === 'string' && product.completed.saved?.endedEarly === false, JSON.stringify(product.completed.saved))
   ok('confirmation summarises the submitted count', product.completed.rows[0] === 'Quantity submitted450' && (product.completed.rows[1] ?? '').startsWith('Shift ended at'), JSON.stringify(product.completed.rows))
   ok('start-new-shift opens a fresh machine allotment',
-    product.afterStartNewShift.allotmentShown && product.afterStartNewShift.allotmentTitle === 'Machine Allotment',
+    product.afterStartNewShift.allotmentShown && product.afterStartNewShift.allotmentTitle === "Today's Machine",
     JSON.stringify(product.afterStartNewShift))
   ok('allotment confirm opens a fresh homepage',
     product.afterConfirmAllotment.homeShown && product.afterConfirmAllotment.shiftRestarted,
@@ -1069,7 +1106,12 @@ function check(data) {
   // --- early end + logout / back navigation ---
   ok('End Shift & Submit records endedEarly', productEarly.early.endedEarlyFlag && productEarly.early.saved?.quantity === 120, JSON.stringify(productEarly.early))
   ok('logout from the confirmation returns to login', productEarly.afterLogout.loginShown && productEarly.afterLogout.sessionCleared, JSON.stringify(productEarly.afterLogout))
-  ok('back button on the form ends the session', productBack.backFromForm.loginShown && productBack.backFromForm.sessionCleared, JSON.stringify(productBack.backFromForm))
+  ok('the form has no logout control; exit runs through a submission',
+    productBack.noLogoutOnForm && productBack.confirmationShown, JSON.stringify(productBack))
+  ok('Start New Shift clears the shift and asks a fresh allotment',
+    productBack.afterStartNewShift.allotmentShown && productBack.afterStartNewShift.shiftCleared
+      && productBack.afterStartNewShift.allotmentCleared && productBack.afterStartNewShift.reminderCleared,
+    JSON.stringify(productBack.afterStartNewShift))
 
   // --- reset demo ---
   ok('reset link returns to login', reset.afterReset.loginShown)
@@ -1120,12 +1162,12 @@ async function main() {
         const btn = Array.from(document.querySelectorAll('button'))
           .find((b) => b.textContent.trim() === 'Check In');
         btn.click();
-        for (let i = 0; i < 20 && !document.querySelector('.allotment'); i += 1) {
+        for (let i = 0; i < 20 && !document.querySelector('.allot'); i += 1) {
           await sleep(100);
         }
         Array.from(document.querySelectorAll('button'))
-          .find((b) => b.textContent.trim() === 'Confirm & Start Shift').click();
-        for (let i = 0; i < 20 && !document.querySelector('.home'); i += 1) {
+          .find((b) => b.textContent.trim() === 'Next').click();
+        for (let i = 0; i < 20 && !document.querySelector('.shift-timer'); i += 1) {
           await sleep(100);
         }
         return document.querySelector('.shift-timer')?.textContent.trim() ?? null;

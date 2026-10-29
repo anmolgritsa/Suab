@@ -37,7 +37,7 @@ import {
   resolveLocationState,
 } from '../utils/geo.js'
 import { formatTime12h, saveAttendance } from '../utils/storage.js'
-// import { DEMO_INTERVAL_MINUTES, SHIFT_DURATION_MINUTES } from '../utils/shift.js'
+import { DEMO_INTERVAL_MINUTES, SHIFT_DURATION_MINUTES } from '../utils/shift.js'
 
 /* Replace {placeholders} in a translated string: fill('Every {n} min', { n: 5 }) */
 function fill(text, vars) {
@@ -178,7 +178,7 @@ export default function AttendanceScreen({
         </div>
 
         {/* ---- "Today's Shift" summary: read-only card under the button ---- */}
-        {/* <section className="att__shift-card" aria-label={t('attShiftTitle')}>
+        <section className="att__shift-card" aria-label={t('attShiftTitle')}>
           <h2 className="att__shift-title">{t('attShiftTitle')}</h2>
           <dl className="att__shift-rows">
             <div className="att__shift-row">
@@ -204,7 +204,7 @@ export default function AttendanceScreen({
               </dd>
             </div>
           </dl>
-        </section> */}
+        </section>
       </div>
 
       <footer className="att__footer">

@@ -18,6 +18,14 @@ npm run build    # production build
 npm run lint     # eslint
 ```
 
+## Deployment
+
+Pushes to `main` are built and published automatically to GitHub Pages at
+<https://anmolgritsa.github.io/Suab-deploy/> (public deploy repo
+`Suab-deploy`, `gh-pages` branch — see `.github/workflows/deploy.yml`).
+The one-time setup — deploy repo, Pages branch and the `DEPLOY_TOKEN`
+secret — is described in [DEPLOY.md](DEPLOY.md).
+
 ## The flow
 
 ```
