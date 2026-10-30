@@ -1,0 +1,308 @@
+/* ==========================================================================
+   components.css — styles for the reusable pieces (Logo, TextField,
+   PrimaryButton, Keypad, Toast…)
+   ========================================================================== */
+
+/* ---- Logo ---- */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo__badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--blue);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(46, 131, 249, 0.35);
+}
+
+.logo__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+}
+
+.logo__name {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--text);
+}
+
+.logo__tagline {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+/* ---- round icon badge (card headers) ---- */
+.icon-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-badge--lg {
+  width: 76px;
+  height: 76px;
+}
+
+/* green variant — "done" confirmations (e.g. the PIN-saved screen) */
+.icon-badge--success {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+/* ---- card (the white rounded panel on every screen) ---- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 24px 20px;
+}
+
+/* ---- TextField ---- */
+.field {
+  margin-bottom: 16px;
+}
+
+.field__box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f4f9fe;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-input);
+  padding: 0 14px;
+  height: 54px;
+  transition: border-color 0.15s ease;
+}
+
+/* Highlight the field while the user types in it. */
+.field__box:focus-within {
+  border-color: var(--blue);
+  background: #ffffff;
+}
+
+.field--error .field__box {
+  border-color: var(--danger);
+  background: #fff5f5;
+}
+
+.field__icon {
+  color: var(--blue);
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.field__input {
+  flex: 1;
+  min-width: 0; /* allow the input to shrink inside the flex box */
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px; /* 16px+ stops iOS Safari zooming in on focus */
+  color: var(--text);
+  height: 100%;
+}
+
+.field__input::placeholder {
+  color: var(--text-soft);
+}
+
+.field__error {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--danger);
+}
+
+/* ---- PrimaryButton (big blue pill) ---- */
+.btn-primary {
+  width: 100%;
+  min-height: 54px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: 0 10px 22px rgba(46, 131, 249, 0.35);
+  transition: transform 0.1s ease, background 0.15s ease;
+  /* Big enough tap target and no blue flash when tapped on iOS. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary:active {
+  background: var(--blue-dark);
+  transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ---- Keypad ----
+   The pad is a clean 3-column grid:
+       1 2 3
+       4 5 6
+       7 8 9
+       0 ⌫ _
+   Every row is its own 3-column grid with EQUAL 1fr tracks, so all
+   columns line up perfectly — including the bottom row, where the
+   invisible spacer fills the third column.
+
+   `.screen` centres its children, which would normally shrink this pad
+   to the width of its text. width: 100% + max-width + margin-inline:
+   auto gives it a real, centred width inside the card instead.
+
+   Key styling is measured from the number-pad mockup: pale-blue PILL
+   keys (fill #ecf4fd — what --blue-soft renders as), flat (no border or
+   shadow), width:height = 173:95 ≈ 1.82, column gap slightly wider
+   than the row gap (45px vs 29px). At a 320px pad that works out to
+   94.7px-wide keys, 52px tall, 18px column gaps, 16px row gaps. */
+.keypad {
+  width: 100%;
+  max-width: 320px;
+  margin-inline: auto; /* centre the pad within the card */
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* vertical spacing BETWEEN rows (mockup ratio) */
+  padding: 8px 0 16px;
+}
+
+.keypad__row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+  gap: 18px; /* horizontal spacing BETWEEN keys (mockup ratio) */
+}
+
+.keypad__key {
+  height: 52px; /* comfortably above the 44px minimum touch target */
+  border: none; /* the mockup keys are flat fills, not outlined */
+  border-radius: 999px; /* full pill — rounded ends like the mockup */
+  background: var(--blue-soft); /* pale blue pill on the light card */
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* kills the double-tap zoom delay on iOS */
+  user-select: none; /* rapid taps must not select the digit text */
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+.keypad__key:active {
+  /* Pressed feedback: the pill fills with the primary blue. */
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.keypad__key--icon {
+  font-size: 18px;
+}
+
+/* Invisible spacer that keeps the bottom row aligned with the mockup. */
+.keypad__key--empty {
+  visibility: hidden;
+}
+
+/* Very narrow windows (below the iPhone 16's 393px): tighten the gaps so
+   the keys keep closer to the mockup's wide-pill proportions instead of
+   becoming squat squares. iPhone 16 itself is unaffected. */
+@media (max-width: 360px) {
+  .keypad {
+    gap: 12px;
+  }
+
+  .keypad__row {
+    gap: 12px;
+  }
+}
+
+/* ---- Toast ---- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(28px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(90vw, 380px);
+  background: #1f2b40;
+  color: #ffffff;
+  font-size: 13.5px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
+  animation: toast-in 0.25s ease;
+}
+
+.toast__close {
+  color: #ffffff;
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ---- small text helpers shared by screens ---- */
+.demo-chip {
+  align-self: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--blue);
+  background: var(--blue-soft);
+  border: 1px dashed rgba(46, 131, 249, 0.5);
+  border-radius: 999px;
+  padding: 6px 14px;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  padding: 10px 12px;
+  border-radius: 12px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.link-button:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.link-button--center {
+  align-self: center;
+  margin-top: 4px;
+}
