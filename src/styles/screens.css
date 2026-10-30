@@ -1,0 +1,1855 @@
+/* ==========================================================================
+   screens.css — layout for each screen (login, attendance, home, reports…)
+   ========================================================================== */
+
+/* ---- shared screen shell ----
+   Every screen centres its content: horizontally always (align-items),
+   vertically when the content is shorter than the viewport (the "safe"
+   keyword falls back to top-alignment if the content ever overflows, so
+   nothing can be clipped out of reach on small screens). Full-height
+   screens with a pinned footer (attendance, homepage) keep their own
+   layout — see .att / .home below. */
+.screen {
+  position: relative;
+  z-index: 1; /* above the decorative shapes */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* vertical centring (fallback) */
+  justify-content: safe center; /* never clip the top when content overflows */
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto; /* small phones can scroll if needed */
+}
+
+.screen__header {
+  margin-bottom: 20px;
+}
+
+.screen__title {
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.screen__subtitle {
+  font-size: 14px;
+  color: var(--text-soft);
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.45;
+}
+
+/* ---- shared round back button (report + product screens) ---- */
+.back-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(23, 35, 59, 0.06);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.back-button:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* ==========================================================================
+   Login screen
+   ========================================================================== */
+.login__who {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-top: 4px;
+}
+
+.login__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 18px;
+}
+
+.login__form .demo-chip {
+  align-self: center;
+  margin-bottom: 14px;
+}
+
+/* Fingerprint block: icon above the label, both centred. */
+.fingerprint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fingerprint__icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fingerprint:active .fingerprint__icon {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.login__divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0 6px;
+}
+
+.login__footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Screen: header upar, baaki sab bachi hui jagah me center */
+.home.login {
+  display: flex;
+  flex-direction: column;
+  height: 100%;        /* frame ki height follow kare */
+  min-height: 100%;
+}
+
+/* Header ke neeche ka poora block: vertically + horizontally center */
+.home.login .login__main {
+  flex: 1;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 32px 20px 24px;   /* padding-top badhao = aur neeche aayega */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;                 /* cheezon ke beech saaf spacing */
+}
+
+.home.login .login__title,
+.home.login .login__who {
+  text-align: center;
+  margin: 0;
+}
+
+.home.login .login__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Fingerprint: icon upar, text neeche, dono bilkul center */
+.home.login .fingerprint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 6px auto 0;
+}
+
+.home.login .login__divider {
+  width: 100%;
+  margin: 6px 0;
+}
+
+/* Forgot Password / Help: ek line me, beech me */
+.home.login .login__footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* Decorative rounded shapes behind the login content (mockup 3). */
+.decor--corner {
+  position: absolute;
+  top: -70px;
+  right: -70px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  opacity: 0.55;
+  z-index: -1;
+}
+
+/* ==========================================================================
+   Success (placeholder) screen
+   ========================================================================== */
+.success {
+  justify-content: center;
+}
+
+.success__card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.success__badge {
+  background: #e6f7ec;
+  color: var(--success);
+}
+
+.success__card .screen__title {
+  margin-top: 14px;
+}
+
+.success__note {
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.5;
+  margin: 14px 0 18px;
+}
+
+/* ==========================================================================
+   Attendance screen (Part 2)
+   --------------------------------------------------------------------------
+   One screen, three GPS states. Each state class sets custom properties
+   (--att = main colour, --att-soft = pale version) that the illustration,
+   button and footer wave all read â€” switching state re-themes everything.
+   ========================================================================== */
+
+   /* Header aur footer ke beech ki bachi hui jagah me center */
+.att__main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.att__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Footer ab wrapper ke baad hai, isliye auto margin ki zarurat nahi */
+.att__footer {
+  margin-top: 0;
+}
+.att {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px 0;
+  overflow-y: auto;
+}
+
+.att--at-location {
+  --att: var(--blue);
+  --att-dark: var(--blue-dark);
+  --att-soft: var(--blue-soft);
+  --att-tint: #d3e8fd;
+}
+
+.att--not-at-location {
+  --att: var(--coral);
+  --att-dark: var(--coral-dark);
+  --att-soft: var(--coral-soft);
+  --att-tint: #fedbe5;
+}
+
+.att--location-off {
+  --att: var(--purple);
+  --att-dark: var(--purple-dark);
+  --att-soft: var(--purple-soft);
+  --att-tint: #ded8fd;
+}
+
+.att__header {
+  width: 100%;
+  display: flex;
+}
+
+/* The big circular illustration (AttendanceArt.jsx). The SVG inside is
+   100%/100%, so this box needs a real size: a square that scales down on
+   narrow phones. */
+.att-art {
+  width: min(230px, 60vw);
+  aspect-ratio: 1;
+  margin-top: 18px;
+}
+
+/* The SVG is inline by default, which adds a ~4px baseline gap under it and
+   makes the square 4px taller than the aspect-ratio box. Block removes it. */
+.att-art svg {
+  display: block;
+}
+
+.att__art {
+  width: min(230px, 60vw);
+  margin-top: 18px;
+}
+
+.att__title {
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  margin-top: 18px;
+}
+
+.att__subtitle {
+  font-size: 14px;
+  color: var(--text-soft);
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.45;
+  max-width: 300px;
+}
+
+.att__distance {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--att);
+  background: var(--att-soft);
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin-top: 12px;
+}
+
+.att__actions {
+  width: 100%;
+  margin-top: 22px;
+}
+
+.att__actions .btn-primary {
+  min-height: 60px; /* the mockup's attendance button is taller than usual */
+}
+
+/* ---- Second section: "Today's Shift" summary card ----
+   A quiet, read-only card under the check-in button. It mirrors the demo's
+   timing knobs (shift length, reminder interval) and the worker's check-in
+   status. Same card language as the rest of the app (white, rounded, soft
+   shadow); the title picks up the current GPS state colour via --att. */
+.att__shift-card {
+  width: 100%;
+  margin-top: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 16px 18px;
+}
+
+.att__shift-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--att);
+}
+
+.att__shift-rows {
+  margin: 10px 0 0;
+  display: grid;
+  gap: 9px;
+}
+
+.att__shift-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.att__shift-row dt {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.att__shift-row dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: right;
+}
+
+/* The status value turns the app's success green once the worker is in. */
+.att__shift-status--on {
+  color: #157a55;
+}
+
+/* State-coloured button variants (see PrimaryButton's variant prop). */
+.btn-primary--coral {
+  background: var(--coral);
+  box-shadow: 0 10px 22px rgba(249, 109, 127, 0.35);
+}
+
+.btn-primary--coral:active {
+  background: var(--coral-dark);
+}
+
+.btn-primary--purple {
+  background: var(--purple);
+  box-shadow: 0 10px 22px rgba(143, 123, 250, 0.35);
+}
+
+.btn-primary--purple:active {
+  background: var(--purple-dark);
+}
+
+/* Demo GPS strip: small chips so testers can switch the simulated state
+   without touching the real UI a labourer would see. */
+.att__sim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.att__sim-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.att__sim-chip {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-soft);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 12px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.att__sim-chip--active {
+  color: #ffffff;
+  background: var(--att);
+  border-color: var(--att);
+}
+
+/* Footer: state-tinted wave with the language pill (mockup bottom). */
+.att__footer {
+  width: 100%;
+  margin-top: auto;
+  position: relative;
+  padding-top: 26px;
+}
+
+.att__wave {
+  display: block;
+  width: 100%;
+  height: 84px;
+}
+
+.att__lang {
+  position: absolute;
+  left: 50%;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 12px rgba(23, 35, 59, 0.12);
+}
+
+/* ==========================================================================
+   Machine Assignment placeholder screen (Part 2)
+   --------------------------------------------------------------------------
+   REMOVED — the Labour Homepage (Part 3) is now the screen the worker
+   lands on after checking in, so this placeholder and its styles were
+   retired with it.
+   ========================================================================== */
+
+/* ==========================================================================
+   Labour Homepage (Part 3 — mockups 6.1 / 6.2)
+   --------------------------------------------------------------------------
+   Top bar (logo + language pill) → shift timer pill → action cards
+   (2-up grid + one full-width row) → SOS button pinned near the bottom.
+   ========================================================================== */
+
+   /* ---- Machine Allotment: 2 big cards + Next ---- */
+.allot__main {
+  flex: 1;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0 40px;
+}
+
+.allot__cards {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.allot-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 24px 22px;
+  border-radius: 26px;
+  box-shadow: var(--shadow-card);
+}
+
+.allot-card__badge {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(23, 35, 59, 0.14);
+}
+
+.allot-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.allot-card__label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.allot-card__value {
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+/* Blue = machine */
+.allot-card--machine {
+  background: var(--blue-soft);
+}
+.allot-card--machine .allot-card__badge {
+  background: var(--blue);
+}
+.allot-card--machine .allot-card__label {
+  color: var(--blue);
+}
+
+/* Amber = job */
+.allot-card--job {
+  background: #fdeedd;
+}
+.allot-card--job .allot-card__badge {
+  background: #e08a3c;
+}
+.allot-card--job .allot-card__label {
+  color: #e08a3c;
+}
+
+.allot__actions {
+  width: 100%;
+  margin-top: 28px;
+}
+.home {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centre the content column horizontally */
+  padding: 18px 20px calc(18px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+.home__topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* The attached logo PNG is navy-on-white; multiply blending makes the
+   white box disappear into the light page background. */
+.brand-logo {
+  mix-blend-mode: multiply;
+  width: auto;
+  user-select: none;
+}
+
+/* ---- language dropdown (top-right pill) ---- */
+.lang {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.lang__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 9px 14px;
+  box-shadow: 0 4px 10px rgba(23, 35, 59, 0.06);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang__pill:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.lang__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  min-width: 190px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 14px 34px rgba(23, 35, 59, 0.16);
+  padding: 6px;
+  list-style: none;
+  animation: lang-pop 0.15s ease;
+}
+
+@keyframes lang-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lang__option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang__option:active {
+  background: var(--blue-soft);
+}
+
+.lang__option--active {
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.lang__native {
+  font-weight: 600;
+}
+
+.lang__option--active .lang__native {
+  font-weight: 700;
+}
+
+.lang__label {
+  font-size: 11.5px;
+  color: var(--text-soft);
+}
+
+/* ---- shift timer pill (clock + "00:00:00") ---- */
+.shift-timer {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  background: var(--blue-soft);
+  border-radius: 999px;
+  padding: 8px 22px 8px 10px;
+}
+
+.shift-timer__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(46, 131, 249, 0.18);
+}
+
+.shift-timer__time {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums; /* digits don't jitter as they tick */
+}
+
+/* ---- action cards (Raw Material Issue / Machine Breakdown / Output Defect)
+   Each card picks its palette through the custom properties set inline by
+   ActionCard.jsx: --card-badge (solid icon circle), --card-soft (card fill)
+   and --card-text (label colour).
+   The cards are the homepage's primary touch targets, so they are sized
+   generously for iPhone 16: ~204px tall tiles with a 72px icon badge and
+   19px labels — far past the 44px minimum Apple recommends, so the three
+   report actions are impossible to miss and easy to hit with a thumb. ---- */
+.home__grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  background: var(--card-soft);
+  border-radius: 26px;
+  padding: 26px 24px;
+  min-height: 204px;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease;
+}
+
+.action-card:active {
+  transform: scale(0.97);
+}
+
+.action-card__badge {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--card-badge);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(23, 35, 59, 0.14);
+}
+
+.action-card__label {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--card-text);
+}
+
+/* Full-width row variant (Output Defect): icon left, label, chevron right. */
+.action-card--wide {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  min-height: 116px;
+  gap: 18px;
+}
+
+.action-card--wide .action-card__label {
+  flex: 1;
+}
+
+.action-card__arrow {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--card-text);
+  opacity: 0.55;
+  line-height: 1;
+}
+
+/* ---- SOS button (pinned near the bottom of the homepage) ---- */
+.home__sos {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.sos-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--danger);
+  color: #ffffff;
+  border-radius: 24px;
+  padding: 18px 0 16px;
+  box-shadow: 0 12px 26px rgba(229, 72, 77, 0.35);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.sos-button:active {
+  background: #d13a40;
+  transform: scale(0.98);
+}
+
+.sos-button__sos {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.sos-button__label {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  opacity: 0.85;
+}
+
+.home__footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+/* ---- shared modal pieces (SOS confirm, work-update reminder) ---- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(23, 35, 59, 0.45);
+  padding: 24px;
+  animation: backdrop-in 0.18s ease;
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(23, 35, 59, 0.06);
+  color: var(--text-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modal__title {
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.modal__subtitle {
+  font-size: 13.5px;
+  color: var(--text-soft);
+  text-align: center;
+  line-height: 1.45;
+  margin-top: 6px;
+}
+
+/* SOS confirm dialog: white card, red warning badge, two actions. */
+.sos-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 26px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: dialog-pop 0.18s ease;
+}
+
+@keyframes dialog-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sos-dialog__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fdecec;
+  color: var(--danger);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.sos-dialog__actions {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.sos-dialog__cancel {
+  flex: 1;
+  min-height: 48px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 14.5px;
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sos-dialog__send {
+  flex: 1.4;
+  min-height: 48px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(229, 72, 77, 0.35);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Work-update reminder: warm peach card with a blue send button. */
+.update-reminder {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  background: #fdeedd;
+  border-radius: 24px;
+  padding: 26px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: dialog-pop 0.18s ease;
+}
+
+.update-reminder__icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #e08a3c;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 14px rgba(224, 138, 60, 0.25);
+}
+
+.update-reminder__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.update-reminder__send {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 18px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 10px 22px rgba(46, 131, 249, 0.35);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.update-reminder__send:active {
+  background: var(--blue-dark);
+}
+
+/* ==========================================================================
+   Report screens (Input Errors / Machine Defect / Output Errors)
+   --------------------------------------------------------------------------
+   All three are the same shared ReportForm, parameterised by category:
+   back button + icon badge + title, a mandatory photo/video attachment
+   (metadata only — nothing is uploaded) and Submit / Cancel actions.
+   ========================================================================== */
+
+   /* ==========================================================================
+   Report screens: theme colour = homepage card colour
+   ========================================================================== */
+.rtheme--amber { --t-badge: #f5a524; --t-soft: #fdf0d5; --t-text: #8a5a12; }
+.rtheme--blue  { --t-badge: var(--blue); --t-soft: var(--blue-soft); --t-text: #1f5fbf; }
+.rtheme--green { --t-badge: #22b573; --t-soft: #e3f6ec; --t-text: #157a55; }
+
+/* Content header ke neeche bachi jagah ke bilkul beech me */
+.rtheme .report {
+  width: 100%;
+  flex: 1;
+  padding: 0 0 32px;
+  justify-content: center;
+}
+
+/* Header me ab logo + language hai, isliye purana round back button chhupa do */
+.rtheme .report__topbar { display: none; }
+
+/* Kam text: subtitle hata do */
+.rtheme .screen__subtitle { display: none; }
+
+.rtheme .icon-badge {
+  width: 84px;
+  height: 84px;
+  background: var(--t-badge);
+  color: #ffffff;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--t-badge) 35%, transparent);
+}
+
+.rtheme .screen__title {
+  color: var(--t-text);
+  font-size: 24px;
+}
+
+/* Photo/Video block: bada, dashed, theme colour ka */
+.rtheme .report__pick {
+  flex-direction: column;
+  gap: 12px;
+  min-height: 170px;
+  border-radius: 26px;
+  border: 2px dashed var(--t-badge);
+  background: var(--t-soft);
+  color: var(--t-text);
+  font-size: 16px;
+  box-shadow: none;
+}
+
+.rtheme .report__pick:active {
+  background: color-mix(in srgb, var(--t-badge) 18%, #ffffff);
+}
+
+.rtheme .report__pick.report__pick--error {
+  border-color: var(--danger);
+  background: #fff5f5;
+  color: var(--danger);
+}
+
+/* Chosen file row bhi bada aur theme colour ka */
+.rtheme .report__attachment {
+  min-height: 72px;
+  border-radius: 22px;
+  background: var(--t-soft);
+  border-color: var(--t-badge);
+}
+.rtheme .report__attachment-icon { color: var(--t-badge); }
+
+/* Submit button = homepage card ka color */
+.rtheme .btn-primary {
+  background: var(--t-badge);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--t-badge) 35%, transparent);
+}
+
+/* Cancel link bhi theme colour me */
+.rtheme .link-button { color: var(--t-text); }
+
+.report {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* centre the form vertically */
+  justify-content: safe center; /* fall back to top when content overflows */
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+.report__topbar {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+}
+
+.report .icon-badge {
+  margin-bottom: 18px;
+}
+
+.report__form {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.report__label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* The real <input type="file"> is hidden; the pill button drives it. */
+.report__file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.report__pick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 18px;
+  border-radius: 999px;
+  /* Solid blue like the Submit button; the transparent border keeps the
+     error state's red outline visible without shifting the layout. */
+  border: 1.5px solid transparent;
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: 0 10px 22px rgba(46, 131, 249, 0.35);
+  transition: transform 0.1s ease, background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.report__pick:active {
+  background: var(--blue-dark);
+  transform: scale(0.98);
+}
+
+/* Error state: the worker tried to submit without attaching anything. */
+.report__pick--error {
+  border-color: var(--danger);
+  background: #fff5f5;
+  color: var(--danger);
+}
+
+.report__pick--error:active {
+  background: #ffe3e3;
+}
+
+/* Chosen file: a small row with its name + a remove (×) button. */
+.report__attachment {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 8px 12px;
+  border-radius: var(--radius-input);
+  background: #f4f9fe;
+  border: 1.5px solid var(--border);
+}
+
+.report__attachment-icon {
+  color: var(--blue);
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.report__attachment-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.report__attachment-remove {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(23, 35, 59, 0.06);
+  color: var(--text-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.report__actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 24px;
+}
+
+/* ---- report confirmation state ("Report submitted!") ---- */
+.report__sent-icon {
+  background: #e7f8ec;
+  color: var(--success);
+}
+
+.report__action {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 26px;
+}
+
+.report .link-button {
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   Product Submission screen (shift completion)
+   --------------------------------------------------------------------------
+   Big quantity readout + the shared keypad (0-9, ⌫, C) + Confirm and
+   "End Shift & Submit" actions, then a shift-completed confirmation.
+   ========================================================================== */
+
+   .product-submit {
+  /* .home se flex column, padding aur overflow aata hai */
+  justify-content: flex-start;
+}
+
+/* Header ke neeche ka poora block: bachi jagah me center */
+.product-submit__main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: safe center;
+  padding: 12px 0 8px;
+}
+.product-submit {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* centre the keypad stack vertically */
+  justify-content: safe center; /* fall back to top when content overflows */
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+.product-submit__assigned {
+  margin-top: 16px;
+}
+
+.product-submit__assigned strong {
+  font-size: 14px;
+}
+
+/* The quantity readout: huge digits, small caption underneath. */
+.product-submit__display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 18px 0 6px;
+}
+
+.product-submit__value {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums; /* digits keep a steady width */
+  letter-spacing: 1px;
+}
+
+.product-submit__display-label {
+  margin-top: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.product-submit__error {
+  margin: 2px 0 8px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.product-submit .keypad {
+  margin-top: 4px;
+}
+
+.product-submit__actions {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+/* ---- shift-completed confirmation ---- */
+.product-submit__sent-icon {
+  background: #e7f8ec;
+  color: var(--success);
+  margin-bottom: 18px;
+}
+
+.product-submit__summary {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 22px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  box-shadow: var(--shadow-card);
+  padding: 6px 16px;
+}
+
+.product-submit__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  font-size: 13.5px;
+  color: var(--text-soft);
+}
+
+.product-submit__row + .product-submit__row {
+  border-top: 1px solid var(--border);
+}
+
+.product-submit__row strong {
+  font-size: 15px;
+  color: var(--text);
+}
+
+.product-submit__action {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 22px;
+}
+
+.product-submit .link-button {
+  margin-top: 6px;
+}
+
+/* ---- keypad clear key (product submission's bottom-row "C") ---- */
+.keypad__key--clear {
+  background: #fdecec; /* pale red — destructive "clear everything" */
+  color: var(--danger);
+}
+
+.keypad__key--clear:active {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+/* ---- work-update reminder additions (Part 4) ---- */
+
+/* Green variant of the round icon for the "Update sent!" stage. */
+.update-reminder__icon--sent {
+  color: var(--success);
+  box-shadow: 0 6px 14px rgba(47, 179, 68, 0.25);
+}
+
+/* The attach pill inside the reminder sits between the text and Send. */
+.update-reminder__pick {
+  margin-top: 14px;
+  min-height: 48px;
+  background: #ffffff;
+  border-color: rgba(224, 138, 60, 0.55);
+  color: #e08a3c;
+}
+
+.update-reminder__pick:active {
+  background: #fdf3e7;
+}
+
+/* Error state inside the reminder modal: .update-reminder__pick above
+   repaints the shared picker (white fill, amber text), so the danger
+   colours must be restated here — the two-class selector also wins over
+   the single-class repaint regardless of source order. */
+.update-reminder__pick.report__pick--error {
+  border-color: var(--danger);
+  background: #fff5f5;
+  color: var(--danger);
+}
+
+.update-reminder__pick.report__pick--error:active {
+  background: #ffe3e3;
+}
+
+.update-reminder .report__attachment {
+  margin-top: 14px;
+  background: #ffffff;
+}
+
+/* ==========================================================================
+   Machine Allotment screen (mockup 4) + homepage machine banner
+   ========================================================================== */
+
+/* The big machine card: icon, name, id/type line, then the detail rows. */
+
+
+.machine-card {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 22px;
+  padding: 26px 22px 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.machine-card__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.machine-card__name {
+  font-size: 19px;
+  font-weight: 800;
+  margin-top: 14px;
+}
+
+.machine-card__meta {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  margin-top: 4px;
+}
+
+.machine-card__details {
+  width: 100%;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.machine-card__detail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  font-size: 13.5px;
+  color: var(--text-soft);
+}
+
+.machine-card__detail + .machine-card__detail {
+  border-top: 1px solid var(--border);
+}
+
+.machine-card__detail dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.machine-card__detail dd {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* "Active" status chip in green. */
+.machine-card__status {
+  color: var(--success) !important;
+}
+
+.allotment__actions {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Quiet full-width button under the primary action ("Report an Issue"). */
+.secondary-button {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.secondary-button:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* Homepage banner showing today's confirmed machine. */
+.machine-banner {
+  width: 100%;
+  max-width: 430px;
+  margin: 10px auto 0;
+  padding: 10px 14px;
+  background: var(--blue-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.machine-banner__icon {
+  color: var(--blue);
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.machine-banner__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.machine-banner__text strong {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.machine-banner__text > span:last-child {
+  font-size: 12.5px;
+  color: var(--text-soft);
+}
+
+/* ==========================================================================
+   Auth: PIN setup + PIN unlock (first-time / returning login)
+   --------------------------------------------------------------------------
+   SetPinScreen ("Create Your PIN") and EnterPinScreen ("Enter Your PIN")
+   share one layout: centred stack under the top bar — title, subtitle,
+   identity chip, the 4-dot PIN display, the shared keypad and a hint.
+   The dots never reveal the digits, like a phone lock screen.
+   ========================================================================== */
+
+/* Stacked quick-unlock buttons on the login screen (PIN already set up). */
+.login__quick {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pin {
+  /* .home supplies the flex column + padding + overflow. */
+  justify-content: flex-start;
+}
+
+/* Everything under the top bar, centred in the free space. */
+.pin__main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: safe center;
+  padding: 12px 0 8px;
+}
+
+/* Back arrow row (SetPinScreen only), left-aligned above the title. */
+.pin__back {
+  width: 100%;
+  display: flex;
+  margin-bottom: 6px;
+}
+
+/* The 4-dot PIN display. */
+.pin__dots {
+  display: flex;
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.pin__dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.pin__dot--filled {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+/* Wrong PIN (or mismatch): every dot turns coral-red… */
+.pin__dot--error {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+/* …and the row shakes, like a phone lock screen. */
+@keyframes pin-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px);
+  }
+  40% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.pin__dots--shake {
+  animation: pin-shake 0.35s ease;
+}
+
+/* "Enter a 4-digit PIN" / "Re-enter your PIN to confirm" / lockout countdown. */
+.pin__label {
+  margin-top: 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+.pin__error {
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* "Your PIN never leaves this device." */
+.pin__hint {
+  margin-top: 16px;
+  font-size: 12.5px;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+/* "PIN saved securely!" confirmation actions. */
+.pin__actions {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* "Not you? Use another account" under the keypad. */
+.pin__forgot {
+  margin-top: 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--blue);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pin__forgot:active {
+  color: var(--blue-dark);
+}
+
+/* ==========================================================================
+   Auth: mock biometric scanners (fingerprint / Face ID)
+   --------------------------------------------------------------------------
+   FingerprintAuthScreen + FaceIdAuthScreen share one layout: the big
+   BiometricArt circle, title + subtitle, a state label, the big
+   "Tap to scan" sensor button and a "Use PIN instead" fallback link.
+   The art re-colours itself per state by overriding --bio / --bio-soft.
+   ========================================================================== */
+
+.bio {
+  /* .home supplies the flex column + padding + overflow. */
+  justify-content: flex-start;
+}
+
+.bio__main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: safe center;
+  padding: 12px 0 8px;
+}
+
+/* The big circular scanner illustration. */
+.bio-art {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin-bottom: 20px;
+}
+
+/* The centre glyph (fingerprint / face drawing) floats over the ring. */
+.bio-art__glyph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+/* State colours: blue while ready/scanning… */
+.bio-art--ready,
+.bio-art--scanning {
+  --bio: var(--blue);
+  --bio-soft: var(--blue-soft);
+}
+
+/* …green once the identity is verified… */
+.bio-art--matched {
+  --bio: var(--success);
+  --bio-soft: #e2f6e5;
+}
+
+/* …and coral when the scan is not recognised. */
+.bio-art--no-match {
+  --bio: var(--coral);
+  --bio-soft: var(--coral-soft);
+}
+
+/* While scanning the whole art gently pulses. */
+@keyframes bio-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.bio-art--scanning {
+  animation: bio-pulse 1s ease-in-out infinite;
+}
+
+/* State label under the art ("Sensor ready", "Scanning…", …). */
+.bio__label {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+.bio__error {
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* The big sensor button — a soft blue pill, like the mockup's CTA. */
+.bio__sensor {
+  margin-top: 22px;
+  padding: 14px 34px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bio__sensor:active {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.bio__sensor:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+
+/* "Use PIN instead" fallback link. */
+.bio__footer {
+  margin-top: 20px;
+}
