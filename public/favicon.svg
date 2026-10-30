@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- SUAB favicon: blue rounded square with a white factory glyph -->
-  <rect x="2" y="2" width="60" height="60" rx="16" fill="#2e83f9" />
-  <path
-    d="M14 46 V30 l10 7 v-7 l10 7 v-13 c0-2 1.6-3.6 3.6-3.6 h1.8 c2 0 3.6 1.6 3.6 3.6 V46 Z"
-    fill="#ffffff"
-  />
-  <rect x="17" y="49" width="30" height="4" rx="2" fill="#feea94" />
-</svg>
