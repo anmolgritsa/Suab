@@ -3,9 +3,9 @@
  *
  * Shown instead of the credential form when this device has logged in
  * before (secureStore.hasPinAuth()). The worker unlocks the app
- * with the 4-digit PIN they created on SetPinScreen — the temporary
- * stand-in for real biometrics — so they never re-type their mobile
- * number or Employee ID on this device.
+ * with the 4-digit PIN saved on this device — the temporary stand-in
+ * for real biometrics — so they never re-type their mobile number or
+ * Employee ID.
  *
  * Behaviour:
  *   - digits are collected with the shared <Keypad /> and shown as dots

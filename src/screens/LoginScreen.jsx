@@ -19,7 +19,6 @@
  *
  * Props:
  *  - registeredUser   optional saved account for the personalised greeting
- *  - hasPinSaved      a PIN exists on this device → show quick-unlock
  *  - onLogin(phone, employeeId)   valid credentials → App.jsx routes on
  *  - onUnlockWithPin()            quick-unlock: the PIN pad screen
  *  - onFingerprint()              quick-unlock: the fingerprint scanner
@@ -42,17 +41,20 @@ import {
   PhoneIcon,
 } from '../components/icons.jsx'
 import { useI18n } from '../i18n.jsx'
+import { hasPinAuth } from '../utils/secureStore.js'
 import { checkLogin, validatePhone } from '../utils/validation.js'
 
 export default function LoginScreen({
   registeredUser,
-  hasPinSaved,
   onLogin,
   onUnlockWithPin,
   onFingerprint,
   onFaceId,
 }) {
   const { t } = useI18n()
+  // A PIN saved on this device (checked here, not passed in) enables the
+  // quick-unlock options below — fingerprint, Face ID and the PIN pad.
+  const hasPinSaved = hasPinAuth()
   const [phone, setPhone] = useState('')
   const [employeeId, setEmployeeId] = useState('')
   // { field: 'phone' | 'employeeId', message } — shown under the field the

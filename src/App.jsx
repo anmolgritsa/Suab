@@ -2,11 +2,11 @@
  * App.jsx — the app's tiny state-based router (no react-router).
  *
  * Flow:
- *   Part 1 (auth)       FIRST login on a device: credentials (phone +
- *                       supervisor-issued Employee ID) → create a PIN →
- *                       attendance. Every login after that unlocks with
- *                       that PIN (or a mock fingerprint / Face ID scan) —
- *                       no re-typing of phone + Employee ID. The PIN is
+ *   Part 1 (auth)       login: credentials (phone + supervisor-issued
+ *                       Employee ID) → attendance. On a device that has
+ *                       logged in before, the saved PIN unlocks the app
+ *                       (or a mock fingerprint / Face ID scan) — no
+ *                       re-typing of phone + Employee ID. The PIN is
  *                       stored ENCRYPTED by utils/secureStore.js and is
  *                       the temporary stand-in for real biometrics.
  *   Part 2 (attendance) login → attendance (simulated GPS check-in)
@@ -21,7 +21,6 @@
 import { useState } from 'react'
 import { I18nProvider } from './i18n.jsx'
 import LoginScreen from './screens/LoginScreen.jsx'
-import SetPinScreen from './screens/SetPinScreen.jsx'
 import EnterPinScreen from './screens/EnterPinScreen.jsx'
 import FingerprintAuthScreen from './screens/FingerprintAuthScreen.jsx'
 import FaceIdAuthScreen from './screens/FaceIdAuthScreen.jsx'
@@ -45,12 +44,7 @@ import {
   saveSession,
   todayKey,
 } from './utils/storage.js'
-import {
-  clearPinAuth,
-  getPinAuth,
-  hasPinAuth,
-  savePinAuth,
-} from './utils/secureStore.js'
+import { clearPinAuth, getPinAuth, hasPinAuth } from './utils/secureStore.js'
 
 /**
  * Where should the app open? A returning visitor resumes mid-flow:
@@ -84,10 +78,6 @@ export default function App() {
   // Today's machine allotment — null until the worker confirms it.
   const [machineAllotment, setMachineAllotment] = useState(getTodayAllotment)
 
-  // Credentials typed on the login screen while the PIN is being set up
-  // (first login only) — handed to <SetPinScreen /> and then saved.
-  const [pendingIdentity, setPendingIdentity] = useState(null)
-
   /* ---- navigation helpers ---- */
 
   /** Open the session for an identity and go to the attendance screen. */
@@ -103,31 +93,9 @@ export default function App() {
     setScreen('attendance')
   }
 
-  /**
-   * Credential login succeeded.
-   *   - first login on this device → the "Create Your PIN" screen
-   *   - a device that already has a PIN (e.g. after logout) → straight in
-   */
+  /** Credential login succeeded → straight into the app (attendance). */
   function handleLogin(phone, employeeId) {
-    const identity = { phone, employeeId }
-    if (hasPinAuth()) {
-      openSession(identity)
-      return
-    }
-    setPendingIdentity(identity)
-    setScreen('set-pin')
-  }
-
-  /** The PIN was created and confirmed → save it encrypted + open the session. */
-  async function handlePinSet(pin) {
-    const identity = pendingIdentity
-    await savePinAuth({
-      pin,
-      employeeId: identity.employeeId,
-      mobile: identity.phone,
-    })
-    setPendingIdentity(null)
-    openSession(identity)
+    openSession({ phone, employeeId })
   }
 
   /** The saved PIN (or a mock biometric) verified → open the session. */
@@ -172,7 +140,6 @@ export default function App() {
   /** Wipe every persisted value and restart the demo at the login screen. */
   function handleResetDemo() {
     clearAllDemoData() // also clears the encrypted PIN vault (secureStore)
-    setPendingIdentity(null)
     setAttendanceRecord(null)
     setMachineAllotment(null)
     setScreen('login')
@@ -186,20 +153,10 @@ export default function App() {
         return (
           <LoginScreen
             registeredUser={registeredUser}
-            hasPinSaved={hasPinAuth()}
             onLogin={handleLogin}
             onUnlockWithPin={() => setScreen('enter-pin')}
             onFingerprint={() => setScreen('fingerprint')}
             onFaceId={() => setScreen('face-id')}
-          />
-        )
-
-      case 'set-pin':
-        return (
-          <SetPinScreen
-            identity={pendingIdentity}
-            onPinSet={handlePinSet}
-            onBack={() => setScreen('login')}
           />
         )
 

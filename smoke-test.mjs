@@ -46,7 +46,10 @@ t('login bad phone reported first', checkLogin('12345', 'SUAB-1024'), 'Phone num
 t('login ok', checkLogin('9876543210', 'SUAB-1024'), '')
 console.log('DEMO_EMPLOYEE_ID =', DEMO_EMPLOYEE_ID)
 
-/* ---- async flavour of t() for the PIN vault ---- */
+/* ---- async flavour of t() for the PIN vault ----
+   every ta(...) call below is awaited: t() bumps `failures` from inside
+   a microtask, so an un-awaited call would settle after the exit-code
+   gate at the bottom and could never fail the run. */
 async function ta(label, promise, expected) {
   t(label, await promise, expected)
 }
@@ -83,21 +86,21 @@ const {
 } = await import('./src/utils/secureStore.js')
 
 t('PIN_LENGTH is 4', PIN_LENGTH, 4)
-ta('no PIN at first', hasPinAuth(), false)
-ta('getPinAuth empty', getPinAuth(), null)
-ta('verifyPin before any save', verifyPin('1234'), false)
+await ta('no PIN at first', hasPinAuth(), false)
+await ta('getPinAuth empty', getPinAuth(), null)
+await ta('verifyPin before any save', verifyPin('1234'), false)
 
 await savePinAuth({ pin: '4821', employeeId: 'SUAB-1024', mobile: '9876543210' })
 
-ta('hasPinAuth after save', hasPinAuth(), true)
+await ta('hasPinAuth after save', hasPinAuth(), true)
 const record = await getPinAuth()
 t('record pin', record && record.pin, '4821')
 t('record employeeId', record && record.employeeId, 'SUAB-1024')
 t('record mobile', record && record.mobile, '9876543210')
 t('record stamped with setAt', Boolean(record && record.setAt), true)
-ta('verifyPin correct', verifyPin('4821'), true)
-ta('verifyPin wrong', verifyPin('0000'), false)
-ta('verifyPin accepts a number', verifyPin(4821), true)
+await ta('verifyPin correct', verifyPin('4821'), true)
+await ta('verifyPin wrong', verifyPin('0000'), false)
+await ta('verifyPin accepts a number', verifyPin(4821), true)
 
 /* the vault must never hold the PIN as plain text */
 const rawVault = memory.get(STORAGE_KEYS.PIN_VAULT) || ''
@@ -105,12 +108,12 @@ t('vault hides the pin', rawVault.includes('"pin":"4821"'), false)
 
 /* a corrupted vault degrades to "no PIN" instead of crashing */
 memory.set(STORAGE_KEYS.PIN_VAULT, 'not-json')
-ta('corrupted vault reads as null', getPinAuth(), null)
+await ta('corrupted vault reads as null', getPinAuth(), null)
 
 /* clearPinAuth forgets everything (demo reset / "not you?") */
 clearPinAuth()
-ta('hasPinAuth after clear', hasPinAuth(), false)
-ta('getPinAuth after clear', getPinAuth(), null)
+await ta('hasPinAuth after clear', hasPinAuth(), false)
+await ta('getPinAuth after clear', getPinAuth(), null)
 
 if (failures > 0) {
   console.log(`\n${failures} test(s) FAILED`)

@@ -134,16 +134,7 @@ const DICTIONARY = {
     attSimNot: 'Not at location',
     attSimOff: 'Location off',
 
-    // ── Auth: PIN setup + unlock + mock biometrics ──
-    setPinTitle: 'Create Your PIN',
-    setPinSub: 'Use this PIN to unlock the app next time — no need to type your phone number again.',
-    setPinIdentity: 'Setting up: Employee ID {id}',
-    setPinEnterLabel: 'Enter a 4-digit PIN',
-    setPinConfirmLabel: 'Re-enter your PIN to confirm',
-    setPinMismatch: "PINs didn't match. Start again.",
-    setPinSaved: 'PIN saved securely!',
-    setPinSavedSub: 'Your PIN is encrypted and stays on this device.',
-    setPinHint: 'Your PIN never leaves this device.',
+    // ── Auth: PIN unlock + mock biometrics ──
     enterPinTitle: 'Enter Your PIN',
     enterPinSub: 'Welcome back, Employee ID {id}!',
     enterPinLabel: 'Enter your 4-digit PIN',
@@ -271,16 +262,7 @@ const DICTIONARY = {
     resetDemo: 'डेमो डेटा रीसेट करें',
     languageLabel: 'भाषा',
 
-    // ── Auth: PIN setup + unlock + mock biometrics ──
-    setPinTitle: 'अपना पिन बनाएँ',
-    setPinSub: 'अगली बार ऐप खोलने के लिए इस पिन का उपयोग करें — दोबारा फ़ोन नंबर टाइप करने की ज़रूरत नहीं।',
-    setPinIdentity: 'सेटअप: कर्मचारी ID {id}',
-    setPinEnterLabel: '4 अंकों का पिन डालें',
-    setPinConfirmLabel: 'पुष्टि के लिए पिन फिर से डालें',
-    setPinMismatch: 'पिन मेल नहीं खाए। दोबारा शुरू करें।',
-    setPinSaved: 'पिन सुरक्षित रूप से सेव हो गया!',
-    setPinSavedSub: 'आपका पिन एन्क्रिप्टेड है और इसी डिवाइस पर रहता है।',
-    setPinHint: 'आपका पिन इसी डिवाइस पर रहता है।',
+    // ── Auth: PIN unlock + mock biometrics ──
     enterPinTitle: 'अपना पिन डालें',
     enterPinSub: 'वापसी पर स्वागत है, कर्मचारी ID {id}!',
     enterPinLabel: 'अपना 4 अंकों का पिन डालें',
@@ -408,16 +390,7 @@ const DICTIONARY = {
     resetDemo: 'ডেমো ডেটা রিসেট',
     languageLabel: 'ভাষা',
 
-    // ── Auth: PIN setup + unlock + mock biometrics ──
-    setPinTitle: 'আপনার পিন তৈরি করুন',
-    setPinSub: 'পরের বার অ্যাপ খুলতে এই পিন ব্যবহার করুন — আবার ফোন নম্বর টাইপ করতে হবে না।',
-    setPinIdentity: 'সেটআপ: কর্মী ID {id}',
-    setPinEnterLabel: '৪ সংখ্যার পিন দিন',
-    setPinConfirmLabel: 'নিশ্চিত করতে পিন আবার দিন',
-    setPinMismatch: 'পিন মেলেনি। আবার শুরু করুন।',
-    setPinSaved: 'পিন নিরাপদে সংরক্ষিত!',
-    setPinSavedSub: 'আপনার পিন এনক্রিপ্ট করা এবং এই ডিভাইসেই থাকে।',
-    setPinHint: 'আপনার পিন এই ডিভাইসেই থাকে।',
+    // ── Auth: PIN unlock + mock biometrics ──
     enterPinTitle: 'আপনার পিন দিন',
     enterPinSub: 'স্বাগতম, কর্মী ID {id}!',
     enterPinLabel: 'আপনার ৪ সংখ্যার পিন দিন',
@@ -545,16 +518,7 @@ const DICTIONARY = {
     resetDemo: 'ਡੈਮੋ ਡਾਟਾ ਰੀਸੈਟ',
     languageLabel: 'ਭਾਸ਼ਾ',
 
-    // ── Auth: PIN setup + unlock + mock biometrics ──
-    setPinTitle: 'ਆਪਣਾ ਪਿੰਨ ਬਣਾਓ',
-    setPinSub: 'ਅਗਲੀ ਵਾਰ ਐਪ ਖੋਲ੍ਹਣ ਲਈ ਇਹ ਪਿੰਨ ਵਰਤੋ — ਦੁਬਾਰਾ ਫ਼ੋਨ ਨੰਬਰ ਟਾਈਪ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ।',
-    setPinIdentity: 'ਸੈੱਟਅੱਪ: ਕਰਮਚਾਰੀ ID {id}',
-    setPinEnterLabel: '4 ਅੰਕਾਂ ਦਾ ਪਿੰਨ ਦਾਖਲ ਕਰੋ',
-    setPinConfirmLabel: 'ਪੁਸ਼ਟੀ ਲਈ ਪਿੰਨ ਦੁਬਾਰਾ ਦਾਖਲ ਕਰੋ',
-    setPinMismatch: 'ਪਿੰਨ ਮੇਲ ਨਹੀਂ ਖਾਧੇ। ਦੁਬਾਰਾ ਸ਼ੁਰੂ ਕਰੋ।',
-    setPinSaved: 'ਪਿੰਨ ਸੁਰੱਖਿਅਤ ਸੰਭਾਲਿਆ ਗਿਆ!',
-    setPinSavedSub: 'ਤੁਹਾਡਾ ਪਿੰਨ ਐਨਕ੍ਰਿਪਟਡ ਹੈ ਅਤੇ ਇਸੇ ਡਿਵਾਈਸ ਤੇ ਰਹਿੰਦਾ ਹੈ।',
-    setPinHint: 'ਤੁਹਾਡਾ ਪਿੰਨ ਇਸੇ ਡਿਵਾਈਸ ਤੇ ਰਹਿੰਦਾ ਹੈ।',
+    // ── Auth: PIN unlock + mock biometrics ──
     enterPinTitle: 'ਆਪਣਾ ਪਿੰਨ ਦਾਖਲ ਕਰੋ',
     enterPinSub: 'ਜੀ ਆਇਆਂ ਨੂੰ, ਕਰਮਚਾਰੀ ID {id}!',
     enterPinLabel: 'ਆਪਣਾ 4 ਅੰਕਾਂ ਦਾ ਪਿੰਨ ਦਾਖਲ ਕਰੋ',
@@ -682,16 +646,7 @@ const DICTIONARY = {
     resetDemo: 'డెమో డేటా రీసెట్',
     languageLabel: 'భాష',
 
-    // ── Auth: PIN setup + unlock + mock biometrics ──
-    setPinTitle: 'మీ పిన్‌ను సృష్టించండి',
-    setPinSub: 'తర్వాత యాప్ తెరవడానికి ఈ పిన్ ఉపయోగించండి — మళ్లీ ఫోన్ నంబర్ టైప్ చేయాల్సిన అవసరం లేదు.',
-    setPinIdentity: 'సెటప్: ఉద్యోగి ID {id}',
-    setPinEnterLabel: '4 అంకెల పిన్ నమోదు చేయండి',
-    setPinConfirmLabel: 'నిర్ధారించడానికి పిన్‌ను మళ్లీ నమోదు చేయండి',
-    setPinMismatch: 'పిన్‌లు సరిపోలలేదు. మళ్లీ ప్రారంభించండి.',
-    setPinSaved: 'పిన్ సురక్షితంగా సేవ్ చేయబడింది!',
-    setPinSavedSub: 'మీ పిన్ ఎన్‌క్రిప్ట్ చేయబడి ఈ పరికరంలోనే ఉంటుంది.',
-    setPinHint: 'మీ పిన్ ఈ పరికరంలోనే ఉంటుంది.',
+    // ── Auth: PIN unlock + mock biometrics ──
     enterPinTitle: 'మీ పిన్ నమోదు చేయండి',
     enterPinSub: 'తిరిగి స్వాగతం, ఉద్యోగి ID {id}!',
     enterPinLabel: 'మీ 4 అంకెల పిన్ నమోదు చేయండి',

@@ -61,12 +61,6 @@
   height: 76px;
 }
 
-/* green variant — "done" confirmations (e.g. the PIN-saved screen) */
-.icon-badge--success {
-  background: var(--success-soft);
-  color: var(--success);
-}
-
 /* ---- card (the white rounded panel on every screen) ---- */
 .card {
   background: var(--card);
@@ -242,7 +236,10 @@
   left: 50%;
   bottom: calc(28px + env(safe-area-inset-bottom));
   transform: translateX(-50%);
-  z-index: 50;
+  /* Above the modal backdrop (screens.css, z-index: 60) so a toast fired
+     while a modal is open — e.g. the work-update confirmation — is still
+     visible instead of hiding underneath it. */
+  z-index: 70;
   display: flex;
   align-items: center;
   gap: 10px;

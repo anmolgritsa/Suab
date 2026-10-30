@@ -54,6 +54,7 @@ import {
   REMINDER_INTERVAL_MS,
   isReminderDue,
 } from '../utils/shift.js';
+import { playUpdateChime } from '../utils/sound.js';
 
 /* How often the homepage re-checks "is a reminder due now?". Capped so a
    tiny demo interval still fires promptly, and bounded so the real 3-hour
@@ -119,8 +120,9 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
     // reminder modal only calls this AFTER its mandatory-attachment check,
     // so `attachment` is always present here. The modal itself switches to
     // its "Update sent!" stage and closes when the worker taps Done — so
-    // we only record + toast here.
+    // we only record + toast + chime here.
     saveWorkUpdate({ at: new Date().toISOString(), attachment });
+    playUpdateChime(); // synthesised "sent" chime (utils/sound.js)
     setToast(t('updateSent'));
   }, [t]);
 

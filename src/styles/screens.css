@@ -1599,12 +1599,12 @@
 }
 
 /* ==========================================================================
-   Auth: PIN setup + PIN unlock (first-time / returning login)
+   Auth: PIN unlock (returning login)
    --------------------------------------------------------------------------
-   SetPinScreen ("Create Your PIN") and EnterPinScreen ("Enter Your PIN")
-   share one layout: centred stack under the top bar — title, subtitle,
-   identity chip, the 4-dot PIN display, the shared keypad and a hint.
-   The dots never reveal the digits, like a phone lock screen.
+   EnterPinScreen ("Enter Your PIN"): centred stack under the top bar —
+   title, subtitle, the 4-dot PIN display, the shared keypad and the
+   "not you" link. The dots never reveal the digits, like a phone lock
+   screen.
    ========================================================================== */
 
 /* Stacked quick-unlock buttons on the login screen (PIN already set up). */
@@ -1630,13 +1630,6 @@
   justify-content: center;
   justify-content: safe center;
   padding: 12px 0 8px;
-}
-
-/* Back arrow row (SetPinScreen only), left-aligned above the title. */
-.pin__back {
-  width: 100%;
-  display: flex;
-  margin-bottom: 6px;
 }
 
 /* The 4-dot PIN display. */
@@ -1690,7 +1683,7 @@
   animation: pin-shake 0.35s ease;
 }
 
-/* "Enter a 4-digit PIN" / "Re-enter your PIN to confirm" / lockout countdown. */
+/* "Enter a 4-digit PIN" / lockout countdown. */
 .pin__label {
   margin-top: 16px;
   font-size: 13.5px;
@@ -1702,24 +1695,6 @@
 .pin__error {
   margin-top: 6px;
   text-align: center;
-}
-
-/* "Your PIN never leaves this device." */
-.pin__hint {
-  margin-top: 16px;
-  font-size: 12.5px;
-  color: var(--text-soft);
-  text-align: center;
-}
-
-/* "PIN saved securely!" confirmation actions. */
-.pin__actions {
-  width: 100%;
-  max-width: 320px;
-  margin-top: 26px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 /* "Not you? Use another account" under the keypad. */
