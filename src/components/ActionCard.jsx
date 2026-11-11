@@ -15,6 +15,8 @@
  *  - onClick() open the matching report screen
  */
 
+/*hello world*/
+
 const PALETTES = {
   amber: { badge: '#f6a723', soft: '#fdf3d7', text: '#8a5a10' },
   blue: { badge: '#2e83f9', soft: '#e3effd', text: '#1b5fb8' },
