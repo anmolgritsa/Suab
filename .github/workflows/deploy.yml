@@ -7,7 +7,7 @@
 #
 # How it works
 #   1. Build the app with Vite (vite.config.js already sets base '/Suab-deploy/').
-#   2. Publish dist/ to the gh-pages branch of the PUBLIC deploy repo with
+#   2. Publish dist/ to the main branch of the PUBLIC deploy repo with
 #      peaceiris/actions-gh-pages, authenticating with the DEPLOY_TOKEN secret.
 #
 # Why peaceiris instead of checkout + push:
@@ -16,7 +16,7 @@
 #   empty deploy repo cannot be checked out at all — actions/checkout fails
 #   with "couldn't find remote ref refs/heads/main" because there is no
 #   branch yet. peaceiris only runs `git ls-remote` (which succeeds on an
-#   empty repo) and creates the gh-pages branch from scratch on the first
+#   empty repo) and creates the main branch from scratch on the first
 #   deploy. One-time setup — deploy repo, Pages branch and the secret — is
 #   documented in DEPLOY.md.
 # ============================================================================
@@ -57,11 +57,11 @@ jobs:
       - name: Build
         run: npm run build   # base '/Suab-deploy/' comes from vite.config.js
 
-      # ---- 2. Publish dist/ to the gh-pages branch of Suab-deploy ------------
+      # ---- 2. Publish dist/ to the main branch of Suab-deploy ---------------
       # Works even when Suab-deploy is completely empty: on the first run the
-      # action creates the gh-pages branch itself. Unchanged build output is
+      # action creates the main branch itself. Unchanged build output is
       # skipped automatically (no empty commits on docs-only pushes).
-      - name: Publish to the gh-pages branch
+      - name: Publish to the main branch of Suab-deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
           # A PAT with Contents: Read and write on Suab-deploy — required for
