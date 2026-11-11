@@ -25,7 +25,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]       # every push to main auto-deploys
+    branches: [master]       # every push to main auto-deploys
   workflow_dispatch: {}    # manual runs from the Actions tab
 
 permissions:
