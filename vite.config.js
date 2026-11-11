@@ -2,6 +2,7 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 import { createSyncServer } from './server/syncServer.js'
+import { buildServiceWorker } from './buildServiceWorker.js'
 
 // https://vite.dev/config/
 //
@@ -77,6 +78,6 @@ export default defineConfig(() => {
     // is what mounts the API there; `vite dev` uses configureServer. The base
     // is passed so the middleware accepts both /api/... and /Suab-deploy/api/...
     // regardless of which URL form the client used.
-    plugins: [react(), syncServerPlugin(base)],
+    plugins: [react(), syncServerPlugin(base), buildServiceWorker()],
   }
 })

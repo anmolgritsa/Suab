@@ -41,6 +41,21 @@ const APPLY_DEBOUNCE_MS = 250;
 /** Must stay ahead of the server's persisted revision after restarts. */
 const SERVER_CLOCK = Number(import.meta.env?.VITE_SYNC_CLOCK ?? 0) || 0;
 
+/**
+ * DEMO PHASE — backend/database temporarily disabled.
+ *
+ * The app currently runs as a UI/navigation demo without a connected
+ * database, so the cross-browser sync API (the only backend surface this
+ * app has: PUT/GET /api/db + SSE) is switched off here. Everything keeps
+ * working on localStorage alone; the bridge's fetches/EventSource never
+ * fire, so no backend errors can appear in the console.
+ *
+ * TO RESTORE BACKEND SYNC: set SYNC_ENABLED to true (and run the sync
+ * server — `npm run dev` mounts it automatically, or `npm run sync-server`).
+ * No other change is needed; all bridge code below is preserved.
+ */
+const SYNC_ENABLED = false;
+
 function syncEndpoints() {
   const base = new URL(import.meta.env.BASE_URL ?? '/', window.location.origin);
   return {
@@ -141,6 +156,7 @@ function schedulePull() {
  *  3. fall back to polling when EventSource is unavailable/retrying.
  */
 export async function startSyncBridge({ pollMs = 5000 } = {}) {
+  if (!SYNC_ENABLED) return null; // backend disabled for the demo phase
   if (state) return state; // StrictMode double-invocation safe
   state = createState(syncEndpoints());
 

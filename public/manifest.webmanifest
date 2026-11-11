@@ -1,0 +1,41 @@
+{
+  "name": "Suab",
+  "short_name": "Suab",
+  "description": "Suab — Factory Management: labour and supervisor workflows for attendance, machine allotment, work updates, defect reports and SOS alerts.",
+  "id": "/Suab-deploy/",
+  "start_url": "/Suab-deploy/",
+  "scope": "/Suab-deploy/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5fafd",
+  "theme_color": "#2e83f9",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

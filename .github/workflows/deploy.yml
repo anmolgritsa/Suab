@@ -68,7 +68,7 @@ jobs:
           # cross-repo pushes (GITHUB_TOKEN cannot leave this repository).
           personal_token: ${{ secrets.DEPLOY_TOKEN }}
           external_repository: anmolgritsa/Suab-deploy
-          publish_branch: gh-pages
+          publish_branch: main      # deploy repo uses `main` as its primary deployment branch
           publish_dir: ./dist
           enable_jekyll: false   # adds .nojekyll — serve the files as-is
           commit_message: "Deploy ${{ github.sha }} from anmolgritsa/Suab@main"

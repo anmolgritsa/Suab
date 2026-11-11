@@ -25,3 +25,13 @@ startSyncBridge().finally(() => {
     </StrictMode>,
   )
 })
+
+// PWA: register the build-time service worker (production only — the dev
+// server never emits sw.js, and a failed registration is harmless anyway).
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register(`${import.meta.env.BASE_URL}sw.js`)
+      .catch(() => {})
+  })
+}

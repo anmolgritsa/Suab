@@ -26,6 +26,10 @@ dist-ssr
 # Transient screenshots written by the browser test scripts
 .tmp-*.png
 
+# Temporary debug scripts and artifacts from coding sessions
+.tmp-*
+tmp-*
+
 # Local cross-browser sync database (server/dataFile.js) — seed it again
 # any time with `npm run db:seed`; never commit per-machine data
 .data/
