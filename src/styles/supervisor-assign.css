@@ -1,0 +1,525 @@
+/* ==========================================================================
+   Supervisor — Assign Machine screen (.supa__*)
+   --------------------------------------------------------------------------
+   Opened from the dashboard's "Assign Machine" card. Reuses the labour
+   homepage's shell (.home, .home__topbar, .home__back) and the app's card
+   language (white cards, soft shadows, standard control height); everything
+   below is scoped to .supa__* so no shared rule is touched.
+   ========================================================================== */
+.supa__body {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 14px;
+  padding-bottom: 32px;
+}
+
+.supa__heading {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin: 0 0 10px;
+}
+
+/* ---- employee roster: compact rows with a status badge ---- */
+.supa__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.supa__emp {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-input);
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-card);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease, transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.supa__emp:active {
+  transform: scale(0.98);
+}
+
+/* Selected worker — the app's blue accent. */
+.supa__emp--on {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+}
+
+.supa__avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.supa__emp--on .supa__avatar {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.supa__emp-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.supa__emp-text strong {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.supa__emp-text small {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+/* Status badges — green when assigned (with the machine number), amber
+   when free (the same palettes the Other screen's pills use). */
+.supa__badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.supa__badge--on {
+  background: #e0f6ec;
+  color: #157a55;
+}
+
+.supa__badge--off {
+  background: #fdf3d7;
+  color: #8a5a10;
+}
+
+/* ---- machine + material dropdowns ---- */
+.supa__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.supa__select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: var(--control-h);
+  padding: 0 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  box-shadow: var(--shadow-card);
+  color: var(--text-soft);
+  margin-bottom: 14px;
+}
+
+.supa__select {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+
+/* The reassign note — soft amber, the same tone as the "not assigned" badge. */
+.supa__note {
+  margin: -6px 0 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #8a5a10;
+}
+
+/* ---- output details: editable dimension tiles ---- */
+.supa__dims {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.supa__dim {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+}
+
+/* Target quantity spans the full row so the four dimensions sit evenly. */
+.supa__dim--wide {
+  grid-column: 1 / -1;
+}
+
+.supa__dim label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.supa__dim input {
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+}
+
+/* ---- priority chips (each priority carries its own accent) ---- */
+.supa__prio {
+  display: flex;
+  gap: 10px;
+}
+
+.supa__prio-chip {
+  flex: 1;
+  min-width: 0;
+  height: var(--control-h);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--text-soft);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+}
+
+.supa__prio-chip--normal {
+  --p: var(--blue);
+  --p-soft: var(--blue-soft);
+}
+
+.supa__prio-chip--high {
+  --p: #e08a3c;
+  --p-soft: #fdeedd;
+}
+
+.supa__prio-chip--urgent {
+  --p: var(--coral);
+  --p-soft: var(--coral-soft);
+}
+
+.supa__prio-chip--on {
+  background: var(--p-soft);
+  border-color: var(--p);
+  color: var(--p);
+}
+
+/* ---- preview summary card ---- */
+/* Wrapper around the PrimaryButton ("Preview assignment" / "Confirm") —
+   .supa__body's flex gap provides the spacing; the wrapper just keeps the
+   button full-width inside the preview card too. */
+.supa__actions {
+  width: 100%;
+}
+
+.supa__preview {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--box-pad);
+}
+
+.supa__prev-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+/* Separator between rows only (a sibling combinator, so the trailing
+   .supa__actions div can't swallow the :last-of-type match). */
+.supa__prev-row + .supa__prev-row {
+  border-top: 1px solid var(--border);
+}
+
+.supa__prev-label {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  width: 96px;
+  flex-shrink: 0;
+}
+
+.supa__prev-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The five output values as a compact mini-grid inside the preview. */
+.supa__prev-dims {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.supa__prev-dim {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.supa__prev-dim small {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.supa__prev-dim strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* The preview's secondary "Back" — a quiet white pill under the confirm. */
+.supa__back {
+  width: 100%;
+  height: var(--control-h);
+  margin-top: 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.supa__back:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* ---- recent assignments history ---- */
+.supa__history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.supa__hist-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+}
+
+.supa__avatar--sm {
+  width: 32px;
+  height: 32px;
+  font-size: 11px;
+}
+
+.supa__hist-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.supa__hist-text strong {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.supa__hist-text small {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Priority dots — the same accents as the chips. */
+.supa__prio-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.supa__prio-dot--normal {
+  background: var(--blue);
+}
+
+.supa__prio-dot--high {
+  background: #e08a3c;
+}
+
+.supa__prio-dot--urgent {
+  background: var(--coral);
+}
+
+.supa__empty {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+/* ==========================================================================
+   Labour home — assigned-job banner (.labour-job__*)
+   --------------------------------------------------------------------------
+   Purely additive: renders only when the supervisor has assigned THIS
+   worker a machine (data/assignments.js). Sits between the shift timer
+   block and the action-card grid; the labour flow itself is untouched.
+   ========================================================================== */
+.labour-job {
+  width: 100%;
+  max-width: 380px;
+  margin-top: 12px;
+  background: var(--blue-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.labour-job__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.labour-job__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 6px 12px;
+  box-shadow: 0 3px 8px rgba(23, 35, 59, 0.08);
+}
+
+.labour-job__chip svg {
+  color: var(--blue);
+  flex-shrink: 0;
+}
+
+.labour-job__chip-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.labour-job__chip-text small {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.labour-job__chip-text strong {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Priority pill — the same accents as the assign screen's chips. */
+.labour-job__prio {
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.labour-job__prio--normal {
+  background: #e3effd;
+  color: #1b5fb8;
+}
+
+.labour-job__prio--high {
+  background: #fdeedd;
+  color: #8a5a10;
+}
+
+.labour-job__prio--urgent {
+  background: var(--coral-soft);
+  color: #c23a55;
+}
+
+.labour-job__line {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  overflow-wrap: anywhere;
+}

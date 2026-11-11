@@ -1,0 +1,337 @@
+/* ==========================================================================
+   Supervisor — Labour Updates screen (.supu__*)
+   --------------------------------------------------------------------------
+   Opened from the dashboard's "Labour Updates" card. Reuses the labour
+   homepage's shell (.home, .home__topbar, .home__back) and the app's card
+   language (white cards, soft shadows, standard control height); everything
+   below is scoped to .supu__* so no shared rule is touched.
+   ========================================================================== */
+.supu__body {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 14px;
+  padding-bottom: 32px;
+}
+
+/* ---- roster: one compact row per labourer ---- */
+.supu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.supu__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-input);
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+/* Initials avatar — colored circle, the same soft palette the dashboard's
+   action cards use. */
+.supu__avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.supu__avatar--blue {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.supu__avatar--green {
+  background: #e2f6e9;
+  color: #1d7a46;
+}
+
+.supu__avatar--amber {
+  background: #fdeedd;
+  color: #8a5a10;
+}
+
+.supu__avatar--purple {
+  background: #f1ecfe;
+  color: #6a4fd8;
+}
+
+.supu__avatar--coral {
+  background: var(--coral-soft);
+  color: #c23a55;
+}
+
+/* Name + ID/time column. */
+.supu__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.supu__text strong {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.supu__text small {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+/* Video thumbnail — the Play/View button (colored placeholder + play icon). */
+.supu__thumb {
+  width: 52px;
+  height: 38px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 10px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+
+.supu__thumb:hover {
+  background: #d8e8fd;
+  transform: translateY(-1px);
+}
+
+/* Muted "not submitted" placeholder — no update to play. */
+.supu__thumb--none {
+  background: #eef1f6;
+  color: #9aa5bd;
+  cursor: default;
+}
+
+/* Status badges — green when submitted, amber when not. */
+.supu__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.supu__badge--on {
+  background: #e2f6e9;
+  color: #1d7a46;
+}
+
+.supu__badge--off {
+  background: #fdeedd;
+  color: #8a5a10;
+}
+
+/* ---- date-wise grouping: one heading per factory day ---- */
+.supu__date-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.supu__date-heading {
+  margin: 6px 0 0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #7c8aa5;
+}
+
+/* A row's details text and inline media (images/videos) — the row becomes a
+   column when it carries media so the previews get the full card width. */
+.supu__details {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #4a5872;
+}
+
+.supu__media {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.supu__media-img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  cursor: zoom-in;
+}
+
+.supu__media-video {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: #0b1220;
+}
+
+/* Empty state — no real submissions yet (no demo rows are shown). */
+.supu__empty {
+  margin: 24px 0;
+  text-align: center;
+  font-size: 13px;
+  color: #7c8aa5;
+}
+
+/* ---- full-screen viewer: the update enlarged, with a close button ---- */
+.supu__modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(23, 35, 59, 0.72);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px;
+}
+
+.supu__modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.supu__modal-close:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* The enlarged placeholder — a real build plays the video here. */
+.supu__modal-media {
+  width: min(320px, 80vw);
+  aspect-ratio: 16 / 10;
+  border-radius: 18px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 18px 40px rgba(23, 35, 59, 0.35);
+}
+
+.supu__modal-caption {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.supu__modal-caption strong {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.supu__modal-caption span {
+  font-size: 12.5px;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+/* Live voice note — a real play/stop button over the placeholder (the
+   clip plays through an Audio element). Transparent, so the placeholder's
+   soft-blue card stays the visual. */
+.supu__modal-play {
+  border: none;
+  background: transparent;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The labourer's details text under the caption — the update's "what was
+   done" line, kept narrow so long descriptions wrap inside the modal.
+   (.supu__modal-caption .supu__modal-details out-specifies the caption's
+   plain span rule above, so no !important is needed.) */
+.supu__modal-caption .supu__modal-details {
+  max-width: 320px;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.92;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+
+
+/* ---- ErrorBoundary fallback (App.jsx wraps the routed screen) ----
+   A screen that throws during render used to unmount the WHOLE tree -
+   the blank page. The fallback keeps the app frame usable: a short
+   message + a retry button, styled with the existing tokens. */
+.errbound {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.errbound__title {
+  margin: 0;
+  max-width: 300px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.errbound__retry {
+  width: auto;
+  min-width: 180px;
+  padding: 0 28px;
+}

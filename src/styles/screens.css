@@ -1,0 +1,4090 @@
+/* ==========================================================================
+   screens.css — layout for each screen (login, attendance, home, reports…)
+   ========================================================================== */
+
+/* ---- shared screen shell ----
+   Every screen centres its content: horizontally always (align-items),
+   vertically when the content is shorter than the viewport (the "safe"
+   keyword falls back to top-alignment if the content ever overflows, so
+   nothing can be clipped out of reach on small screens). Full-height
+   screens with a pinned footer (attendance, homepage) keep their own
+   layout — see .att / .home below. */
+.screen {
+  position: relative;
+  z-index: 1; /* above the decorative shapes */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* vertical centring (fallback) */
+  justify-content: safe center; /* never clip the top when content overflows */
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto; /* small phones can scroll if needed */
+}
+
+.screen__header {
+  margin-bottom: 20px;
+}
+
+.screen__title {
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.screen__subtitle {
+  font-size: 14px;
+  color: var(--text-soft);
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.45;
+}
+
+/* ---- shared round back button (report + product screens) ---- */
+.back-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(23, 35, 59, 0.06);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.back-button:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* ==========================================================================
+   Login screen
+   ========================================================================== */
+.login__who {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-top: 4px;
+}
+
+.login__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 18px;
+}
+
+.login__form .demo-chip {
+  align-self: center;
+  margin-bottom: 14px;
+}
+
+/* Fingerprint block: icon above the label, both centred. */
+.fingerprint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fingerprint__icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fingerprint:active .fingerprint__icon {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.login__divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0 6px;
+}
+
+.login__footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Screen: header upar, baaki sab bachi hui jagah me center */
+.home.login {
+  display: flex;
+  flex-direction: column;
+  height: 100%;        /* frame ki height follow kare */
+  min-height: 100%;
+}
+
+/* Header ke neeche ka poora block: vertically + horizontally center */
+.home.login .login__main {
+  flex: 1;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 32px 20px 24px;   /* padding-top badhao = aur neeche aayega */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;                 /* cheezon ke beech saaf spacing */
+}
+
+.home.login .login__title,
+.home.login .login__who {
+  text-align: center;
+  margin: 0;
+}
+
+.home.login .login__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Fingerprint: icon upar, text neeche, dono bilkul center */
+.home.login .fingerprint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 6px auto 0;
+}
+
+.home.login .login__divider {
+  width: 100%;
+  margin: 6px 0;
+}
+
+/* Forgot Password / Help: ek line me, beech me */
+.home.login .login__footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* Decorative rounded shapes behind the login content (mockup 3). */
+.decor--corner {
+  position: absolute;
+  top: -70px;
+  right: -70px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  opacity: 0.55;
+  z-index: -1;
+}
+
+/* ==========================================================================
+   Success (placeholder) screen
+   ========================================================================== */
+.success {
+  justify-content: center;
+}
+
+.success__card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.success__badge {
+  background: #e6f7ec;
+  color: var(--success);
+}
+
+.success__card .screen__title {
+  margin-top: 14px;
+}
+
+.success__note {
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.5;
+  margin: 14px 0 18px;
+}
+
+/* ==========================================================================
+   Attendance screen (Part 2)
+   --------------------------------------------------------------------------
+   One screen, three GPS states. Each state class sets custom properties
+   (--att = main colour, --att-soft = pale version) that the illustration,
+   button and footer wave all read â€” switching state re-themes everything.
+   ========================================================================== */
+
+   /* Header aur footer ke beech ki bachi hui jagah me center */
+.att__main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.att__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Footer ab wrapper ke baad hai, isliye auto margin ki zarurat nahi */
+.att__footer {
+  margin-top: 0;
+}
+.att {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px 0;
+  overflow-y: auto;
+}
+
+.att--at-location {
+  --att: var(--blue);
+  --att-dark: var(--blue-dark);
+  --att-soft: var(--blue-soft);
+  --att-tint: #d3e8fd;
+}
+
+.att--not-at-location {
+  --att: var(--coral);
+  --att-dark: var(--coral-dark);
+  --att-soft: var(--coral-soft);
+  --att-tint: #fedbe5;
+}
+
+.att--location-off {
+  --att: var(--purple);
+  --att-dark: var(--purple-dark);
+  --att-soft: var(--purple-soft);
+  --att-tint: #ded8fd;
+}
+
+.att__header {
+  width: 100%;
+  display: flex;
+}
+
+/* The big circular illustration (AttendanceArt.jsx). The SVG inside is
+   100%/100%, so this box needs a real size: a square that scales down on
+   narrow phones. */
+.att-art {
+  width: min(230px, 60vw);
+  aspect-ratio: 1;
+  margin-top: 18px;
+}
+
+/* The SVG is inline by default, which adds a ~4px baseline gap under it and
+   makes the square 4px taller than the aspect-ratio box. Block removes it. */
+.att-art svg {
+  display: block;
+}
+
+.att__art {
+  width: min(230px, 60vw);
+  margin-top: 18px;
+}
+
+.att__title {
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  margin-top: 18px;
+}
+
+.att__subtitle {
+  font-size: 14px;
+  color: var(--text-soft);
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.45;
+  max-width: 300px;
+}
+
+.att__distance {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--att);
+  background: var(--att-soft);
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin-top: 12px;
+}
+
+.att__actions {
+  width: 100%;
+  margin-top: 22px;
+}
+
+/* The check-in button keeps the shared .btn-primary standard height
+   (--control-h), the same as every other primary action in the app. */
+
+/* ---- Second section: "Today's Shift" summary card ----
+   A quiet, read-only card under the check-in button. It mirrors the demo's
+   timing knobs (shift length, reminder interval) and the worker's check-in
+   status. Same card language as the rest of the app (white, rounded, soft
+   shadow); the title picks up the current GPS state colour via --att. */
+.att__shift-card {
+  width: 100%;
+  margin-top: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--box-pad); /* standard card padding */
+}
+
+.att__shift-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--att);
+}
+
+.att__shift-rows {
+  margin: 10px 0 0;
+  display: grid;
+  gap: 9px;
+}
+
+.att__shift-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.att__shift-row dt {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.att__shift-row dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: right;
+}
+
+/* The status value turns the app's success green once the worker is in. */
+.att__shift-status--on {
+  color: #157a55;
+}
+
+/* State-coloured button variants (see PrimaryButton's variant prop). */
+.btn-primary--coral {
+  background: var(--coral);
+  box-shadow: 0 10px 22px rgba(249, 109, 127, 0.35);
+}
+
+.btn-primary--coral:active {
+  background: var(--coral-dark);
+}
+
+.btn-primary--purple {
+  background: var(--purple);
+  box-shadow: 0 10px 22px rgba(143, 123, 250, 0.35);
+}
+
+.btn-primary--purple:active {
+  background: var(--purple-dark);
+}
+
+/* Success-green variant — the homepage's "Half-Day End Shift" button
+   (green = finish & submit, the app's success colour). */
+.btn-primary--success {
+  background: var(--success);
+  box-shadow: 0 10px 22px rgba(47, 179, 68, 0.35);
+}
+
+.btn-primary--success:active {
+  background: #26963a;
+}
+
+/* Demo GPS strip: small chips so testers can switch the simulated state
+   without touching the real UI a labourer would see. */
+.att__sim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.att__sim-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.att__sim-chip {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-soft);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 12px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.att__sim-chip--active {
+  color: #ffffff;
+  background: var(--att);
+  border-color: var(--att);
+}
+
+/* Footer: state-tinted wave with the language pill (mockup bottom). */
+.att__footer {
+  width: 100%;
+  margin-top: auto;
+  position: relative;
+  padding-top: 26px;
+}
+
+.att__wave {
+  display: block;
+  width: 100%;
+  height: 84px;
+}
+
+.att__lang {
+  position: absolute;
+  left: 50%;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 12px rgba(23, 35, 59, 0.12);
+}
+
+/* ==========================================================================
+   Machine Assignment placeholder screen (Part 2)
+   --------------------------------------------------------------------------
+   REMOVED — the Labour Homepage (Part 3) is now the screen the worker
+   lands on after checking in, so this placeholder and its styles were
+   retired with it.
+   ========================================================================== */
+
+/* ==========================================================================
+   Labour Homepage (Part 3 — mockups 6.1 / 6.2)
+   --------------------------------------------------------------------------
+   Top bar (logo + language pill) → shift timer pill → action cards
+   (2-up grid + one full-width row) → SOS button pinned near the bottom.
+   ========================================================================== */
+
+   /* ---- Machine Allotment: 2 big cards + Next ---- */
+.allot__main {
+  flex: 1;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0 40px;
+}
+
+.allot__cards {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.allot-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: var(--box-pad); /* standard card padding */
+  min-height: var(--row-min-h); /* same height as the wide action card */
+  border-radius: 26px;
+  box-shadow: var(--shadow-card);
+}
+
+.allot-card__badge {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(23, 35, 59, 0.14);
+}
+
+.allot-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.allot-card__label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.allot-card__value {
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+/* Blue = machine */
+.allot-card--machine {
+  background: var(--blue-soft);
+}
+.allot-card--machine .allot-card__badge {
+  background: var(--blue);
+}
+.allot-card--machine .allot-card__label {
+  color: var(--blue);
+}
+
+/* Amber = job */
+.allot-card--job {
+  background: #fdeedd;
+}
+.allot-card--job .allot-card__badge {
+  background: #e08a3c;
+}
+.allot-card--job .allot-card__label {
+  color: #e08a3c;
+}
+
+/* Green = raw material (the input the machine runs on) */
+.allot-card--raw {
+  background: #e2f6e5;
+}
+.allot-card--raw .allot-card__badge {
+  background: var(--success);
+}
+.allot-card--raw .allot-card__label {
+  color: var(--success);
+}
+
+/* Purple = finished product (what the machine turns out) */
+.allot-card--product {
+  background: var(--purple-soft);
+}
+.allot-card--product .allot-card__badge {
+  background: var(--purple);
+}
+.allot-card--product .allot-card__label {
+  color: var(--purple);
+}
+
+.allot__actions {
+  width: 100%;
+  margin-top: 28px;
+}
+
+/* The 4th button ("Other") sits below the primary Next CTA. */
+.allot__more {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* ---- Tappable allot cards (Machine No. / Job open detail screens) ---- */
+
+/* Button reset: the card keeps its look but behaves like a button. */
+button.allot-card {
+  width: 100%;
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.allot-card:active {
+  transform: scale(0.98);
+}
+
+/* Subtle "this opens something" affordance at the card's right edge. */
+.allot-card__chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--text-soft);
+}
+
+/* ==========================================================================
+   Machine detail screens (Machine Inputs / Product Dimensions)
+   --------------------------------------------------------------------------
+   Opened from the allotment cards. Same header (logo + language), the
+   shared round back button returning to the allotment, and the allot-card
+   look for the content — spec rows list grade/spec/dimensions.
+   ========================================================================== */
+
+   /* ProductDimensionsScreen.css
+   Everything is prefixed with .pd so it won't clash with existing styles. */
+
+/* Make the main area a column so the content block can sit in the
+   vertical centre of the screen (below the header). */
+.detail__main {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd {
+  --pd-ink: #141a3a;
+  --pd-muted: #6b7194;
+  --pd-purple: #8b6cf6;
+  --pd-purple-deep: #6a4de0;
+  --pd-tint: #ece6ff;
+  --pd-card: #ffffff;
+
+  width: 100%;
+  max-width: 420px;
+  margin: auto;                 /* centres vertically + horizontally */
+  padding: 8px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---------- Title ---------- */
+.pd__title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 800;
+  color: var(--pd-ink);
+  letter-spacing: -0.01em;
+}
+.pd__subtitle {
+  margin: 6px 0 24px;
+  font-size: 16px;
+  color: var(--pd-muted);
+}
+
+/* ---------- Product hero ---------- */
+.pd-hero {
+  width: 100%;
+  padding: var(--box-pad); /* standard card padding */
+  border-radius: 28px;
+  background: linear-gradient(160deg, #e6defe 0%, #f3efff 100%);
+  box-shadow: 0 14px 34px rgba(106, 77, 224, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pd-hero__badge {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(145deg, var(--pd-purple), var(--pd-purple-deep));
+  box-shadow: 0 10px 22px rgba(106, 77, 224, 0.4),
+    0 0 0 8px rgba(139, 108, 246, 0.16);
+}
+.pd-hero__label {
+  margin-top: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pd-purple-deep);
+}
+.pd-hero__name {
+  margin-top: 4px;
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: var(--pd-ink);
+}
+
+/* Grade pill */
+.pd-hero__grade {
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 8px 16px;
+  border-radius: 999px;
+  background: var(--pd-card);
+  box-shadow: 0 4px 12px rgba(20, 26, 58, 0.08);
+}
+.pd-hero__grade-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pd-muted);
+}
+.pd-hero__grade-value {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--pd-purple-deep);
+}
+
+/* ---------- Dimension tiles ---------- */
+.pd-grid {
+  width: 100%;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.pd-tile {
+  padding: var(--box-pad); /* standard card padding */
+  border-radius: 22px;
+  background: var(--pd-card);
+  box-shadow: 0 8px 22px rgba(20, 26, 58, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+/* Coil weight spans the full row so the 3 tiles sit evenly */
+.pd-tile--weight {
+  grid-column: 1 / -1;
+}
+.pd-tile__label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pd-muted);
+}
+.pd-tile__value {
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--pd-ink);
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  .pd__title { font-size: 24px; }
+  .pd-hero__name { font-size: 23px; }
+  .pd-tile__value { font-size: 24px; }
+}
+
+.detail__main {
+  flex: 1;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0 32px;
+}
+
+.detail__back {
+  align-self: flex-start;
+  margin: 2px 0 10px;
+}
+
+.detail__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  text-align: center;
+}
+
+/* ---- Machine Inputs: ride the content higher ----
+   The shared .detail__body centres this screen's short three-card block,
+   which strands it mid-screen with a large void between the back button
+   and the title. This scoped modifier keeps the app's two-step centring
+   cascade (plain centre first — the shared rule only declares `safe
+   center`, which some browsers drop — then safe centre) and adds a strong
+   bottom-padding bias, so the block sits well above true centre and the
+   slack collects below the cards. Scoped to this screen only: the shared
+   .detail__body rules the other detail screens rely on are untouched. */
+.inputs__body {
+  justify-content: center; /* centre the block (fallback declaration) */
+  justify-content: safe center; /* never clip the top when content overflows */
+  padding-bottom: 200px; /* biases the centred block upward (~100px) */
+}
+
+/* Detail cards are read-only, so a slightly tighter rhythm than the
+   allotment's two big cards. */
+.allot__cards--detail {
+  margin-top: 20px;
+  gap: 14px;
+}
+
+/* Long material names read better a step smaller than the allotment's. */
+.allot-card__value--sm {
+  font-size: 18px;
+}
+
+/* Spec rows inside a detail card (Grade / Spec / dimensions). */
+.allot-card__specs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.spec-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14.5px;
+}
+
+.spec-row__label {
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.spec-row__value {
+  font-weight: 700;
+  color: var(--text);
+  text-align: right;
+}
+
+/* ---- Compact chips (Machine Inputs' grade/spec, text-light) ----
+   The inputs screen leans on icons and colour instead of labelled rows:
+   the grade chip takes the card's colour, the spec chip stays neutral. */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  background: rgba(127, 142, 181, 0.14);
+  color: var(--text);
+}
+
+.chip--raw {
+  background: var(--success);
+  color: #ffffff;
+}
+
+.chip--machine {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.chip--job {
+  background: #e08a3c;
+  color: #ffffff;
+}
+
+/* ---- Machine Inputs: the materials as a clean read-only table ----
+   A real <table> (header row + one row per material) replaces the old
+   card stack: a soft blue header row with tiny icons, hairline row
+   dividers, faint zebra striping and a coloured badge per material.
+   Scoped to .inputs__table* so no shared rule is touched. */
+.inputs__table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  box-shadow: var(--shadow-card);
+  overflow: hidden; /* clip the header/zebra fills to the rounded corners */
+  text-align: left;
+}
+
+/* Header row: soft blue, small uppercase labels with tiny icons. */
+.inputs__table thead th {
+  background: var(--blue-soft);
+  padding: 11px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  vertical-align: middle;
+}
+
+.inputs__th {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Body cells: large readable values on hairline-divided rows. */
+.inputs__table tbody th,
+.inputs__table tbody td {
+  padding: 13px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.inputs__table tbody tr + tr th,
+.inputs__table tbody tr + tr td {
+  border-top: 1px solid var(--border);
+}
+
+/* Faint zebra striping so the eye tracks each material's row. */
+.inputs__table tbody tr:nth-child(even) {
+  background: rgba(232, 242, 254, 0.45);
+}
+
+/* The material cell: coloured badge + name (the old card's badge,
+   same allotment palette). */
+.inputs__material-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+}
+
+.inputs__icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px rgba(23, 35, 59, 0.14);
+}
+
+.inputs__icon--raw {
+  background: var(--success);
+}
+
+.inputs__icon--machine {
+  background: var(--blue);
+}
+
+.inputs__icon--job {
+  background: #e08a3c;
+}
+
+/* Narrow windows: tighter cells so the three columns keep fitting. */
+@media (max-width: 360px) {
+  .inputs__table thead th {
+    padding: 9px 10px;
+    font-size: 10px;
+  }
+
+  .inputs__table tbody th,
+  .inputs__table tbody td {
+    padding: 11px 10px;
+    font-size: 13px;
+  }
+
+  .inputs__icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ---- Other screen (opened from the allotment's third card) ----
+   Four option cards in the allot-card style, each with its own colour
+   from the app palette; the half-day card recolours green once approved. */
+
+/* Neutral slate — the "Other" card on the allotment screen. */
+.allot-card--other {
+  background: #edf1f9;
+}
+.allot-card--other .allot-card__badge {
+  background: var(--text-soft);
+}
+.allot-card--other .allot-card__label {
+  color: var(--text-soft);
+}
+
+/* Blue — Apply for Half Day (idle). */
+.allot-card--halfday {
+  background: var(--blue-soft);
+}
+.allot-card--halfday .allot-card__badge {
+  background: var(--blue);
+}
+.allot-card--halfday .allot-card__label {
+  color: var(--blue);
+}
+
+/* Amber — Apply for Overtime. */
+.allot-card--overtime {
+  background: #fdeedd;
+}
+.allot-card--overtime .allot-card__badge {
+  background: #e08a3c;
+}
+.allot-card--overtime .allot-card__label {
+  color: #e08a3c;
+}
+
+/* Coral — Report Machine Maintenance. */
+.allot-card--maintenance {
+  background: var(--coral-soft);
+}
+.allot-card--maintenance .allot-card__badge {
+  background: var(--coral);
+}
+.allot-card--maintenance .allot-card__label {
+  color: var(--coral);
+}
+
+/* Purple — Update Other Work Activities. */
+.allot-card--activities {
+  background: var(--purple-soft);
+}
+.allot-card--activities .allot-card__badge {
+  background: var(--purple);
+}
+.allot-card--activities .allot-card__label {
+  color: var(--purple);
+}
+
+/* Green — the half-day card once the request is approved. */
+.allot-card--approved {
+  background: #e2f6e5;
+}
+.allot-card--approved .allot-card__badge {
+  background: var(--success);
+}
+.allot-card--approved .allot-card__label {
+  color: var(--success);
+}
+
+/* Static status pills inside the half-day card — no spinner or animation,
+   the state reads at a glance: amber while pending, green with a check
+   once approved. The colours reuse the app's ActionCard palettes (amber
+   soft/text, green soft/text) so the pills match the tile language. */
+.other__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.other__badge svg {
+  flex-shrink: 0;
+}
+
+/* Pending — a soft amber pill (ActionCard's amber palette). */
+.other__badge--pending {
+  background: #fdf3d7;
+  color: #8a5a10;
+}
+
+/* Approved — a soft green pill with the check icon (ActionCard's green). */
+.other__badge--approved {
+  background: #e0f6ec;
+  color: #157a55;
+}
+
+/* Rejected — a soft coral pill with the X icon (the supervisor screen's
+   rejected palette, .supr__status--rejected). */
+.other__badge--rejected {
+  background: var(--coral-soft);
+  color: #c23a55;
+}
+
+/* Cards waiting on the demo approval are not tappable. */
+button.allot-card:disabled {
+  cursor: default;
+}
+
+button.allot-card:disabled:active {
+  transform: none;
+}
+
+/* One-line note under the cards ("Shift updated to Half Shift"). */
+.other__note {
+  margin-top: 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--success);
+}
+
+/* ---- Other page: vertical positioning of the tile block ----
+   The shared .detail__body declares only `justify-content: safe center`,
+   which browsers without `safe` support drop entirely — the content then
+   top-aligns instead of centring. This screen re-declares the app's usual
+   two-step cascade (plain centre first, safe centre after) and adds extra
+   bottom padding, so the centred block (title + 2×2 tile grid) rides a
+   little above true centre instead of sagging toward the page bottom.
+   Horizontal centring is untouched (align-items on .home/.detail__body),
+   and the back button/topbar are unaffected. */
+.other__body {
+  justify-content: center; /* centre the block (fallback declaration) */
+  justify-content: safe center; /* never clip the top when content overflows */
+  padding-bottom: 136px; /* biases the centred block upward (~68px) */
+}
+
+/* A touch more air between the four tiles than the homepage grid's 16px
+   default — this page is tile-only, so the wider gap reads as intentional
+   spacing instead of crowding. Scoped so the Home screen's grid is
+   untouched. */
+.other__body .home__grid {
+  gap: 20px;
+}
+
+/* ---- Half-day voice request screen (opened from the Other screen) ----
+   A voice-first form: one hero mic button, a status line, play/retake
+   chips and a full-width submit. Same shell as the other detail screens
+   (topbar, round back button, centred .detail__body) — everything below
+   is scoped to .halfday__* / .workact__* / .maint__* — the work-activities
+   (WorkActivitiesScreen) and machine-maintenance (MachineMaintenanceScreen)
+   voice screens share these rules through the grouped selectors — so no
+   shared rule is touched. */
+.halfday__body,
+.workact__body,
+.maint__body {
+  justify-content: center; /* centre the block (fallback declaration) */
+  justify-content: safe center; /* never clip the top when content overflows */
+  padding-bottom: 48px; /* biases the centred block upward (~24px) */
+}
+
+/* The big round mic — the screen's single hero control. Blue like the
+   app's primary action, with the soft two-layer shadow the cards use. */
+.halfday__mic,
+.workact__mic,
+.maint__mic {
+  width: 112px;
+  height: 112px;
+  margin-top: 26px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow:
+    0 16px 30px rgba(46, 131, 249, 0.35),
+    0 4px 10px rgba(23, 35, 59, 0.08);
+  transition:
+    transform 0.12s ease,
+    background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.halfday__mic:active,
+.workact__mic:active,
+.maint__mic:active {
+  background: var(--blue-dark);
+  transform: scale(0.95);
+}
+
+.halfday__mic:disabled,
+.workact__mic:disabled,
+.maint__mic:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Recording state — the button turns coral and breathes a pulsing halo
+   ring, so "recording" is obvious even at a glance. */
+.halfday__mic--rec,
+.workact__mic--rec,
+.maint__mic--rec {
+  background: var(--coral);
+  animation: halfday-pulse 1.4s ease-out infinite;
+}
+
+.halfday__mic--rec:active,
+.workact__mic--rec:active,
+.maint__mic--rec:active {
+  background: var(--coral-dark);
+}
+
+@keyframes halfday-pulse {
+  0% {
+    box-shadow:
+      0 16px 30px rgba(249, 109, 127, 0.4),
+      0 0 0 0 rgba(249, 109, 127, 0.35);
+  }
+  70% {
+    box-shadow:
+      0 16px 30px rgba(249, 109, 127, 0.4),
+      0 0 0 22px rgba(249, 109, 127, 0);
+  }
+  100% {
+    box-shadow:
+      0 16px 30px rgba(249, 109, 127, 0.4),
+      0 0 0 0 rgba(249, 109, 127, 0);
+  }
+}
+
+/* The one status line: hint → "Recording… 0:07" → the clip's length. */
+.halfday__status,
+.workact__status,
+.maint__status {
+  margin-top: 16px;
+  min-height: 20px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+.halfday__status--rec,
+.workact__status--rec,
+.maint__status--rec {
+  color: var(--coral-dark);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums; /* the timer digits don't jitter */
+}
+
+/* Play / Retake chips under a finished recording — the same white pill
+   language as the back button, with the retake tinted coral (destructive:
+   it deletes the clip). */
+.halfday__review,
+.workact__review,
+.maint__review {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.halfday__chip,
+.workact__chip,
+.maint__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: var(--control-h); /* standard control height */
+  padding: 0 18px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(23, 35, 59, 0.06);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.halfday__chip:active,
+.workact__chip:active,
+.maint__chip:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.halfday__chip--retake,
+.workact__chip--retake,
+.maint__chip--retake {
+  color: var(--coral-dark);
+}
+
+.halfday__chip--retake:active,
+.workact__chip--retake:active,
+.maint__chip--retake:active {
+  background: var(--coral-soft);
+  color: var(--coral-dark);
+}
+
+/* Friendly inline message when the mic is missing or permission was
+   denied — a soft coral note; the back button stays available. */
+.halfday__error,
+.workact__error,
+.maint__error {
+  margin-top: 14px;
+  max-width: 300px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: var(--coral-soft);
+  color: var(--coral-dark);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* The full-width submit (btn-primary is already width: 100%) — icon plus
+   label centred like the homepage's Half-Day End Shift button. */
+.halfday__submit,
+.workact__submit,
+.maint__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+/* Small phones: a slightly smaller hero mic keeps everything on screen. */
+@media (max-width: 360px) {
+  .halfday__mic,
+  .workact__mic,
+  .maint__mic {
+    width: 96px;
+    height: 96px;
+  }
+}
+
+/* ---- Work-activities details field ----
+   The update's text input, in the same white-card language as the
+   overtime hours field (.overtime__field) — label plus one text input,
+   shown between the subtitle and the mic hero. Scoped to .workact__field
+   so no shared rule is touched. */
+.workact__field {
+  width: 100%;
+  margin-top: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  box-shadow: var(--shadow-card);
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.workact__label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.workact__input {
+  width: 100%;
+  height: var(--control-h);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 0 12px;
+  outline: none;
+  transition: border-color 0.12s ease;
+}
+
+.workact__input:focus {
+  border-color: var(--blue);
+}
+
+.workact__input:disabled {
+  opacity: 0.6;
+}
+
+.workact__input::placeholder {
+  color: var(--text-soft);
+  font-weight: 500;
+}
+
+/* ---- Work-activities attachments ----
+   Photos/videos picked from the device: a wrap row of square previews
+   (each with a small coral remove chip) plus a dashed "Add photo/video"
+   tile that wraps the hidden file input. Scoped to .workact__attachment*
+   so no shared rule is touched. */
+.workact__attachments {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.workact__attachment {
+  position: relative;
+  width: 84px;
+  height: 84px;
+}
+
+.workact__attachment-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: #0b1220;
+}
+
+.workact__attachment-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: var(--coral);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.workact__attachment-add {
+  width: 84px;
+  height: 84px;
+  border: 1.5px dashed var(--border);
+  border-radius: 12px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--text-soft);
+  font-size: 10.5px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+.workact__attachment-add:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.workact__attachment-add input[type='file'] {
+  display: none;
+}
+
+/* ---- Machine-maintenance quick-report sections (reference design) ----
+   Around the voice flow above, the screen shows WHICH machine the report
+   is about (a soft-blue chip), three quick-pick reason cards with their
+   own accents, and the "Tell us the problem" voice header. Scoped to
+   .maint__machine / .maint__reason* / .maint__voicehead* so no shared
+   rule is touched; the photo picker reuses the defect report's
+   .report__pick / .report__attachment classes as-is. */
+
+/* Machine chip: a soft-blue pill — cog badge, small label, big machine
+   number — readable at a glance from arm's length. */
+.maint__machine {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 8px 16px 8px 10px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  border: 1px solid var(--border);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.maint__machine-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.maint__machine-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.maint__machine-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.maint__machine-no {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reason cards: three equal columns, coloured icon badge on top and a
+   two-word label under it. Each card sets its own accent via --r-icon /
+   --r / --r-soft (the same palettes the report themes use); selecting a
+   card tints it with that accent. */
+.maint__reasons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 18px;
+}
+
+.maint__reason {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 6px 12px;
+  border-radius: var(--radius-input);
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 4px 10px rgba(23, 35, 59, 0.06);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.1s ease, border-color 0.1s ease;
+}
+
+.maint__reason:active {
+  transform: scale(0.97);
+}
+
+.maint__reason:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.maint__reason-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--r-soft);
+  color: var(--r-icon);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.maint__reason-label {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+/* Selected — the card fills with its own soft accent. */
+.maint__reason--on {
+  background: var(--r-soft);
+  border-color: var(--r);
+}
+
+.maint__reason--on .maint__reason-label {
+  color: var(--r);
+}
+
+/* The three accents: coral = machine not working, amber = unusual sound
+   (ActionCard's amber palette), blue = other issue. */
+.maint__reason--not-working {
+  --r-icon: var(--coral);
+  --r: var(--coral-dark);
+  --r-soft: var(--coral-soft);
+}
+
+.maint__reason--sound {
+  --r-icon: #f5a524;
+  --r: #8a5a12;
+  --r-soft: #fdf0d5;
+}
+
+.maint__reason--other {
+  --r-icon: var(--blue);
+  --r: #1f5fbf;
+  --r-soft: var(--blue-soft);
+}
+
+/* Voice header: a small blue mic badge beside the two-line instruction
+   ("Tell us the problem / Speak in your language") — it carries the idle
+   guidance so the status line under the mic stays quiet until recording. */
+.maint__voicehead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.maint__voicehead-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.maint__voicehead-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.maint__voicehead-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.maint__voicehead-sub {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+/* The optional photo picker rides the defect report's pill/row styles —
+   only the spacing into the voice block is added here. */
+.maint__photo-pick {
+  margin-top: 20px;
+}
+
+.maint__photo-pick:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.maint__photo {
+  margin-top: 20px;
+}
+
+/* ---- Overtime request screen (opened from the Other screen) ----
+   A minimal hours form: quick-pick chips (1 / 2 / 4 hrs) plus one stepper
+   card (− / big value / +), a status pill and a full-width submit. Same
+   shell as the other detail screens (topbar, round back button, centred
+   .detail__body) — everything below is scoped to .overtime__* so no
+   shared rule is touched. */
+.overtime__body {
+  justify-content: center; /* centre the block (fallback declaration) */
+  justify-content: safe center; /* never clip the top when content overflows */
+  padding-bottom: 48px; /* biases the centred block upward (~24px) */
+}
+
+/* The hours stepper — the same white-card + pale-blue-pill language as
+   the product submission's quantity rows (qty-field), minus the mic. */
+.overtime__field {
+  width: 100%;
+  margin-top: 26px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  box-shadow: var(--shadow-card);
+  padding: 14px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.overtime__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.overtime__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.overtime__label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Quick-pick chips — one tap for the common requests (1 / 2 / 4 hrs).
+   Same white-pill language as the rest of the app; the active chip fills
+   with the pale-blue tint and gains a blue outline. */
+.overtime__chips {
+  display: flex;
+  gap: 8px;
+}
+
+.overtime__chip {
+  flex: 1;
+  min-width: 0;
+  height: var(--control-h); /* standard control height */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--text-soft);
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+}
+
+.overtime__chip-unit {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+.overtime__chip--on {
+  background: var(--blue-soft);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.overtime__chip--on .overtime__chip-unit {
+  color: var(--blue);
+}
+
+.overtime__chip:active {
+  background: var(--blue-soft);
+}
+
+.overtime__chip:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.overtime__box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* − / + steppers: the same pale-blue pills as the quantity rows, at the
+   standard control height so they match every other button in the app. */
+.overtime__step {
+  width: 54px; /* square, matching the standard control height */
+  height: var(--control-h);
+  flex: none;
+  border-radius: 12px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+.overtime__step:active {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.overtime__step:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* The chosen hours: big, centred, read-only — the steppers are the input,
+   so no keyboard is ever needed. The unit rides along in small type. */
+.overtime__value {
+  flex: 1;
+  min-width: 0;
+  height: var(--control-h); /* standard control height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.overtime__unit {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+/* The status slot — always reserved so the submit button never jumps.
+   Holds the same static pills as the Other screen's half-day card:
+   amber while pending, green with a check once approved. */
+.overtime__status {
+  margin-top: 18px;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overtime__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.overtime__badge svg {
+  flex-shrink: 0;
+}
+
+.overtime__badge--pending {
+  background: #fdf3d7; /* ActionCard's amber palette */
+  color: #8a5a10;
+}
+
+.overtime__badge--approved {
+  background: #e0f6ec; /* ActionCard's green palette */
+  color: #157a55;
+}
+
+.overtime__badge--rejected {
+  background: var(--coral-soft); /* the supervisor screen's rejected palette */
+  color: #c23a55;
+}
+
+/* The full-width submit (btn-primary is already width: 100%) — icon plus
+   label centred like the half-day screen's submit. */
+.overtime__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.home {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centre the content column horizontally */
+  padding: 18px 20px calc(18px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+.home__topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* The attached logo PNG is navy-on-white; multiply blending makes the
+   white box disappear into the light page background. */
+.brand-logo {
+  mix-blend-mode: multiply;
+  width: auto;
+  user-select: none;
+}
+
+/* ---- language dropdown (top-right pill) ---- */
+.lang {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.lang__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 9px 14px;
+  box-shadow: 0 4px 10px rgba(23, 35, 59, 0.06);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang__pill:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.lang__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  min-width: 190px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 14px 34px rgba(23, 35, 59, 0.16);
+  padding: 6px;
+  list-style: none;
+  animation: lang-pop 0.15s ease;
+}
+
+@keyframes lang-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lang__option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang__option:active {
+  background: var(--blue-soft);
+}
+
+.lang__option--active {
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.lang__native {
+  font-weight: 600;
+}
+
+.lang__option--active .lang__native {
+  font-weight: 700;
+}
+
+.lang__label {
+  font-size: 11.5px;
+  color: var(--text-soft);
+}
+
+/* ---- back chip to the Machine Allotment screen ----
+   The shared .back-button round chip, widened into a small pill
+   (icon + short label) and left-aligned under the top bar — it reads
+   as navigation, not as one of the action cards. */
+.home__back {
+  width: auto;
+  height: 36px;
+  padding: 0 14px 0 11px;
+  gap: 7px;
+  border-radius: 999px;
+  align-self: flex-start; /* .home centres children; the chip hugs the left */
+  flex-shrink: 0;
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap; /* the label never wraps into two lines */
+}
+
+/* ---- shift timer pill (clock + "00:00:00") ---- */
+.shift-timer {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  background: var(--blue-soft);
+  border-radius: 999px;
+  padding: 8px 22px 8px 10px;
+}
+
+.shift-timer__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(46, 131, 249, 0.18);
+}
+
+.shift-timer__time {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums; /* digits don't jitter as they tick */
+}
+
+/* Overtime tail of the SAME single timer — once the REGULAR shift
+   duration has elapsed (isRegularShiftComplete in utils/shift.js), the
+   pill turns orange and the clock gains a plus, so the overtime shift
+   reads differently at a glance. Purely visual: the countdown logic is
+   untouched (the approved hours already stretch this one timer). */
+.shift-timer--overtime {
+  background: #fdeee0; /* warm orange soft — the overtime accent */
+}
+
+.shift-timer--overtime .shift-timer__icon {
+  color: #e5731f;
+  box-shadow: 0 4px 10px rgba(229, 115, 31, 0.22);
+}
+
+.shift-timer--overtime .shift-timer__time {
+  color: #a34e00;
+}
+
+/* ---- OVERTIME SHIFT badge (homepage, under the shift timer) ----
+   A small orange status pill — the ONLY overtime indicator on the
+   homepage, shown exclusively once the REGULAR shift duration has
+   elapsed (the overtime tail of the same single timer has begun). No
+   badge shows while the regular shift is still running. Warm orange
+   palette matches .shift-timer--overtime; scoped to .ot__* so nothing
+   shared is touched; .home centres its children, so the pill needs no
+   alignment of its own. */
+.ot__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: #fdeee0; /* the same warm orange as .shift-timer--overtime */
+  color: #c2570e;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ot__badge svg {
+  flex-shrink: 0;
+}
+
+/* ---- action cards (Raw Material Issue / Machine Breakdown / Output Defect)
+   Each card picks its palette through the custom properties set inline by
+   ActionCard.jsx: --card-badge (solid icon circle), --card-soft (card fill)
+   and --card-text (label colour).
+   The cards are the homepage's primary touch targets, so they are sized
+   generously for iPhone 16: --tile-min-h (204px) tall tiles with a 72px
+   icon badge and 19px labels — far past the 44px minimum Apple recommends,
+   so the report actions are impossible to miss and easy to hit with a
+   thumb. ---- */
+.home__grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  background: var(--card-soft);
+  border-radius: 26px;
+  padding: var(--box-pad); /* standard card padding */
+  min-height: var(--tile-min-h); /* standard grid tile height */
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease;
+}
+
+.action-card:active {
+  transform: scale(0.97);
+}
+
+.action-card__badge {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--card-badge);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(23, 35, 59, 0.14);
+}
+
+.action-card__label {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--card-text);
+}
+
+/* Full-width row variant (Output Defect): icon left, label, chevron right. */
+.action-card--wide {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  min-height: var(--row-min-h); /* standard row-card height */
+  gap: 18px;
+}
+
+.action-card--wide .action-card__label {
+  flex: 1;
+}
+
+.action-card__arrow {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--card-text);
+  opacity: 0.55;
+  line-height: 1;
+}
+
+/* Optional small status line under a tile's label (the Other screen's
+   half-day tile: an amber "Pending…" pill / a green "Half Day Approved"
+   pill with a check). */
+.action-card__note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--card-text);
+}
+
+/* A tile waiting on the demo approval is not tappable. */
+.action-card:disabled {
+  cursor: default;
+}
+
+.action-card:disabled:active {
+  transform: none;
+}
+
+/* ---- Half-Day End Shift button ----
+   A green pill right under the shift timer, shown only while a half-day
+   request is active (applied for / approved on the Other screen). Icon +
+   short label only, matching the app's button style. */
+.home__halfday {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.home__halfday .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ---- SOS button (pinned near the bottom of the homepage) ---- */
+.home__sos {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.sos-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--danger);
+  color: #ffffff;
+  border-radius: 24px;
+  padding: 18px 0 16px;
+  box-shadow: 0 12px 26px rgba(229, 72, 77, 0.35);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.sos-button:active {
+  background: #d13a40;
+  transform: scale(0.98);
+}
+
+.sos-button__sos {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.sos-button__label {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  opacity: 0.85;
+}
+
+.home__footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+/* ---- supervisor bottom navigation (shared) ----
+   Four tabs pinned to the bottom of every supervisor screen (mockup:
+   Home · Reports · Alerts · Settings). Full-bleed white bar with a soft
+   top border; the active tab is the primary blue, the rest soft grey. */
+.home.sup,
+.home.supa,
+.home.supu,
+.home.supat,
+.home.suprep,
+.home.supal {
+  /* the nav is fixed to the viewport, so the scrollable body reserves its
+     height (~65px) plus the device safe area — content never hides behind it */
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+}
+
+.sup__nav {
+  /* fixed to the bottom of the viewport, always visible while scrolling.
+     Centred and capped to the app frame's 430px column so it lines up with
+     the rest of the UI on desktop; full width on phones. */
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  z-index: 40;
+  display: flex;
+  align-items: stretch;
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -6px 18px rgba(23, 35, 59, 0.06);
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+}
+
+.sup__nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 4px;
+  border-radius: 14px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-soft);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sup__nav-item--active {
+  color: var(--blue);
+}
+
+.sup__nav-item:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* ---- nav badge: the unresolved-alerts count on the Alerts tab ---- */
+.sup__nav-badge {
+  position: absolute;
+  top: 6px;
+  right: 50%;
+  transform: translateX(26px);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--coral);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* ---- shared modal pieces (SOS confirm, work-update reminder) ---- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(23, 35, 59, 0.45);
+  padding: 24px;
+  animation: backdrop-in 0.18s ease;
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(23, 35, 59, 0.06);
+  color: var(--text-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modal__title {
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.modal__subtitle {
+  font-size: 13.5px;
+  color: var(--text-soft);
+  text-align: center;
+  line-height: 1.45;
+  margin-top: 6px;
+}
+
+/* SOS confirm dialog: white card, red warning badge, two actions. */
+.sos-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: var(--box-pad); /* standard card padding */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: dialog-pop 0.18s ease;
+}
+
+@keyframes dialog-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.sos-dialog__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fdecec;
+  color: var(--danger);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.sos-dialog__actions {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.sos-dialog__cancel {
+  flex: 1;
+  min-height: var(--control-h); /* standard control height */
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 14.5px;
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sos-dialog__send {
+  flex: 1.4;
+  min-height: var(--control-h); /* standard control height */
+  border-radius: 999px;
+  background: var(--danger);
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(229, 72, 77, 0.35);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Work-update reminder: warm peach card with a blue send button. */
+.update-reminder {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  background: #fdeedd;
+  border-radius: 24px;
+  padding: var(--box-pad); /* standard card padding */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: dialog-pop 0.18s ease;
+}
+
+.update-reminder__icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #e08a3c;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 14px rgba(224, 138, 60, 0.25);
+}
+
+.update-reminder__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.update-reminder__send {
+  width: 100%;
+  min-height: var(--control-h); /* standard control height */
+  margin-top: 18px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 10px 22px rgba(46, 131, 249, 0.35);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.update-reminder__send:active {
+  background: var(--blue-dark);
+}
+
+/* ==========================================================================
+   Report screens (Input Errors / Machine Defect / Output Errors)
+   --------------------------------------------------------------------------
+   All three are the same shared ReportForm, parameterised by category:
+   back button + icon badge + title, a mandatory photo/video attachment
+   (metadata only — nothing is uploaded) and Submit / Cancel actions.
+   ========================================================================== */
+
+   /* ==========================================================================
+   Report screens: theme colour = homepage card colour
+   ========================================================================== */
+.rtheme--amber { --t-badge: #f5a524; --t-soft: #fdf0d5; --t-text: #8a5a12; }
+.rtheme--blue  { --t-badge: var(--blue); --t-soft: var(--blue-soft); --t-text: #1f5fbf; }
+.rtheme--green { --t-badge: #22b573; --t-soft: #e3f6ec; --t-text: #157a55; }
+
+/* Content header ke neeche bachi jagah ke bilkul beech me */
+.rtheme .report {
+  width: 100%;
+  flex: 1;
+  padding: 0 0 32px;
+  justify-content: center;
+}
+
+/* Header me ab logo + language hai, isliye purana round back button chhupa do */
+.rtheme .report__topbar { display: none; }
+
+/* Kam text: subtitle hata do */
+.rtheme .screen__subtitle { display: none; }
+
+.rtheme .icon-badge {
+  width: 84px;
+  height: 84px;
+  background: var(--t-badge);
+  color: #ffffff;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--t-badge) 35%, transparent);
+}
+
+.rtheme .screen__title {
+  color: var(--t-text);
+  font-size: 24px;
+}
+
+/* Photo/Video block: bada, dashed, theme colour ka */
+.rtheme .report__pick {
+  flex-direction: column;
+  gap: 12px;
+  min-height: 170px;
+  border-radius: 26px;
+  border: 2px dashed var(--t-badge);
+  background: var(--t-soft);
+  color: var(--t-text);
+  font-size: 16px;
+  box-shadow: none;
+}
+
+.rtheme .report__pick:active {
+  background: color-mix(in srgb, var(--t-badge) 18%, #ffffff);
+}
+
+.rtheme .report__pick.report__pick--error {
+  border-color: var(--danger);
+  background: #fff5f5;
+  color: var(--danger);
+}
+
+/* Chosen file row bhi bada aur theme colour ka */
+.rtheme .report__attachment {
+  min-height: 72px;
+  border-radius: 22px;
+  background: var(--t-soft);
+  border-color: var(--t-badge);
+}
+.rtheme .report__attachment-icon { color: var(--t-badge); }
+
+/* Voice note follows the screen's theme like the picker above it —
+   except the recording state, which stays coral (it must read as
+   "recording" on every screen, so it overrides the theme). */
+.rtheme .report__voice-mic {
+  background: var(--t-badge);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--t-badge) 35%, transparent);
+}
+
+.rtheme .report__voice-mic:active {
+  background: color-mix(in srgb, var(--t-badge) 82%, #000000);
+}
+
+.rtheme .report__voice-mic--rec,
+.rtheme .report__voice-mic--rec:active {
+  background: var(--coral);
+}
+
+.rtheme .report__voice {
+  background: var(--t-soft);
+  border-color: var(--t-badge);
+}
+
+.rtheme .report__voice-chip:active {
+  background: var(--t-soft);
+  color: var(--t-text);
+}
+
+/* Submit button = homepage card ka color */
+.rtheme .btn-primary {
+  background: var(--t-badge);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--t-badge) 35%, transparent);
+}
+
+/* Cancel link bhi theme colour me */
+.rtheme .link-button { color: var(--t-text); }
+
+.report {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* centre the form vertically */
+  justify-content: safe center; /* fall back to top when content overflows */
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+.report__topbar {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+}
+
+.report .icon-badge {
+  margin-bottom: 18px;
+}
+
+.report__form {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.report__label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* The real <input type="file"> is hidden; the pill button drives it. */
+.report__file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.report__pick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: var(--control-h); /* standard control height */
+  padding: 0 18px;
+  border-radius: 999px;
+  /* Solid blue like the Submit button; the transparent border keeps the
+     error state's red outline visible without shifting the layout. */
+  border: 1.5px solid transparent;
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: 0 10px 22px rgba(46, 131, 249, 0.35);
+  transition: transform 0.1s ease, background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.report__pick:active {
+  background: var(--blue-dark);
+  transform: scale(0.98);
+}
+
+/* Error state: the worker tried to submit without attaching anything. */
+.report__pick--error {
+  border-color: var(--danger);
+  background: #fff5f5;
+  color: var(--danger);
+}
+
+.report__pick--error:active {
+  background: #ffe3e3;
+}
+
+/* Chosen file: a small row with its name + a remove (×) button. */
+.report__attachment {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--control-h); /* standard control height */
+  padding: 8px 12px;
+  border-radius: var(--radius-input);
+  background: #f4f9fe;
+  border: 1.5px solid var(--border);
+}
+
+.report__attachment-icon {
+  color: var(--blue);
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.report__attachment-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.report__attachment-remove {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(23, 35, 59, 0.06);
+  color: var(--text-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- voice note (ReportForm — the three defect report screens) ----
+   An optional spoken description recorded with the shared engine
+   (utils/voiceNote.js): a mic pill that records, then play / retake /
+   delete chips. Scoped to .report__voice* so nothing shared is touched. */
+.report__voice-mic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: var(--control-h); /* standard control height */
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: 0 10px 22px rgba(46, 131, 249, 0.35);
+  transition: transform 0.1s ease, background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.report__voice-mic:active {
+  background: var(--blue-dark);
+  transform: scale(0.98);
+}
+
+/* Recording state — coral like the half-day mic, with a pulsing halo. */
+.report__voice-mic--rec {
+  background: var(--coral);
+  animation: voice-pulse 1.4s ease-out infinite;
+}
+
+.report__voice-mic--rec:active {
+  background: var(--coral-dark);
+}
+
+@keyframes voice-pulse {
+  0% {
+    box-shadow:
+      0 10px 22px rgba(249, 109, 127, 0.4),
+      0 0 0 0 rgba(249, 109, 127, 0.35);
+  }
+  70% {
+    box-shadow:
+      0 10px 22px rgba(249, 109, 127, 0.4),
+      0 0 0 18px rgba(249, 109, 127, 0);
+  }
+  100% {
+    box-shadow:
+      0 10px 22px rgba(249, 109, 127, 0.4),
+      0 0 0 0 rgba(249, 109, 127, 0);
+  }
+}
+
+/* The recorded take: play / retake chips + the clip's length + delete. */
+.report__voice {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--control-h); /* standard control height */
+  padding: 8px 12px;
+  border-radius: var(--radius-input);
+  background: #f4f9fe;
+  border: 1.5px solid var(--border);
+}
+
+.report__voice-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.report__voice-chip:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* Retake discards the take and immediately records a new one. */
+.report__voice-chip--retake {
+  color: var(--coral-dark);
+}
+
+.report__voice-chip--retake:active {
+  background: var(--coral-soft);
+  color: var(--coral-dark);
+}
+
+.report__voice-length {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.report__voice-remove {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(23, 35, 59, 0.06);
+  color: var(--text-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Friendly inline message when the mic is missing or permission denied. */
+.report__voice-error {
+  margin-top: 8px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: var(--coral-soft);
+  color: var(--coral-dark);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.report__actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 24px;
+}
+
+/* ---- report confirmation state ("Report submitted!") ---- */
+.report__sent-icon {
+  background: #e7f8ec;
+  color: var(--success);
+}
+
+.report__action {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 26px;
+}
+
+.report .link-button {
+  margin-top: 6px;
+}
+
+/* ==========================================================================
+   Product Submission screen (shift completion)
+   --------------------------------------------------------------------------
+   Big quantity readout + the shared keypad (0-9, ⌫, C) + Confirm and
+   "End Shift & Submit" actions, then a shift-completed confirmation.
+   ========================================================================== */
+
+   .product-submit {
+  /* .home se flex column, padding aur overflow aata hai */
+  justify-content: flex-start;
+}
+
+/* Header ke neeche ka poora block: bachi jagah me center */
+.product-submit__main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: safe center;
+  padding: 12px 0 8px;
+}
+.product-submit {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* centre the keypad stack vertically */
+  justify-content: safe center; /* fall back to top when content overflows */
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+.product-submit__assigned {
+  margin-top: 16px;
+}
+
+.product-submit__assigned strong {
+  font-size: 14px;
+}
+
+/* ---- the three count rows (Successful / Rejected / Reusable) ----
+   Each row is a small card in the app's card style: coloured icon badge,
+   the count's name, then [−] [input] [+] [🎤]. The mic pulses red while
+   it is listening. */
+.product-submit__form {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.qty-field {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  box-shadow: var(--shadow-card);
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.qty-field--listening {
+  border-color: var(--danger);
+}
+
+.qty-field__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-field__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.qty-field--success .qty-field__icon {
+  background: #e7f8ec;
+  color: var(--success);
+}
+
+.qty-field--danger .qty-field__icon {
+  background: #fdecec;
+  color: var(--danger);
+}
+
+.qty-field--info .qty-field__icon {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.qty-field__label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.qty-field__box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* − / + steppers: the same pale-blue pill language as the keypad keys. */
+.qty-field__step {
+  width: 54px; /* square, matching the standard control height */
+  height: var(--control-h);
+  flex: none;
+  border-radius: 12px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+.qty-field__step:active {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.qty-field__step:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* The count itself: big, centred, digits-only, still fully editable. */
+.qty-field__input {
+  flex: 1;
+  min-width: 0;
+  height: var(--control-h); /* standard control height */
+  text-align: center;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+
+.qty-field__input:focus {
+  border-color: var(--blue);
+}
+
+/* The mic: quiet blue when idle, pulsing red while listening. */
+.qty-field__mic {
+  width: 54px; /* round, matching the standard control height */
+  height: var(--control-h);
+  flex: none;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.qty-field__mic:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.qty-field__mic--listening {
+  background: var(--danger);
+  color: #ffffff;
+  animation: mic-pulse 1.2s ease-out infinite;
+}
+
+@keyframes mic-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(229, 72, 77, 0);
+  }
+}
+
+/* ---- voice status line (hint / listening / notice) ---- */
+.product-submit__voice {
+  min-height: 24px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-soft);
+}
+
+.product-submit__voice-hint {
+  color: var(--text-soft);
+}
+
+.product-submit__voice-warn {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Pulsing dot next to "Listening…" — echoes the mic's own pulse. */
+.product-submit__voice-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--danger);
+  animation: mic-pulse 1.2s ease-out infinite;
+}
+
+/* The tiny language chip: shows which locale the mic is trying, and
+   tapping it skips to the next one — the unobtrusive manual fallback. */
+.product-submit__lang {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.product-submit__error {
+  margin: 2px 0 8px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.product-submit__actions {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+/* ---- shift-completed confirmation ---- */
+.product-submit__sent-icon {
+  background: #e7f8ec;
+  color: var(--success);
+  margin-bottom: 18px;
+}
+
+/* ---- shift-completed confirmation: the counts as a small table ----
+   A real <table> (header row + one row per product type + a footer row
+   with the shift-end time) replaces the old stacked rows. Scoped to
+   .output__table*; each row keeps its field's accent colour (green =
+   good, red = scrap, blue = reuse) so the summary reads at a glance. */
+.output__table {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 22px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  box-shadow: var(--shadow-card);
+  overflow: hidden; /* clip the header fill to the rounded corners */
+  text-align: left;
+}
+
+/* Header row: soft blue, small uppercase labels with tiny icons. */
+.output__table thead th {
+  background: var(--blue-soft);
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  vertical-align: middle;
+}
+
+.output__th {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* The Count column (header + values) aligns right, table-style. */
+.output__table thead th:last-child,
+.output__table tbody td {
+  text-align: right;
+}
+
+/* Body rows: hairline dividers, label left / count right. */
+.output__table tbody th,
+.output__table tbody td {
+  padding: 13px 14px;
+  vertical-align: middle;
+}
+
+.output__table tbody tr + tr th,
+.output__table tbody tr + tr td {
+  border-top: 1px solid var(--border);
+}
+
+.output__item-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+
+/* Each row's icon takes its field's accent colour. */
+.output__item-inner--success svg {
+  color: var(--success);
+}
+
+.output__item-inner--danger svg {
+  color: var(--danger);
+}
+
+.output__item-inner--info svg {
+  color: var(--blue);
+}
+
+/* The counts: large, bold, in the row's accent colour. */
+.output__count {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.output__count--success {
+  color: var(--success);
+}
+
+.output__count--danger {
+  color: var(--danger);
+}
+
+.output__count--info {
+  color: var(--blue);
+}
+
+/* Footer row: the shift-end time, muted with a bold time value. */
+.output__table tfoot td {
+  padding: 11px 14px;
+  border-top: 1px solid var(--border);
+  background: rgba(232, 242, 254, 0.35);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+.output__foot-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.output__foot-inner strong {
+  color: var(--text);
+  font-weight: 800;
+}
+
+/* Narrow windows: tighter cells. */
+@media (max-width: 360px) {
+  .output__table thead th {
+    padding: 9px 12px;
+  }
+
+  .output__table tbody th,
+  .output__table tbody td,
+  .output__table tfoot td {
+    padding: 11px 12px;
+  }
+}
+
+.product-submit__action {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 22px;
+}
+
+.product-submit .link-button {
+  margin-top: 6px;
+}
+
+/* ---- keypad clear key (product submission's bottom-row "C") ---- */
+.keypad__key--clear {
+  background: #fdecec; /* pale red — destructive "clear everything" */
+  color: var(--danger);
+}
+
+.keypad__key--clear:active {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+/* ---- work-update reminder additions (Part 4) ---- */
+
+/* Green variant of the round icon for the "Update sent!" stage. */
+.update-reminder__icon--sent {
+  color: var(--success);
+  box-shadow: 0 6px 14px rgba(47, 179, 68, 0.25);
+}
+
+/* The attach pill inside the reminder sits between the text and Send. */
+.update-reminder__pick {
+  margin-top: 14px;
+  min-height: var(--control-h); /* standard control height */
+  background: #ffffff;
+  border-color: rgba(224, 138, 60, 0.55);
+  color: #e08a3c;
+}
+
+.update-reminder__pick:active {
+  background: #fdf3e7;
+}
+
+/* Error state inside the reminder modal: .update-reminder__pick above
+   repaints the shared picker (white fill, amber text), so the danger
+   colours must be restated here — the two-class selector also wins over
+   the single-class repaint regardless of source order. */
+.update-reminder__pick.report__pick--error {
+  border-color: var(--danger);
+  background: #fff5f5;
+  color: var(--danger);
+}
+
+.update-reminder__pick.report__pick--error:active {
+  background: #ffe3e3;
+}
+
+.update-reminder .report__attachment {
+  margin-top: 14px;
+  background: #ffffff;
+}
+
+/* ==========================================================================
+   Machine Allotment screen (mockup 4) + homepage machine banner
+   ========================================================================== */
+
+/* The big machine card: icon, name, id/type line, then the detail rows. */
+
+
+.machine-card {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 22px;
+  padding: var(--box-pad); /* standard card padding */
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.machine-card__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.machine-card__name {
+  font-size: 19px;
+  font-weight: 800;
+  margin-top: 14px;
+}
+
+.machine-card__meta {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  margin-top: 4px;
+}
+
+.machine-card__details {
+  width: 100%;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.machine-card__detail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  font-size: 13.5px;
+  color: var(--text-soft);
+}
+
+.machine-card__detail + .machine-card__detail {
+  border-top: 1px solid var(--border);
+}
+
+.machine-card__detail dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.machine-card__detail dd {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* "Active" status chip in green. */
+.machine-card__status {
+  color: var(--success) !important;
+}
+
+.allotment__actions {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Quiet full-width button under the primary action ("Report an Issue"). */
+.secondary-button {
+  width: 100%;
+  min-height: var(--control-h); /* standard control height */
+  padding: 14px 18px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.secondary-button:active {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* Homepage banner showing today's confirmed machine. */
+.machine-banner {
+  width: 100%;
+  max-width: 430px;
+  margin: 10px auto 0;
+  padding: 10px 14px;
+  background: var(--blue-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.machine-banner__icon {
+  color: var(--blue);
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.machine-banner__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.machine-banner__text strong {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.machine-banner__text > span:last-child {
+  font-size: 12.5px;
+  color: var(--text-soft);
+}
+
+/* ==========================================================================
+   Auth: PIN unlock (returning login)
+   --------------------------------------------------------------------------
+   EnterPinScreen ("Enter Your PIN"): centred stack under the top bar —
+   title, subtitle, the 4-dot PIN display, the shared keypad and the
+   "not you" link. The dots never reveal the digits, like a phone lock
+   screen.
+   ========================================================================== */
+
+/* Stacked quick-unlock buttons on the login screen (PIN already set up). */
+.login__quick {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pin {
+  /* .home supplies the flex column + padding + overflow. */
+  justify-content: flex-start;
+}
+
+/* Everything under the top bar, centred in the free space. */
+.pin__main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: safe center;
+  padding: 12px 0 8px;
+}
+
+/* The 4-dot PIN display. */
+.pin__dots {
+  display: flex;
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.pin__dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.pin__dot--filled {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+/* Wrong PIN (or mismatch): every dot turns coral-red… */
+.pin__dot--error {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+/* …and the row shakes, like a phone lock screen. */
+@keyframes pin-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px);
+  }
+  40% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.pin__dots--shake {
+  animation: pin-shake 0.35s ease;
+}
+
+/* "Enter a 4-digit PIN" / lockout countdown. */
+.pin__label {
+  margin-top: 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+.pin__error {
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* "Not you? Use another account" under the keypad. */
+.pin__forgot {
+  margin-top: 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--blue);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pin__forgot:active {
+  color: var(--blue-dark);
+}
+
+/* ==========================================================================
+   Auth: mock biometric scanners (fingerprint / Face ID)
+   --------------------------------------------------------------------------
+   FingerprintAuthScreen + FaceIdAuthScreen share one layout: the big
+   BiometricArt circle, title + subtitle, a state label, the big
+   "Tap to scan" sensor button and a "Use PIN instead" fallback link.
+   The art re-colours itself per state by overriding --bio / --bio-soft.
+   ========================================================================== */
+
+.bio {
+  /* .home supplies the flex column + padding + overflow. */
+  justify-content: flex-start;
+}
+
+.bio__main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: safe center;
+  padding: 12px 0 8px;
+}
+
+/* The big circular scanner illustration. */
+.bio-art {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin-bottom: 20px;
+}
+
+/* The centre glyph (fingerprint / face drawing) floats over the ring. */
+.bio-art__glyph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+/* State colours: blue while ready/scanning… */
+.bio-art--ready,
+.bio-art--scanning {
+  --bio: var(--blue);
+  --bio-soft: var(--blue-soft);
+}
+
+/* …green once the identity is verified… */
+.bio-art--matched {
+  --bio: var(--success);
+  --bio-soft: #e2f6e5;
+}
+
+/* …and coral when the scan is not recognised. */
+.bio-art--no-match {
+  --bio: var(--coral);
+  --bio-soft: var(--coral-soft);
+}
+
+/* While scanning the whole art gently pulses. */
+@keyframes bio-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.bio-art--scanning {
+  animation: bio-pulse 1s ease-in-out infinite;
+}
+
+/* State label under the art ("Sensor ready", "Scanning…", …). */
+.bio__label {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+.bio__error {
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* The big sensor button — a soft blue pill, like the mockup's CTA. */
+.bio__sensor {
+  margin-top: 22px;
+  min-height: var(--control-h); /* standard control height */
+  padding: 14px 34px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bio__sensor:active {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.bio__sensor:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+
+/* "Use PIN instead" fallback link. */
+.bio__footer {
+  margin-top: 20px;
+}
+
+/* ==========================================================================
+   App Lock screen (AppLockScreen.jsx)
+   --------------------------------------------------------------------------
+   Shown on every reopen after the first login. Top bar → Pattern/PIN tabs
+   → padlock badge + title + "Place Fingerprint or Enter Password" → the
+   device's fingerprint button → the tab's manual panel (PIN dots + keypad
+   or the 3×3 pattern grid) → "Not you?" link. Reuses the .pin__* and
+   .bio__* pieces so it stays visually identical to the rest of the app,
+   except for the dialpad: inside .lock__panel the shared keypad is
+   re-skinned as polished tile keys (see "Lock-screen dialpad").
+   ========================================================================== */
+
+.lock {
+  /* .home supplies the flex column + padding + overflow. */
+  justify-content: flex-start;
+}
+
+/* The Pattern | PIN segmented control, right under the top bar. */
+.lock__tabs {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px auto 0;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+}
+
+.lock__tab {
+  flex: 1;
+  padding: 9px 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-soft);
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.lock__tab--active {
+  background: #fdfeff;
+  color: var(--blue);
+  box-shadow: 0 2px 8px rgba(23, 35, 59, 0.12);
+}
+
+/* Everything under the tabs, centred in the free space. */
+.lock__main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  justify-content: safe center;
+  padding: 12px 0 8px;
+}
+
+.lock__main .screen__subtitle {
+  margin-top: 6px;
+}
+
+/* The fingerprint button — the shared .bio__sensor pill plus an icon. */
+.lock__bio {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.lock__bio-icon {
+  display: inline-flex;
+}
+
+/* Thin separator between the biometric shortcut and the manual panel. */
+.lock__divider {
+  width: 100%;
+  max-width: 240px;
+  height: 1px;
+  margin: 18px 0 14px;
+  background: var(--border);
+}
+
+/* The tab's manual unlock panel (PIN dots + keypad / pattern grid). */
+.lock__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Small demo hint under the pattern grid. */
+.lock__hint {
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+/* ---- Lock-screen dialpad (PIN tab) ----
+   The shared .keypad keeps its flat pale-blue pills everywhere else
+   (EnterPinScreen, product submission). Inside the lock screen's PIN
+   panel it is re-skinned as polished white tile keys stretched across
+   the panel's FULL width — the .home column's 20px side padding frames
+   them, and the shared 3-equal-column grid stretches every key evenly:
+   borderless cards with a layered soft shadow plus a subtle inset top
+   sheen, a tactile press (dip + tighter shadow), a gentle hover lift on
+   pointer devices, a focus ring for keyboard use — and the four PIN dots
+   sit inside a rounded white "display" pill, the way a phone lock screen
+   separates the entry field from the pad. The Keypad component and its
+   behaviour stay exactly the same. */
+.lock__panel .pin__dots {
+  gap: 20px;
+  margin-top: 22px;
+  padding: 15px 26px;
+  border-radius: 999px;
+  background: var(--card);
+  /* Same layered shadow as the keys, so the display and the pad read
+     as one family of soft white cards on the tinted background. */
+  box-shadow: 0 1px 2px rgba(23, 35, 59, 0.05),
+    0 6px 16px rgba(23, 35, 59, 0.08);
+}
+
+.lock__panel .pin__dot {
+  width: 20px;
+  height: 20px;
+  /* Animate the fill colour, the halo and the "pop" together. */
+  transition: background 0.15s ease, border-color 0.15s ease,
+    transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Filled / error dots get a soft halo ring so the entry reads at a
+   glance, and the just-filled dot pops slightly, like a phone lock
+   screen. */
+.lock__panel .pin__dot--filled {
+  transform: scale(1.12);
+  box-shadow: 0 0 0 5px rgba(46, 131, 249, 0.14);
+}
+
+.lock__panel .pin__dot--error {
+  box-shadow: 0 0 0 5px rgba(229, 72, 77, 0.14);
+}
+
+/* The label tucks closer under the display pill — the pill's own
+   padding already provides the visual gap. */
+.lock__panel .pin__label {
+  margin-top: 12px;
+}
+
+.lock__panel .keypad {
+  /* Full available width: lift the shared pad's 320px cap (and this
+     file's earlier 300px) so the keys stretch edge to edge of the app
+     column — .home's 20px side padding is the outer margin. */
+  width: 100%;
+  max-width: none;
+  gap: 16px; /* same rhythm between rows... */
+  padding: 18px 0 2px; /* a little more air under the label/error line */
+}
+
+.lock__panel .keypad__row {
+  gap: 16px; /* ...as between keys: an even, tidy grid */
+}
+
+.lock__panel .keypad__key {
+  /* min-height (not a fixed height): the shared 3×1fr grid stretches
+     each key horizontally, and the key stays ~62px tall — a large, easy
+     tap target — while allowing taller rendering if fonts scale up. */
+  min-height: 62px;
+  border: none; /* shadow-only definition: cleaner than a hairline */
+  border-radius: var(--radius-key); /* rounded tile, like the cards */
+  background: var(--card);
+  /* Layered shadow: a crisp contact edge + a soft ambient lift, plus a
+     1px inset sheen along the top edge so each tile catches the light. */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(23, 35, 59, 0.05), 0 6px 16px rgba(23, 35, 59, 0.08);
+  font-size: 22px;
+  font-weight: 700; /* crisper digits than the shared pad's 600 */
+  transition: background 0.14s cubic-bezier(0.33, 1, 0.68, 1),
+    color 0.14s cubic-bezier(0.33, 1, 0.68, 1),
+    transform 0.14s cubic-bezier(0.33, 1, 0.68, 1),
+    box-shadow 0.14s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Press feedback: the tile fills blue, dips 1px, its shadow tightens. */
+.lock__panel .keypad__key:active {
+  background: var(--blue);
+  color: #ffffff;
+  transform: translateY(1px) scale(0.96);
+  box-shadow: 0 1px 3px rgba(27, 110, 245, 0.45);
+}
+
+/* Pointer devices only, so a touch tap never leaves a stuck hover. */
+@media (hover: hover) {
+  .lock__panel .keypad__key:hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 2px 4px rgba(23, 35, 59, 0.06), 0 10px 22px rgba(23, 35, 59, 0.1);
+  }
+}
+
+/* Keyboard focus: a clean blue ring instead of the browser default. */
+.lock__panel .keypad__key:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46, 131, 249, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(23, 35, 59, 0.05), 0 6px 16px rgba(23, 35, 59, 0.08);
+}
+
+/* The backspace key reads as a secondary action: a soft blue tint. */
+.lock__panel .keypad__key--icon {
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: 20px;
+}
+
+.lock__panel .keypad__key--icon:active {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+/* "C" keeps its destructive identity, now from the shared coral token. */
+.lock__panel .keypad__key--clear {
+  background: var(--coral-soft);
+}
+
+.lock__panel .keypad__key--clear:active {
+  background: var(--danger);
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(229, 72, 77, 0.4);
+}
+
+/* Narrow windows: tighten the gaps and trim the tile height a little
+   (mirrors the shared keypad's own small-screen tweak in components.css). */
+@media (max-width: 360px) {
+  .lock__panel .pin__dots {
+    gap: 16px;
+    padding: 13px 22px;
+  }
+
+  .lock__panel .keypad,
+  .lock__panel .keypad__row {
+    gap: 12px;
+  }
+
+  .lock__panel .keypad__key {
+    min-height: 58px;
+  }
+}
+
+/* ==========================================================================
+   Pattern lock grid (PatternLock.jsx)
+   --------------------------------------------------------------------------
+   A 3×3 field of dots with an SVG polyline tracing the drawn path. The
+   grid is a square sized off the app column; dots sit on a CSS grid while
+   the absolutely-positioned SVG paints the connecting lines beneath them.
+   ========================================================================== */
+
+.pattern {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  place-items: center;
+  touch-action: none; /* the drag belongs to the pattern, not the scroll */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* The connecting lines — under the dots, never a pointer target. */
+.pattern__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pattern__line {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+
+.pattern__dot {
+  position: relative;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: #fdfeff;
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+}
+
+/* A dot the path has passed through fills blue and grows slightly. */
+.pattern__dot--active {
+  background: var(--blue);
+  border-color: var(--blue);
+  transform: scale(1.25);
+}
+
+/* Wrong pattern: the whole grid shakes and everything turns coral-red. */
+.pattern--wrong {
+  animation: pin-shake 0.35s ease;
+}
+
+.pattern--wrong .pattern__dot,
+.pattern--wrong .pattern__dot--active {
+  background: var(--danger);
+  border-color: var(--danger);
+  transform: none;
+}
+
+.pattern--wrong .pattern__line {
+  stroke: var(--danger);
+}

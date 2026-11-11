@@ -1,0 +1,74 @@
+# ============================================================================
+# Deploy SUAB to GitHub Pages
+# ============================================================================
+# Source repo : anmolgritsa/Suab         (private — this workflow lives here)
+# Deploy repo : anmolgritsa/Suab-deploy  (public — GitHub Pages serves it at
+#               https://anmolgritsa.github.io/Suab-deploy/)
+#
+# How it works
+#   1. Build the app with Vite (vite.config.js already sets base '/Suab-deploy/').
+#   2. Publish dist/ to the gh-pages branch of the PUBLIC deploy repo with
+#      peaceiris/actions-gh-pages, authenticating with the DEPLOY_TOKEN secret.
+#
+# Why peaceiris instead of checkout + push:
+#   The built-in GITHUB_TOKEN is scoped to THIS repository only and cannot
+#   push to another repo, so a PAT (DEPLOY_TOKEN secret) is required. And an
+#   empty deploy repo cannot be checked out at all — actions/checkout fails
+#   with "couldn't find remote ref refs/heads/main" because there is no
+#   branch yet. peaceiris only runs `git ls-remote` (which succeeds on an
+#   empty repo) and creates the gh-pages branch from scratch on the first
+#   deploy. One-time setup — deploy repo, Pages branch and the secret — is
+#   documented in DEPLOY.md.
+# ============================================================================
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]       # every push to main auto-deploys
+  workflow_dispatch: {}    # manual runs from the Actions tab
+
+permissions:
+  contents: read           # only read access to THIS repo is needed — the
+                           # push to Suab-deploy uses DEPLOY_TOKEN instead
+
+# Never run two deploys at once; queue behind an in-progress publish
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # ---- 1. Source + build -------------------------------------------------
+      - name: Check out the source repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build   # base '/Suab-deploy/' comes from vite.config.js
+
+      # ---- 2. Publish dist/ to the gh-pages branch of Suab-deploy ------------
+      # Works even when Suab-deploy is completely empty: on the first run the
+      # action creates the gh-pages branch itself. Unchanged build output is
+      # skipped automatically (no empty commits on docs-only pushes).
+      - name: Publish to the gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          # A PAT with Contents: Read and write on Suab-deploy — required for
+          # cross-repo pushes (GITHUB_TOKEN cannot leave this repository).
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          external_repository: anmolgritsa/Suab-deploy
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          enable_jekyll: false   # adds .nojekyll — serve the files as-is
+          commit_message: "Deploy ${{ github.sha }} from anmolgritsa/Suab@main"
