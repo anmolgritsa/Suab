@@ -7,12 +7,21 @@
  *
  * Props:
  *  - message  text to show (null/undefined = hidden)
+<<<<<<< HEAD
+=======
+ *  - icon     optional icon rendered before the text (e.g. a check mark
+ *             for success notifications)
+>>>>>>> master
  *  - onClose  called when the toast's close button is tapped
  */
 
 import { useEffect } from 'react'
 
+<<<<<<< HEAD
 export default function Toast({ message, onClose }) {
+=======
+export default function Toast({ message, icon = null, onClose }) {
+>>>>>>> master
   // Auto-hide after 2.6 seconds. The timer is cleaned up when the toast
   // unmounts or the message changes, which avoids stale timers.
   useEffect(() => {
@@ -25,6 +34,10 @@ export default function Toast({ message, onClose }) {
 
   return (
     <div className="toast" role="status">
+<<<<<<< HEAD
+=======
+      {icon}
+>>>>>>> master
       <span>{message}</span>
       <button className="toast__close" type="button" onClick={onClose}>
         ✕

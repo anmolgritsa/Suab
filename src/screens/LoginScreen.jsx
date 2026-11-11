@@ -7,11 +7,30 @@
  * SUAB-1024). On success App.jsx opens a session record and routes by the
  * day-keyed flow flags: attendance → machine allotment → homepage.
  *
+<<<<<<< HEAD
  * "Use Fingerprint", "Forgot Password?" and "Help" are mock-only — they
  * show a toast instead of doing anything real.
  *
  * All visible text comes from t() (see i18n.jsx), so it follows the
  * language chosen in <LanguageDropdown /> in the top bar.
+=======
+ * When this device already has a PIN (secureStore.hasPinAuth()), the form
+ * is joined by quick-unlock options: fingerprint and Face ID (the mock
+ * biometric scanners) and an "Unlock with PIN" link. Without a saved PIN
+ * those options are mock-only and show a toast instead.
+ *
+ * "Forgot Password?" and "Help" stay mock-only — they show a toast.
+ *
+ * All visible text comes from t() (see i18n.jsx), so it follows the
+ * language chosen in <LanguageDropdown /> in the top bar.
+ *
+ * Props:
+ *  - registeredUser   optional saved account for the personalised greeting
+ *  - onLogin(phone, employeeId)   valid credentials → App.jsx routes on
+ *  - onUnlockWithPin()            quick-unlock: the PIN pad screen
+ *  - onFingerprint()              quick-unlock: the fingerprint scanner
+ *  - onFaceId()                   quick-unlock: the Face ID scanner
+>>>>>>> master
  */
 
 import { useState } from 'react'
@@ -22,6 +41,7 @@ import PrimaryButton from '../components/PrimaryButton.jsx'
 import Toast from '../components/Toast.jsx'
 import {
   BadgeIcon,
+<<<<<<< HEAD
   FingerprintIcon,
   HelpIcon,
   KeyIcon,
@@ -40,6 +60,31 @@ function fill(text, vars) {
 
 export default function LoginScreen({ registeredUser, onLogin }) {
   const { t } = useI18n()
+=======
+  FaceIdIcon,
+  FingerprintIcon,
+  HelpIcon,
+  KeyIcon,
+  PadlockIcon,
+  PhoneIcon,
+} from '../components/icons.jsx'
+import { useI18n } from '../i18n.jsx'
+import { hasPinAuth } from '../utils/secureStore.js'
+import { checkLogin, validatePhone } from '../utils/validation.js'
+import { authenticateUser } from '../data/db.js'
+
+export default function LoginScreen({
+  registeredUser,
+  onLogin,
+  onUnlockWithPin,
+  onFingerprint,
+  onFaceId,
+}) {
+  const { t } = useI18n()
+  // A PIN saved on this device (checked here, not passed in) enables the
+  // quick-unlock options below — fingerprint, Face ID and the PIN pad.
+  const hasPinSaved = hasPinAuth()
+>>>>>>> master
   const [phone, setPhone] = useState('')
   const [employeeId, setEmployeeId] = useState('')
   // { field: 'phone' | 'employeeId', message } — shown under the field the
@@ -60,6 +105,21 @@ export default function LoginScreen({ registeredUser, onLogin }) {
       })
       return
     }
+<<<<<<< HEAD
+=======
+    // Authenticate against the account database (data/db.js): the mobile +
+    // Employee ID must BOTH belong to a seeded account — LAB001–LAB010 are
+    // the labourers (mobiles 9876540010–9876540019), SUP001 the supervisor
+    // (9812345678). The matched account's role decides the route in App.jsx.
+    const user = authenticateUser(employeeId, phone)
+    if (!user) {
+      setError({
+        field: 'employeeId',
+        message: 'Invalid Employee ID or mobile number — check your supervisor-issued credentials',
+      })
+      return
+    }
+>>>>>>> master
     onLogin(phone.replace(/\D/g, ''), employeeId.trim())
   }
 
@@ -118,13 +178,20 @@ export default function LoginScreen({ registeredUser, onLogin }) {
             spellCheck={false}
           />
 
+<<<<<<< HEAD
           <p className="demo-chip">
             {fill(t('loginDemoHint'), { id: DEMO_EMPLOYEE_ID })}
           </p>
+=======
+          {/* <p className="demo-chip">
+            {fill(t('loginDemoHint'), { id: DEMO_EMPLOYEE_ID })}
+          </p> */}
+>>>>>>> master
 
           <PrimaryButton type="submit">{t('loginButton')}</PrimaryButton>
         </form>
 
+<<<<<<< HEAD
         {/* Mock biometric login — shows a toast, unlocks nothing. */}
         <button
           type="button"
@@ -141,6 +208,48 @@ export default function LoginScreen({ registeredUser, onLogin }) {
 
         {/* Mock-only footer actions. */}
         <div className="login__footer">
+=======
+        {/* Quick unlock — only once this device has a PIN to protect.
+            Without a saved PIN the fingerprint button stays mock-only. */}
+        {hasPinSaved ? (
+          <div className="login__quick">
+            <button type="button" className="fingerprint" onClick={onFingerprint}>
+              <span className="fingerprint__icon" aria-hidden="true">
+                <FingerprintIcon size={30} />
+              </span>
+              {t('loginFingerprint')}
+            </button>
+            <button type="button" className="fingerprint" onClick={onFaceId}>
+              <span className="fingerprint__icon" aria-hidden="true">
+                <FaceIdIcon size={30} />
+              </span>
+              {t('loginFaceUnlock')}
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            className="fingerprint"
+            onClick={() => mockAction('loginFingerprintNA')}
+          >
+            <span className="fingerprint__icon" aria-hidden="true">
+              <FingerprintIcon size={30} />
+            </span>
+            {t('loginFingerprint')}
+          </button>
+        )}
+
+        <div className="login__divider" aria-hidden="true" />
+
+        {/* Mock-only footer actions (+ PIN unlock when one is set up). */}
+        <div className="login__footer">
+          {hasPinSaved && (
+            <button type="button" className="link-button" onClick={onUnlockWithPin}>
+              <PadlockIcon size={16} />
+              {t('loginPinUnlock')}
+            </button>
+          )}
+>>>>>>> master
           <button
             type="button"
             className="link-button"

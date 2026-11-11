@@ -67,23 +67,42 @@ function renderCase(label, element, mustContain = []) {
 }
 
 // 1. Full app, fresh visitor → login screen first.
+<<<<<<< HEAD
+=======
+//    (The "Demo: any Employee ID works" chip is commented out in the
+//    LoginScreen markup, so it is no longer part of the render.)
+>>>>>>> master
 renderCase('App fresh → login', createElement(App), [
   'Welcome Back,',
   'Use the ID your supervisor gave you',
   'Phone Number',
   'Employee ID',
   'Login',
+<<<<<<< HEAD
   'Demo: any Employee ID works',
+=======
+>>>>>>> master
   'SUAB',
 ])
 
 // 2. Each screen rendered directly with representative props.
+<<<<<<< HEAD
 renderCase(
   'LoginScreen (no registered user)',
   createElement(LoginScreen, {
     registeredUser: null,
     onLogin: () => {},
   }),
+=======
+//    LoginScreen and AttendanceScreen call useI18n, so they need the
+//    I18nProvider wrapper just like the homepage does.
+renderCase(
+  'LoginScreen (no registered user)',
+  createElement(I18nProvider, null, createElement(LoginScreen, {
+    registeredUser: null,
+    onLogin: () => {},
+  })),
+>>>>>>> master
   [
     'Welcome Back,',
     'Use the ID your supervisor gave you',
@@ -98,10 +117,17 @@ renderCase(
 
 renderCase(
   'LoginScreen (registered user greeting)',
+<<<<<<< HEAD
   createElement(LoginScreen, {
     registeredUser: { name: 'Anmol Bajpai', phone: '9876543210' },
     onLogin: () => {},
   }),
+=======
+  createElement(I18nProvider, null, createElement(LoginScreen, {
+    registeredUser: { name: 'Anmol Bajpai', phone: '9876543210' },
+    onLogin: () => {},
+  })),
+>>>>>>> master
   ['Welcome Back,', 'Anmol Bajpai'],
 )
 
@@ -109,11 +135,19 @@ renderCase(
 // Machine Allotment screen that follows a successful check-in.
 renderCase(
   'AttendanceScreen (at location)',
+<<<<<<< HEAD
   createElement(AttendanceScreen, {
     attendanceRecord: null,
     onCheckIn: () => {},
     onContinue: () => {},
   }),
+=======
+  createElement(I18nProvider, null, createElement(AttendanceScreen, {
+    attendanceRecord: null,
+    onCheckIn: () => {},
+    onContinue: () => {},
+  })),
+>>>>>>> master
   // Note: renderToString escapes the apostrophe (&#x27;), so match a
   // substring without one.
   ['Mark Attendance', 'at the location', 'Check In', 'SUAB Factory', 'At location'],
@@ -121,11 +155,19 @@ renderCase(
 
 renderCase(
   'AttendanceScreen (already checked in)',
+<<<<<<< HEAD
   createElement(AttendanceScreen, {
     attendanceRecord: { date: '2026-10-28', checkInAt: '2026-10-28T09:42:11.000Z' },
     onCheckIn: () => {},
     onContinue: () => {},
   }),
+=======
+  createElement(I18nProvider, null, createElement(AttendanceScreen, {
+    attendanceRecord: { date: '2026-10-28', checkInAt: '2026-10-28T09:42:11.000Z' },
+    onCheckIn: () => {},
+    onContinue: () => {},
+  })),
+>>>>>>> master
   ['Attendance Marked', 'checked in at', 'Continue'],
 )
 
@@ -153,19 +195,31 @@ renderCase(
 renderCase(
   'InputErrorScreen (report form)',
   createElement(I18nProvider, null, createElement(InputErrorScreen, { onBack: () => {} })),
+<<<<<<< HEAD
   ['Input Errors', 'raw material', 'Add a photo or video (required)', 'Choose photo / video', 'Submit Report', 'Cancel'],
+=======
+  ['Input Errors', 'raw material', 'Add a photo or video', 'Choose photo / video', 'Submit Report', 'Cancel'],
+>>>>>>> master
 )
 
 renderCase(
   'MachineDefectScreen (report form)',
   createElement(I18nProvider, null, createElement(MachineDefectScreen, { onBack: () => {} })),
+<<<<<<< HEAD
   ['Machine Defect', 'fault', 'Add a photo or video (required)', 'Choose photo / video', 'Submit Report', 'Cancel'],
+=======
+  ['Machine Defect', 'fault', 'Add a photo or video', 'Choose photo / video', 'Submit Report', 'Cancel'],
+>>>>>>> master
 )
 
 renderCase(
   'OutputErrorScreen (report form)',
   createElement(I18nProvider, null, createElement(OutputErrorScreen, { onBack: () => {} })),
+<<<<<<< HEAD
   ['Output Errors', 'defective pieces', 'Add a photo or video (required)', 'Choose photo / video', 'Submit Report', 'Cancel'],
+=======
+  ['Output Errors', 'defective pieces', 'Add a photo or video', 'Choose photo / video', 'Submit Report', 'Cancel'],
+>>>>>>> master
 )
 
 renderCase(

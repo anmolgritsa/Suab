@@ -84,6 +84,35 @@ export function FingerprintIcon(props) {
   )
 }
 
+<<<<<<< HEAD
+=======
+/** Face inside corner brackets — the mock Face ID login option. */
+export function FaceIdIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M3 8V5a2 2 0 0 1 2-2h3" />
+      <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+      <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+      <path d="M21 16v3a2 2 0 0 1-2 2h-3" />
+      <path d="M9 9.5h.01" />
+      <path d="M15 9.5h.01" />
+      <path d="M9 14.5c.9 1 2 1.5 3 1.5s2.1-.5 3-1.5" />
+    </Svg>
+  )
+}
+
+/** Padlock — the PIN screens' identity/lock art. */
+export function PadlockIcon(props) {
+  return (
+    <Svg {...props}>
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+      <circle cx="12" cy="16" r="1.3" />
+    </Svg>
+  )
+}
+
+>>>>>>> master
 /** Question mark in a circle — the Help action. */
 export function HelpIcon(props) {
   return (
@@ -168,6 +197,21 @@ export function ClockIcon(props) {
   )
 }
 
+<<<<<<< HEAD
+=======
+/** Clock with a plus — the overtime tail of the shift timer (homepage). */
+export function ClockPlusIcon(props) {
+  return (
+    <Svg {...props}>
+      <circle cx="10.5" cy="11.5" r="8" />
+      <path d="M10.5 7.5v4l3 2" />
+      <path d="M18 16v6" />
+      <path d="M15 19h6" />
+    </Svg>
+  )
+}
+
+>>>>>>> master
 /** Closed box — raw material / product actions. */
 export function PackageIcon(props) {
   return (
@@ -188,6 +232,27 @@ export function WrenchIcon(props) {
   )
 }
 
+<<<<<<< HEAD
+=======
+/** Chevron right — "this card opens something" affordance on tappable cards. */
+export function ChevronRightIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M9 18l6-6-6-6" />
+    </Svg>
+  )
+}
+
+/** Chevron left — "go back / previous" affordance (e.g. date switchers). */
+export function ChevronLeftIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M15 18l-6-6 6-6" />
+    </Svg>
+  )
+}
+
+>>>>>>> master
 /** Warning triangle — defects and emergency alerts. */
 export function AlertTriangleIcon(props) {
   return (
@@ -249,3 +314,115 @@ export function TargetIcon(props) {
     </Svg>
   )
 }
+<<<<<<< HEAD
+=======
+
+/** Microphone — "speak your count" button on the product submission screen. */
+export function MicIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+      <line x1="12" y1="19" x2="12" y2="23" />
+      <line x1="8" y1="23" x2="16" y2="23" />
+    </Svg>
+  )
+}
+
+/** Three dots (⋯) — the "Other" card on the machine allotment screen. */
+export function DotsIcon(props) {
+  return (
+    <Svg {...props}>
+      <circle cx="5" cy="12" r="1.6" />
+      <circle cx="12" cy="12" r="1.6" />
+      <circle cx="19" cy="12" r="1.6" />
+    </Svg>
+  )
+}
+
+/** Stopwatch — "Apply for Overtime" on the Other screen. */
+export function TimerIcon(props) {
+  return (
+    <Svg {...props}>
+      <line x1="10" y1="2" x2="14" y2="2" />
+      <line x1="12" y1="14" x2="15" y2="11" />
+      <circle cx="12" cy="14" r="8" />
+    </Svg>
+  )
+}
+
+/** Clipboard with lines — "Update Other Work Activities" on the Other screen. */
+export function ClipboardIcon(props) {
+  return (
+    <Svg {...props}>
+      <rect x="8" y="2" width="8" height="4" rx="1" />
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+      <path d="M9 12h6" />
+      <path d="M9 16h6" />
+    </Svg>
+  )
+}
+
+/** Play triangle — listen to a recorded voice note (half-day request). */
+export function PlayIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M6.5 4.5 19 12 6.5 19.5z" />
+    </Svg>
+  )
+}
+
+/** Solid rounded square — stop a recording / stop playback. The filled
+    shape (unlike the stroke-only icons) reads instantly as "stop". */
+export function StopIcon(props) {
+  return (
+    <Svg {...props}>
+      <rect x="6.5" y="6.5" width="11" height="11" rx="2.5" fill="currentColor" stroke="none" />
+    </Svg>
+  )
+}
+
+/** Circular arrow — "Retake" a recorded voice note (half-day request). */
+export function RefreshIcon(props) {
+  return (
+    <Svg {...props}>
+      <polyline points="1.5 4.5 1.5 10.5 7.5 10.5" />
+      <path d="M4 15a9 9 0 1 0 2.1-9.4L1.5 10.5" />
+    </Svg>
+  )
+}
+
+/** Speaker with sound waves — the "Unusual sound" reason chip on the
+    machine maintenance form. */
+export function VolumeIcon(props) {
+  return (
+    <Svg {...props}>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+      <path d="M18.8 5.2a9.4 9.4 0 0 1 0 13.6" />
+    </Svg>
+  )
+}
+
+/** Eye — "view" a labourer's work-history report (supervisor reports). */
+export function EyeIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M1 12s4-7.5 11-7.5S23 12 23 12s-4 7.5-11 7.5S1 12 1 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </Svg>
+  )
+}
+
+/** Calendar — the date picker on the supervisor reports screen. */
+export function CalendarIcon(props) {
+  return (
+    <Svg {...props}>
+      <rect x="3" y="5" width="18" height="16" rx="2.5" />
+      <path d="M3 10h18" />
+      <path d="M8 2.5v4" />
+      <path d="M16 2.5v4" />
+    </Svg>
+  )
+}
+>>>>>>> master

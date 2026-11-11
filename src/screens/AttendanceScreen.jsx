@@ -36,8 +36,13 @@ import {
   formatDistance,
   resolveLocationState,
 } from '../utils/geo.js'
+<<<<<<< HEAD
 import { formatTime12h, saveAttendance } from '../utils/storage.js'
 import { DEMO_INTERVAL_MINUTES, SHIFT_DURATION_MINUTES } from '../utils/shift.js'
+=======
+import { formatTime12h, getSession } from '../utils/storage.js'
+import { findUserByEmployeeId, getCurrentUser, markAttendance } from '../data/db.js'
+>>>>>>> master
 
 /* Replace {placeholders} in a translated string: fill('Every {n} min', { n: 5 }) */
 function fill(text, vars) {
@@ -103,9 +108,29 @@ export default function AttendanceScreen({
 
   /* ---- actions ---- */
 
+<<<<<<< HEAD
   /** The blue "Check In" button — record today's attendance. */
   function handleCheckIn() {
     const record = saveAttendance({
+=======
+  /** The blue "Check In" button — record today's attendance for THIS labour
+      via the shared data layer. markAttendance is idempotent (one record per
+      labour per day/shift), so if today's record already exists it is
+      returned as-is and the screen shows the "already marked" view. */
+  function handleCheckIn() {
+    // Resolve the logged-in account: the mirrored current user is fastest,
+    // but fall back to the session's Employee ID so the record always carries
+    // the correct labour id + name.
+    const current = getCurrentUser()
+    const user = current
+      ? findUserByEmployeeId(current.employeeId)
+      : findUserByEmployeeId(getSession()?.employeeId)
+    if (!user) {
+      setToast(t('attCheckInFailed'))
+      return
+    }
+    const { record } = markAttendance(user, {
+>>>>>>> master
       checkInAt: new Date().toISOString(),
       workerLat: WORKER_PRESETS.inside.lat,
       workerLng: WORKER_PRESETS.inside.lng,
@@ -178,7 +203,11 @@ export default function AttendanceScreen({
         </div>
 
         {/* ---- "Today's Shift" summary: read-only card under the button ---- */}
+<<<<<<< HEAD
         <section className="att__shift-card" aria-label={t('attShiftTitle')}>
+=======
+        {/* <section className="att__shift-card" aria-label={t('attShiftTitle')}>
+>>>>>>> master
           <h2 className="att__shift-title">{t('attShiftTitle')}</h2>
           <dl className="att__shift-rows">
             <div className="att__shift-row">
@@ -204,7 +233,11 @@ export default function AttendanceScreen({
               </dd>
             </div>
           </dl>
+<<<<<<< HEAD
         </section>
+=======
+        </section> */}
+>>>>>>> master
       </div>
 
       <footer className="att__footer">

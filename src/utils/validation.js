@@ -10,8 +10,26 @@
  * to check that both are present and sensibly formatted.
  */
 
+<<<<<<< HEAD
 /** Example Employee ID shown on the login screen (any valid ID is accepted). */
 export const DEMO_EMPLOYEE_ID = 'SUAB-1024';
+=======
+import { findUserByEmployeeId, USER_ROLES } from '../data/db.js';
+
+/** Example Employee ID shown on the login screen (a seeded labour account). */
+export const DEMO_EMPLOYEE_ID = 'LAB001';
+
+/**
+ * Role-based access control: each account's `role` field in the data layer
+ * (data/db.js) decides the route — a supervisor account opens the
+ * Supervisor dashboard, a labour account continues into the existing
+ * labour workflow. Unknown IDs (no account at all) default to 'labour' so
+ * the resume flow never crashes on a stale session.
+ */
+export function getRoleForEmployeeId(employeeId) {
+  return findUserByEmployeeId(employeeId)?.role ?? USER_ROLES.LABOUR;
+}
+>>>>>>> master
 
 /** Keep only the digits of a string: '+91 98765 43210' -> '9876543210'. */
 export function onlyDigits(value) {

@@ -18,6 +18,73 @@ npm run build    # production build
 npm run lint     # eslint
 ```
 
+<<<<<<< HEAD
+=======
+## Cross-browser sync (local dev)
+
+localStorage is scoped to one browser profile, so **a labour checking in on
+Chrome can never update a supervisor dashboard open in Edge** by itself.
+For the local-dev demo phase the app layers a tiny dependency-free sync
+server on top of the existing localStorage data layer — no UI or screen
+code changes:
+
+```
+Labour browser                 Sync server                 Supervisor browser
+┌──────────────────┐    PUT /api/db (newest revision)   ┌────────────────────┐
+│ check-in →       │ ─────────────────────────────────► │ GET /api/db/events │
+│ data/db.js       │   persists to .data/db.json        │ (SSE)              │
+│ (localStorage)   │ ◄────────────────────────────────  │                    │
+└──────────────────┘   SSE "revision" broadcast         └────────────────────┘
+        ▲                                                        │
+        └──────── both browsers keep working on localStorage ◄───┘
+                  (syncBridge mirrors pulled writes into the same
+                   `suab.db` key + notifies useStorageSync, so every
+                   screen updates live without a refresh)
+```
+
+- **Files**: `server/syncServer.js` (GET/PUT `/api/db` + SSE
+  `/api/db/events`), `server/dataFile.js` (JSON on disk, atomic
+  temp-file writes), `src/data/syncBridge.js` (the browser side —
+  push-on-write, SSE pull, fallback 5 s polling), and the shared seed /
+  schema in `src/data/dbCore.js`.
+- **Startup**: the API is mounted as Vite middleware, so **`npm run dev`
+  starts everything**. Run it separately any time with
+  `npm run sync-server` (port 3847) — including next to `vite preview`,
+  which has no middleware hooks.
+- **Fresh clone / reset**: the server seeds `.data/db.json`
+  (LAB001–LAB010 + SUP001) on first boot; reseed with `npm run db:seed`
+  or wipe with `npm run db:reset`.
+- **Persistence**: accepted writes are flushed to `.data/db.json`
+  (gitignored), so attendance survives dev-server restarts. Restarting
+  simply reloads the file; each browser re-pulls on load.
+- **Labour updates**: alongside `users` and `attendance`, the schema now
+  has a third collection, `updates` (schema **v2**). Each record is
+  `{ id, labourId, labourName, type, details, media: [{ kind, dataUrl,
+  name }], status, createdAt, updatedAt }` — types and statuses live in
+  `UPDATE_TYPES` / `UPDATE_MEDIA_KINDS` / `UPDATE_STATUSES` in
+  `src/data/dbCore.js`. Helpers on `src/data/db.js`:
+  `addUpdate()` (idempotent — the same labour + type + details within a
+  minute is treated as a re-send, not a new record), `getUpdates()`,
+  `getUpdatesByLabour()` and the supervisor-side `setUpdateStatus()`.
+  Like every other write these go through `saveDb()`, so they sync
+  cross-browser the same way attendance does. A v1 database upgrades
+  automatically — migration `v1 → v2` adds an empty `updates` array
+  without touching users or attendance.
+- **Concurrency**: every write carries a `Date.now()`-based revision;
+  the newest wins, a stale tab gets `409` and reloads — so two browsers
+  checking in at once can never clobber each other, and same-day
+  duplicate attendance is still refused by `markAttendance()`.
+- **Sessions stay per-browser** by design (`suab.session` /
+  `suab.currentUser` are not synced) — each screen keeps its own login.
+- If the API is unreachable (static hosting, server stopped) the bridge
+  no-ops and the app behaves exactly like pure localStorage.
+
+Manual check: `npm run dev` → open the app in **two different browsers** →
+log in as SUP001 (Attendance sheet) in one and LAB001 in the other →
+Check In → the supervisor sheet flips LAB001 to **Present** with the
+check-in time within ~1–2 s.
+
+>>>>>>> master
 ## Deployment
 
 Pushes to `main` are built and published automatically to GitHub Pages at
@@ -139,3 +206,14 @@ node render-test.mjs       # server-renders every screen to catch crashes
 node attendance-check.mjs  # real-browser walk of the three GPS states
 node home-check.mjs        # real-browser walk of the whole homepage flow
 ```
+<<<<<<< HEAD
+=======
+
+For the **cross-browser sync**, the reliable check is the manual one: open
+`npm run dev` in two *different browsers*, sign in as SUP001 (Attendance
+sheet) on one and LAB001 on the other, Check In, and watch the sheet flip
+to **Present** with the check-in time within ~1–2 s — all detailed in the
+"Cross-browser sync" section above. The server half (accept/reject writes,
+file persistence, re-seed) is covered by an inline smoke test in that
+section's notes.
+>>>>>>> master

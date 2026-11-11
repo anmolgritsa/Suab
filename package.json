@@ -7,7 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+<<<<<<< HEAD
     "preview": "vite preview"
+=======
+    "preview": "vite preview",
+    "sync-server": "node server/syncServer.js",
+    "check:sync": "node sync-check.mjs",
+    "db:seed": "node server/dataFile.js --file .data/db.json --migrated",
+    "db:reset": "node server/dataFile.js --file .data/db.json --force"
+>>>>>>> master
   },
   "dependencies": {
     "react": "^19.3.1",

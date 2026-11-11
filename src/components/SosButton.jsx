@@ -1,16 +1,33 @@
 /**
  * SosButton.jsx — the red emergency button at the bottom of the labour
+<<<<<<< HEAD
  * homepage (mockup: "SOS / EMERGENCY").
  *
  * Tapping it opens a confirm dialog (a stray tap must not raise a false
  * alarm). Confirming records a mock SOS event in localStorage and shows
  * a toast — the real alert pipeline arrives in a later part.
+=======
+ * homepage (mockup: "SOS / EMERGENCY") and the supervisor dashboard.
+ *
+ * Tapping it opens a confirm dialog (a stray tap must not raise a false
+ * alarm). Confirming writes a REAL SOS record to the SHARED `sosAlerts`
+ * collection (data/db.js) — the supervisor's dashboard trips its blinking
+ * + sound alarm within ~1 s (sync bridge) and the SOS screen lists the
+ * alert. The device-local mock event (utils/storage.js) is kept for its
+ * existing readers.
+>>>>>>> master
  */
 
 import { useState } from 'react';
 import { useI18n } from '../i18n.jsx';
 import { AlertTriangleIcon, XIcon } from './icons.jsx';
+<<<<<<< HEAD
 import { saveSosEvent } from '../utils/storage.js';
+=======
+import { getSession, saveSosEvent } from '../utils/storage.js';
+import { addSosAlert, getCurrentLabour } from '../data/db.js';
+import { getEmployeeAssignment } from '../data/assignments.js';
+>>>>>>> master
 
 /**
  * Props:
@@ -21,7 +38,22 @@ export default function SosButton({ onNotify }) {
   const [confirming, setConfirming] = useState(false);
 
   function handleConfirm() {
+<<<<<<< HEAD
     saveSosEvent({ at: new Date().toISOString() });
+=======
+    const at = new Date().toISOString();
+    saveSosEvent({ at }); // device-local mock event (existing behaviour)
+    // REAL record → shared DB → supervisor alarm + SOS screen, live.
+    const labour = getCurrentLabour();
+    const machineNumber =
+      getEmployeeAssignment(getSession()?.employeeId)?.machineId ?? null;
+    addSosAlert({
+      labourId: labour.id,
+      labourName: labour.name,
+      machineNumber,
+      reportedAt: at,
+    });
+>>>>>>> master
     setConfirming(false);
     onNotify?.(t('sosSent'));
   }

@@ -1,0 +1,366 @@
+console.log(Object.keys({
+en: {
+    returnToHomePage: 'Return to Home Page',
+        allotTitle: "Today's Machine",
+    allotMachineNo: 'Machine No.',
+    allotJob: 'Job',
+    allotNext: 'Next',
+    allotJobValue: 'Bolt Size 12',
+        loginWelcome: 'Welcome Back,',
+    loginUseSupervisorId: 'Use the ID your supervisor gave you',
+    loginPhone: 'Phone Number',
+    loginEmployeeId: 'Employee ID',
+    loginDemoHint: 'Demo: any Employee ID works �� e.g. {id}',
+    loginButton: 'Login',
+    loginFingerprint: 'Use Fingerprint',
+    loginForgot: 'Forgot Password?',
+    loginHelp: 'Help',
+    loginFingerprintNA: 'Fingerprint login is not available in this demo',
+    loginResetNA: 'Password reset is not available in this demo',
+    loginHelpNA: 'Help centre is not available in this demo',
+  supTitle: 'Supervisor Dashboard',
+  supSignedInAs: 'Signed in as supervisor � {id}',
+  supAssignMachine: 'Assign Machine',
+  supLabourUpdates: 'Labour Updates',
+  supAttendance: 'Attendance',
+  supCheckedIn: 'Checked in today',
+  supNotCheckedIn: 'No check-in yet today',
+  supRequests: 'Requests',
+  supPendingCount: '{n} request(s) awaiting approval',
+  supPendingNone: 'No pending requests',
+  supNavHome: 'Home',
+  supNavReports: 'Reports',
+  supNavAlerts: 'Alerts',
+  supNavSettings: 'Settings',
+  supLogout: 'Logout',
+  supDemoOnly: 'This section is not available in this demo',
+    shiftTimerLabel: 'Shift time',
+    rawMaterialIssue: 'Raw Material Issue',
+    machineBreakdown: 'Machine Breakdown',
+    outputDefect: 'Output Defect',
+    sos: 'SOS',
+    emergency: 'EMERGENCY',
+    sosConfirmTitle: 'Send emergency alert?',
+    sosConfirmBody: 'Your supervisor will be alerted immediately.',
+    sosConfirmSend: 'Yes, send alert',
+    cancel: 'Cancel',
+    sosSent: 'Emergency alert sent �� supervisor notified.',
+    workUpdateNeeded: 'Work update needed',
+    sendPhotoVideo: 'Send a photo or video to supervisor',
+    sendUpdate: 'Send Update',
+    updateSent: 'Update sent to your supervisor.',
+    close: 'Close',
+    inputErrors: 'Input Errors',
+    inputErrorsSub: 'Report problems with the raw material you received.',
+    machineDefect: 'Machine Defect',
+    machineDefectSub: 'Report a fault in the machine you are operating.',
+    outputErrors: 'Output Errors',
+    outputErrorsSub: 'Report defective pieces coming out of your machine.',
+    productSubmission: 'Product Submission',
+    productSubmissionSub: 'Your shift is complete �� submit today��"s product count.',
+    shiftComplete: 'Shift complete!',
+    placeholderNote: 'This screen arrives in a later part of the build.',
+    addPhotoVideo: 'Add a photo or video ',
+    attachmentRequired: 'Please attach a photo or video.',
+    chooseFile: 'Choose photo / video',
+    changeFile: 'Change file',
+    removeFile: 'Remove',
+    attachment: 'Attachment',
+    submitReport: 'Submit Report',
+    reportSent: 'Report submitted!',
+    reportSentSub: 'Your supervisor has been notified.',
+    submitAnother: 'Submit another report',
+    updateConfirmTitle: 'Update sent!',
+    updateConfirmSub: 'Thanks �� your supervisor received your update.',
+    done: 'Done',
+    quantityLabel: 'Quantity produced',
+    assignedQuantity: 'Assigned quantity',
+    quantityEmpty: 'Enter the quantity produced.',
+    quantityInvalid: 'Enter a valid quantity.',
+    quantityTooHigh: 'Quantity cannot exceed the assigned limit.',
+    clear: 'Clear',
+    confirmQuantity: 'Confirm',
+    successfulProducts: 'Successful Products',
+    rejectedProducts: 'Rejected Products',
+    reusableProducts: 'Reusable Products',
+    // Column headings for the Product Submission summary table.
+    productColLabel: 'Product',
+    countColLabel: 'Count',
+    speakOrType: 'Type or tap the mic to speak',
+    listening: 'Listening���',
+    voiceUnsupported: 'Voice input is not available here',
+    voiceFailed: 'No number heard �� try again',
+    micLabel: 'Speak this count',
+    endShiftEarly: 'End Shift & Submit',
+    halfDayEndShift: 'Half-Day End Shift',
+    shiftCompletedSub: 'Your product count has been submitted.',
+    submittedQuantity: 'Quantity submitted',
+    shiftEndedAt: 'Shift ended at',
+    logout: 'Logout',
+    backToHome: 'Back to Home',
+    startNewShift: 'Start New Shift',
+    continueToHome: 'Continue to Home',
+    resetDemo: 'Reset demo data',
+    languageLabel: 'Language',
+        attMarkTitle: 'Mark Attendance',
+    attAtLocationSub: "You're at the location",
+    attCheckIn: 'Check In',
+    attNotAtTitle: 'Not at Location',
+    attNotAtSub: 'Go to your office location to mark attendance',
+    attGoToLocation: 'Go to Location',
+    attLocOffTitle: 'Location Off',
+    attLocOffSub: 'Please turn on your location to mark attendance',
+    attTurnOnLocation: 'Turn On Location',
+    attMarkedTitle: 'Attendance Marked',
+    attCheckedInAtSub: 'You checked in at {time}',
+    attContinue: 'Continue',
+    attGpsOff: 'GPS is switched off',
+    attDistanceFrom: '{distance} from {place}',
+    attReachedToast: 'You have reached the factory location',
+    attLocationOnToast: 'Location turned on',
+    attCheckInFailed: 'Could not save attendance �� please sign in again',
+    attShiftTitle: "Today's Shift",
+    attShiftDuration: 'Shift duration',
+    attMinDemo: '{n} min (demo)',
+    attReminder: 'Work update reminder',
+    attEveryMin: 'Every {n} min',
+    attStatus: 'Status',
+    attCheckedInAtStatus: 'Checked in at {time}',
+    attNotCheckedIn: 'Not checked in yet',
+    attDemoGps: 'Demo GPS',
+    attDemoAria: "Demo: simulate the worker's GPS",
+    attSimAt: 'At location',
+    attSimNot: 'Not at location',
+    attSimOff: 'Location off',
+
+    // ���� Auth: PIN unlock + mock biometrics ����
+    enterPinTitle: 'Enter Your PIN',
+    enterPinSub: 'Welcome back, Employee ID {id}!',
+    enterPinLabel: 'Enter your 4-digit PIN',
+    enterPinWrong: 'Wrong PIN. Try again.',
+    enterPinLocked: 'Too many attempts.',
+    enterPinLockedLabel: 'Too many attempts �� try again in {seconds}s',
+    enterPinForgot: 'Not you? Use another account',
+    bioFingerprintTitle: 'Fingerprint Login',
+    bioFingerprintSub: 'Touch the sensor to unlock the app',
+    bioFaceTitle: 'Face ID Login',
+    bioFaceSub: 'Look at the camera to unlock the app',
+    bioReadyLabel: 'Sensor ready',
+    bioScanningLabel: 'Scanning���',
+    bioMatchedLabel: 'Identity verified',
+    bioRetryLabel: 'Try again',
+    bioNoMatch: 'Not recognised. Try again.',
+    bioScanNow: 'Tap to scan',
+    bioScanning: 'Scanning���',
+    bioUsePin: 'Use PIN instead',
+    loginPinUnlock: 'Unlock with PIN',
+    loginFaceUnlock: 'Use Face ID',
+    loginPinUnavailable: 'PIN unlock is not set up on this device',
+
+    // ���� App lock (the reopen gate) ����
+    lockTitle: 'App Locked',
+    lockSub: 'Place Fingerprint or Enter Password',
+    lockTabPattern: 'Pattern',
+    lockTabPin: 'PIN',
+    lockUseBiometric: 'Place Fingerprint',
+    lockPatternLabel: 'Draw your unlock pattern',
+    lockPatternHint: 'Demo pattern: draw an ��SL��� �� top-left �  bottom-left �  bottom-right',
+    lockPatternWrong: 'Wrong pattern. Try again.',
+
+    // ���� Machine allotment: the finished product (Job card's detail) ����
+    allotFinishedProduct: 'Finished Product',
+    allotFinishedProductValue: 'Stainless Steel Coils',
+
+    // ���� Machine detail screens (opened from the allotment cards) ����
+    // Static demo data for now �� dynamic later.
+    backToAllotment: 'Back to Machine Allotment',
+    machineInputsTitle: 'Machine Inputs',
+    machineInputsSub: 'Raw material loaded into this machine',
+    gradeLabel: 'Grade',
+    specLabel: 'Specification',
+    inputMaterial1: 'SS Pipes & Tubes',
+    inputMaterial2: 'SS Sheets',
+    inputMaterial3: 'MS Rods',
+    inputGrade1: 'SS 304',
+    inputSpec1: 'ASTM A312',
+    inputGrade2: 'SS 316L',
+    inputSpec2: 'ASTM A240',
+    inputGrade3: 'E250BR',
+    inputSpec3: 'IS 2062',
+    materialLabel: 'Material',
+    productDimensionsTitle: 'Product Dimensions',
+    productDimensionsSub: 'Finished output of this machine',
+    widthLabel: 'Width',
+    thicknessLabel: 'Thickness',
+    coilWeightLabel: 'Coil Weight',
+    dimWidth: '1250 mm',
+    dimThickness: '0.5 mm',
+    dimCoilWeight: '2.5 t',
+    dimGrade: 'SS 304',
+
+    // ���� Other screen (opened from the allotment's third card) ����
+    other: 'Other',
+    otherTitle: 'Other',
+    otherSub: 'Requests & updates',
+    otherHalfDay: 'Apply for Half Day',
+    otherOvertime: 'Apply for Overtime',
+    otherMaintenance: 'Report Machine Maintenance',
+    otherActivities: 'Update Other Work Activities',
+    halfDayPending: 'Pending���',
+    halfDayApproved: 'Half Day Approved',
+    shiftNowHalf: 'Shift updated to Half Shift',
+
+    // ���� Half-day voice request screen (opened from the Other screen) ����
+    backToOther: 'Back to Other',
+    halfDaySub: 'Record a short voice note for your supervisor',
+    halfDayRecordHint: 'Tap the mic and speak',
+    halfDayRecording: 'Recording���',
+    halfDayRecord: 'Record',
+    halfDayStop: 'Stop',
+    halfDayPlay: 'Play',
+    halfDayStopPlay: 'Stop',
+    halfDayRetake: 'Retake',
+    halfDaySubmit: 'Submit Request',
+    halfDaySent: 'Half-day request sent',
+    halfDayMicError: 'Microphone not available �� please allow mic access and try again.',
+
+    // ���� Overtime request screen (opened from the Other screen) ����
+    overtimeSub: 'Choose how many extra hours you need',
+    overtimeHoursLabel: 'Overtime Hours',
+    overtimeHoursUnit: 'hrs',
+    overtimeSubmit: 'Submit Request',
+    overtimeSent: 'Overtime request sent',
+    overtimeApproved: 'Overtime Approved',
+    overtimeActive: 'Overtime active',
+    overtimeStarted: 'Overtime Started',
+    overtimeCompleted: 'Overtime Completed',
+    overtimeShiftBadge: 'Overtime shift',
+
+    // ���� Voice notes in the defect report forms (ReportForm) ����
+    voiceNoteLabel: 'Add a voice note (optional)',
+    voiceRecord: 'Record voice note',
+    voiceRecording: 'Recording���',
+    voicePlay: 'Play',
+    voiceStop: 'Stop',
+    voiceRetake: 'Retake',
+    voiceDelete: 'Delete voice note',
+    voiceMicError: 'Microphone not available �� please allow mic access and try again.',
+    // ���� Work-activities voice update screen (opened from the Other screen) ����
+    activitiesSub: 'Record a short voice note about your other work activities',
+    activitiesHint: 'Press the mic and speak',
+    activitiesSubmit: 'Send update',
+    activitiesSent: 'Work activity update sent',
+
+    // ���� Machine-maintenance voice request screen (opened from the Other screen) ����
+    maintenanceSub: 'Record a short voice note about the machine maintenance needed',
+    maintenanceHint: 'Press the mic and speak',
+    maintenanceSubmit: 'Send maintenance request',
+    maintenanceSent: 'Maintenance request sent',
+    // ���� Machine-maintenance quick-report sections (reference design) ����
+    maintenanceMachineLabel: 'Machine#',
+    maintenanceReasonsLabel: 'What is the problem?',
+    mReasonNotWorking: 'Machine not working',
+    mReasonSound: 'Unusual sound',
+    mReasonOther: 'Other issue',
+    maintenanceVoiceTitle: 'Tell us the problem',
+    maintenanceVoiceSub: 'Speak in your language',
+    maintenanceAddPhoto: 'Add photo',
+
+  /* ---- Supervisor � Assign Machine (supervisor-assign screen) ---- */
+  supAssignTitle: 'Assign Machine',
+  supAssignSub: 'Tap a worker, then pick the machine and material',
+  supAssignEmployees: 'Employees',
+  supAssignEmployee: 'Employee',
+  supAssignBadgeAssigned: 'Assigned',
+  supAssignBadgeFree: 'Not Assigned',
+  supAssignMachineLabel: 'Select Machine',
+  supAssignMaterialLabel: 'Raw Material',
+  supAssignOutputLabel: 'Output Details',
+  supAssignLength: 'Length',
+  supAssignWidth: 'Width',
+  supAssignThickness: 'Thickness',
+  supAssignWeight: 'Weight',
+  supAssignTarget: 'Target Qty',
+  supAssignPriority: 'Job Priority',
+  supAssignNormal: 'Normal',
+  supAssignHigh: 'High',
+  supAssignUrgent: 'Urgent',
+  supAssignPreview: 'Preview Assignment',
+  supAssignConfirm: 'Assign Machine',
+  supAssignReassign: 'Reassign Machine',
+  supAssignBack: 'Back',
+  supAssignHistory: 'Recent Assignments',
+  supAssignHistoryEmpty: 'No assignments yet',
+  supAssignPickEmployee: 'Select an employee first',
+  supAssignSuccess: '{name} assigned to {machine}',
+  supAssignReassignNote: '{name} is on {machine} �� pick a new machine to reassign',
+  supAssignStAvailable: 'Available',
+  supAssignStAssigned: 'Assigned',
+  supAssignStMaintenance: 'Maintenance',
+  supUpdatesTitle: 'Labour Updates',
+  supUpdatesSub: 'Video updates from today��"s shift',
+  supUpdatesBack: 'Back',
+  supUpdatesSubmitted: 'Submitted',
+  supUpdatesNotSubmitted: 'Not Submitted',
+  supUpdatesView: 'View update',
+  supUpdatesClose: 'Close',
+  supUpdatesVideo: 'Video update',
+  supAttTitle: 'Attendance',
+  supAttSub: 'Who checked in for the selected day',
+  supAttBack: 'Back',
+  supAttPrevDay: 'Previous day',
+  supAttNextDay: 'Next day',
+  supAttPresent: 'Present',
+  supAttNotPresent: 'Not Present',
+  supReqTitle: 'Requests',
+  supReqSub: 'Half-day & overtime requests from your labourers',
+  supReqBack: 'Back',
+  supReqTypeHalfDay: 'Half Day',
+  supReqTypeOvertime: 'Overtime',
+  supReqHours: '{n} hr',
+  supReqReason: 'Reason',
+  supReqNoReason: 'No reason given',
+  supReqAudio: 'Voice note',
+  supReqPlay: 'Play voice note',
+  supReqStop: 'Stop voice note',
+  supReqNoAudio: 'No voice note',
+  supReqPending: 'Pending',
+  supReqApproved: 'Approved',
+  supReqRejected: 'Rejected',
+  supReqApprove: 'Approve',
+  supReqReject: 'Reject',
+  supReqToastApproved: 'Request approved',
+  supReqToastRejected: 'Request rejected',
+  supReqEmpty: 'No requests yet',
+  supRepTitle: 'Reports',
+  supRepSub: 'Work history for the selected day',
+  supRepBack: 'Back',
+  supRepHours: 'Working Hours',
+  supRepSuccess: 'Successful Products',
+  supRepRejected: 'Rejected Products',
+  supRepReusable: 'Reusable Products',
+  supRepNoData: 'No work recorded for this day',
+  supRepDateLabel: 'Report date',
+  supRepExpand: 'View report',
+  supRepCollapse: 'Hide report',
+  supAlertTitle: 'Emergency Alerts',
+  supAlertSub: 'Breakdowns & defects reported by your labourers',
+  supAlertBack: 'Back',
+  supAlertFilterAll: 'All',
+  supAlertTypeMachine: 'Machine Breakdown',
+  supAlertTypeMaterial: 'Raw Material Defect',
+  supAlertTypeOutput: 'Output Defect',
+  supAlertPhoto: 'Photo',
+  supAlertVideo: 'Video',
+  supAlertPlay: 'Play voice note',
+  supAlertStop: 'Stop voice note',
+  supAlertNoAudio: 'No voice note',
+  supAlertNew: 'New',
+  supAlertAcknowledged: 'Acknowledged',
+  supAlertResolved: 'Resolved',
+  supAlertAcknowledge: 'Acknowledge',
+  supAlertResolve: 'Resolve',
+  supAlertToastAcknowledged: 'Alert acknowledged',
+  supAlertToastResolved: 'Alert resolved',
+  supAlertEmpty: 'No alerts here',
+  },}));

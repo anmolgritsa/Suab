@@ -1,0 +1,223 @@
+/* ==========================================================================
+   Supervisor — Attendance screen (.supat__*)
+   --------------------------------------------------------------------------
+   Opened from the dashboard's "Attendance" card. Reuses the labour
+   homepage's shell (.home, .home__topbar, .home__back) and the app's card
+   language (white cards, soft shadows, standard control height); everything
+   below is scoped to .supat__* so no shared rule is touched.
+   ========================================================================== */
+.supat__body {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 14px;
+  padding-bottom: 32px;
+}
+
+/* ---- date switcher: prev/next arrows + a strip of day chips ---- */
+.supat__dates {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.supat__arrow {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+
+.supat__arrow:hover {
+  background: var(--blue-soft);
+  transform: translateY(-1px);
+}
+
+.supat__strip {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px;
+}
+
+.supat__strip::-webkit-scrollbar {
+  display: none;
+}
+
+.supat__day {
+  flex: 1;
+  min-width: 44px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  padding: 6px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.supat__day:hover {
+  border-color: var(--blue);
+}
+
+.supat__day-name {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.supat__day-num {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* The selected day — filled with the app's primary blue. */
+.supat__day--on {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.supat__day--on .supat__day-name,
+.supat__day--on .supat__day-num {
+  color: #ffffff;
+}
+
+/* Today's chip gets a soft blue ring even when not selected. */
+.supat__day--today:not(.supat__day--on) {
+  border-color: var(--blue);
+}
+
+/* ---- roster: one compact row per labourer ---- */
+.supat__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.supat__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-input);
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+/* Initials avatar — colored circle, the same soft palette the dashboard's
+   action cards use. */
+.supat__avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.supat__avatar--blue {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.supat__avatar--green {
+  background: #e2f6e9;
+  color: #1d7a46;
+}
+
+.supat__avatar--amber {
+  background: #fdeedd;
+  color: #8a5a10;
+}
+
+.supat__avatar--purple {
+  background: #f1ecfe;
+  color: #6a4fd8;
+}
+
+.supat__avatar--coral {
+  background: var(--coral-soft);
+  color: #c23a55;
+}
+
+/* Name + ID column. */
+.supat__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.supat__text strong {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.supat__text small {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+/* Check-in time — clock icon + green text for a present labourer. */
+.supat__time {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #1d7a46;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Status badges — green when present, amber when not. */
+.supat__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.supat__badge--on {
+  background: #e2f6e9;
+  color: #1d7a46;
+}
+
+.supat__badge--off {
+  background: #fdeedd;
+  color: #8a5a10;
+}

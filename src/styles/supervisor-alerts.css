@@ -1,0 +1,536 @@
+/* ==========================================================================
+   Supervisor — Emergency Alerts screen (.supal__*)
+   --------------------------------------------------------------------------
+   Opened from the dashboard's bottom-nav "Alerts" tab. Reuses the labour
+   homepage's shell (.home, .home__topbar, .home__back) and the app's card
+   language (white cards, soft shadows, standard control height); everything
+   below is scoped to .supal__* so no shared rule is touched.
+   ========================================================================== */
+.supal__body {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px;
+  padding-bottom: 32px;
+}
+
+/* ---- filter chips: All / Machine / Material / Output ---- */
+.supal__filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.supal__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.supal__chip--active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+/* ---- alert cards ---- */
+.supal__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.supal__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-input);
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+/* ---- card head: avatar + name/ID/time + type badge ---- */
+.supal__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Initials avatar — colored circle, the same soft palette the dashboard's
+   action cards use. */
+.supal__avatar {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.supal__avatar--blue {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.supal__avatar--green {
+  background: #e2f6e9;
+  color: #1d7a46;
+}
+
+.supal__avatar--amber {
+  background: #fdeedd;
+  color: #8a5a10;
+}
+
+.supal__avatar--purple {
+  background: #f1ecfe;
+  color: #6a4fd8;
+}
+
+.supal__avatar--coral {
+  background: var(--coral-soft);
+  color: #c23a55;
+}
+
+/* Name + ID/time column. */
+.supal__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.supal__who strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.supal__who small {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+/* ---- type badges — red machine, amber material, blue output ---- */
+.supal__type {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.supal__type--machine {
+  background: var(--coral-soft);
+  color: #c23a55;
+}
+
+.supal__type--material {
+  background: #fdeedd;
+  color: #8a5a10;
+}
+
+.supal__type--output {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* ---- description ---- */
+.supal__desc {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+/* ---- machine chip: which machine broke down ---- */
+.supal__machine {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--coral-soft);
+  color: #c23a55;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ---- media thumbnails: photo / video placeholders ---- */
+.supal__media {
+  display: flex;
+  gap: 8px;
+}
+
+.supal__thumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.supal__thumb--photo {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.supal__thumb--video {
+  background: #f1ecfe;
+  color: #6a4fd8;
+}
+
+/* ---- audio player: play/stop a simulated waveform ---- */
+.supal__audio {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.supal__audio-btn {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue);
+  cursor: pointer;
+}
+
+/* Muted "no voice note" state. */
+.supal__audio--none {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+/* Simulated waveform — five bars that bounce while "playing". */
+.supal__wave {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+}
+
+.supal__wave i {
+  width: 3px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.supal__wave--on i {
+  background: var(--blue);
+  animation: supal-wave 0.9s ease-in-out infinite;
+}
+
+.supal__wave--on i:nth-child(2) { animation-delay: 0.12s; }
+.supal__wave--on i:nth-child(3) { animation-delay: 0.24s; }
+.supal__wave--on i:nth-child(4) { animation-delay: 0.36s; }
+.supal__wave--on i:nth-child(5) { animation-delay: 0.48s; }
+
+@keyframes supal-wave {
+  0%, 100% { height: 6px; }
+  50% { height: 16px; }
+}
+
+/* ---- meta row: status badge (+ machine details when present) ---- */
+.supal__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Status badges — blue new, amber acknowledged, green resolved. */
+.supal__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.supal__status--new {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.supal__status--acknowledged {
+  background: #fdeedd;
+  color: #8a5a10;
+}
+
+.supal__status--resolved {
+  background: #e2f6e9;
+  color: #1d7a46;
+}
+
+/* ---- action button: Acknowledge / Resolve ---- */
+.supal__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.supal__act {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--radius-input);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.supal__act--acknowledge {
+  background: var(--blue);
+  color: #fff;
+}
+
+.supal__act--resolve {
+  background: #1d7a46;
+  color: #fff;
+}
+
+/* ---- date-wise grouping: one heading per factory day (the same pattern
+   the Labour Updates feed uses for its date headings) ---- */
+.supal__date-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.supal__date-heading {
+  margin: 6px 0 0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #7c8aa5;
+}
+
+/* ---- empty state ---- */
+.supal__empty {
+  margin: 0;
+  padding: 16px;
+  border-radius: var(--radius-input);
+  background: var(--card);
+  border: 1.5px dashed var(--border);
+  color: var(--text-soft);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---- inline voice-note player (<audio controls>) ----
+   The REAL recorded clip, saved by the sync server into data/work-uploads/
+   and served back at /api/work-uploads/<file>. Full width of the card so
+   the seek bar is usable on a phone. */
+.supal__audio-player {
+  width: 100%;
+  max-width: 240px;
+  height: 34px;
+}
+
+/* ---- SOS emergency details (the message the alert carries) ---- */
+.supal__message {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--coral-soft);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #c23a55;
+}
+
+/* ---- SOS type badge (red — the emergency screen) ---- */
+.supal__type--sos {
+  background: var(--coral-soft);
+  color: #c23a55;
+}
+
+/* ---- dashboard SOS alarm overlay ----
+   Rendered by SupervisorDashboardScreen while useSosAlarm() reports an
+   alarm window: blinks (red pulse) for 4 s, then disappears by itself.
+   Tapping it opens the SOS Alerts screen. */
+.sos-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  border: 6px solid #e5484d;
+  background: rgba(229, 72, 77, 0.94);
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  animation: sos-blink 0.6s steps(2, start) infinite;
+}
+
+.sos-overlay__icon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.sos-overlay__title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.sos-overlay__who {
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.95;
+}
+
+.sos-overlay__hint {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+@keyframes sos-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.35;
+  }
+}
+
+/* ---- persistent Home SOS card ----
+   The alert currently holding the Home page's SOS slot (the day's newest
+   un-replaced, un-removed claimant — see getHomeSosAlert in data/db.js).
+   Unlike the 4-second overlay above, this card does NOT disappear by
+   itself: the supervisor removes it (Remove → confirm) or the day ends.
+   Same card language as the Alerts screen (.supal__card): white card,
+   soft shadow, coral emergency accents. */
+.sos-home-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-input);
+  background: var(--card);
+  border: 1.5px solid var(--coral-soft);
+  box-shadow: var(--shadow-card);
+}
+
+.sos-home-card__icon {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--coral-soft);
+  color: #c23a55;
+}
+
+.sos-home-card__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.sos-home-card__name {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sos-home-card__meta {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Remove chip — small red pill, the same danger accent as the SOS button. */
+.sos-home-card__remove {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 999px;
+  background: var(--coral-soft);
+  color: #c23a55;
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease;
+}
+
+.sos-home-card__remove:active {
+  background: #f9d2dc;
+}
