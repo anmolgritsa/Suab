@@ -18,8 +18,6 @@ npm run build    # production build
 npm run lint     # eslint
 ```
 
-<<<<<<< HEAD
-=======
 ## Cross-browser sync (local dev)
 
 localStorage is scoped to one browser profile, so **a labour checking in on
@@ -84,7 +82,6 @@ log in as SUP001 (Attendance sheet) in one and LAB001 in the other →
 Check In → the supervisor sheet flips LAB001 to **Present** with the
 check-in time within ~1–2 s.
 
->>>>>>> master
 ## Deployment
 
 Pushes to `main` are built and published automatically to GitHub Pages at
@@ -206,8 +203,6 @@ node render-test.mjs       # server-renders every screen to catch crashes
 node attendance-check.mjs  # real-browser walk of the three GPS states
 node home-check.mjs        # real-browser walk of the whole homepage flow
 ```
-<<<<<<< HEAD
-=======
 
 For the **cross-browser sync**, the reliable check is the manual one: open
 `npm run dev` in two *different browsers*, sign in as SUP001 (Attendance
@@ -216,4 +211,3 @@ to **Present** with the check-in time within ~1–2 s — all detailed in the
 "Cross-browser sync" section above. The server half (accept/reject writes,
 file persistence, re-seed) is covered by an inline smoke test in that
 section's notes.
->>>>>>> master

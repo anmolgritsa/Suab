@@ -1,15 +1,6 @@
 /**
  * MachineAllotmentScreen.jsx — "Machine Allotment".
  *
-<<<<<<< HEAD
- * Step 3 of the daily flow: after checking in, the worker sees only two
- * things — today's machine number and the job (e.g. "Bolt Size 4") — and
- * taps Next to reach the homepage.
- *
- * The allotment is mock data (utils/machines.js), picked from the date.
- * The job text comes from machine.job (falls back to machine.type).
- * All labels come from t() (see i18n.jsx).
-=======
  * Step 3 of the daily flow: after checking in, the worker sees today's
  * assignment — the machine number and the job it runs — and taps Next
  * to reach the homepage.
@@ -24,38 +15,25 @@
  * The allotment saved for the shift quota comes from the mock catalogue
  * (utils/machines.js), picked from the date. All labels come from t()
  * (see i18n.jsx).
->>>>>>> master
  */
 
 import BrandLogo from '../components/BrandLogo.jsx'
 import LanguageDropdown from '../components/LanguageDropdown.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
-<<<<<<< HEAD
-import { CogIcon, WrenchIcon } from '../components/icons.jsx'
-=======
 import {
   ChevronRightIcon,
   CogIcon,
   WrenchIcon,
 } from '../components/icons.jsx'
->>>>>>> master
 import { useI18n } from '../i18n.jsx'
 import { getAllottedMachine } from '../utils/machines.js'
 import { saveAllotment, saveAssignedQuantity, todayKey } from '../utils/storage.js'
 
-<<<<<<< HEAD
-export default function MachineAllotmentScreen({ onConfirm }) {
-=======
 export default function MachineAllotmentScreen({ onConfirm, onOpenScreen }) {
->>>>>>> master
   const { t } = useI18n()
 
   // The supervisor's assignment for today, resolved once per mount.
   const machine = getAllottedMachine(todayKey())
-<<<<<<< HEAD
-  // const job = machine.job ?? machine.type
-=======
->>>>>>> master
 
   /** Accept today's machine and move on to the homepage. */
   function handleNext() {
@@ -83,38 +61,6 @@ export default function MachineAllotmentScreen({ onConfirm, onOpenScreen }) {
         <h1 className="screen__title">{t('allotTitle')}</h1>
 
         <div className="allot__cards">
-<<<<<<< HEAD
-          {/* 1. Machine number */}
-          <section className="allot-card allot-card--machine">
-            <span className="allot-card__badge" aria-hidden="true">
-              <CogIcon size={34} />
-            </span>
-            <div className="allot-card__text">
-              <span className="allot-card__label">{t('allotMachineNo')}</span>
-              <strong className="allot-card__value">{machine.id}</strong>
-            </div>
-          </section>
-
-          {/* 2. Job */}
-          {/* <section className="allot-card allot-card--job">
-            <span className="allot-card__badge" aria-hidden="true">
-              <WrenchIcon size={34} />
-            </span>
-            <div className="allot-card__text">
-              <span className="allot-card__label">{t('allotJob')}</span>
-              <strong className="allot-card__value">{job}</strong>
-            </div>
-          </section> */}
-          <section className="allot-card allot-card--job">
-  <span className="allot-card__badge" aria-hidden="true">
-    <WrenchIcon size={34} />
-  </span>
-  <div className="allot-card__text">
-    <span className="allot-card__label">{t('allotJob')}</span>
-    <strong className="allot-card__value">{t('allotJobValue')}</strong>
-  </div>
-</section>
-=======
           {/* 1. Machine number — tap to see the machine's input materials */}
           <button
             type="button"
@@ -150,7 +96,6 @@ export default function MachineAllotmentScreen({ onConfirm, onOpenScreen }) {
               <ChevronRightIcon size={22} />
             </span>
           </button>
->>>>>>> master
         </div>
 
         <div className="allot__actions">
@@ -159,8 +104,4 @@ export default function MachineAllotmentScreen({ onConfirm, onOpenScreen }) {
       </div>
     </div>
   )
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> master

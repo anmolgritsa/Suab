@@ -67,11 +67,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
-<<<<<<< HEAD
-  padding: 24px 20px;
-=======
   padding: var(--box-pad); /* standard card padding */
->>>>>>> master
 }
 
 /* ---- TextField ---- */
@@ -87,11 +83,7 @@
   border: 1.5px solid var(--border);
   border-radius: var(--radius-input);
   padding: 0 14px;
-<<<<<<< HEAD
-  height: 54px;
-=======
   height: var(--control-h); /* standard control height */
->>>>>>> master
   transition: border-color 0.15s ease;
 }
 
@@ -136,11 +128,7 @@
 /* ---- PrimaryButton (big blue pill) ---- */
 .btn-primary {
   width: 100%;
-<<<<<<< HEAD
-  min-height: 54px;
-=======
   min-height: var(--control-h); /* standard control height */
->>>>>>> master
   border-radius: 999px;
   background: var(--blue);
   color: #ffffff;
@@ -248,14 +236,10 @@
   left: 50%;
   bottom: calc(28px + env(safe-area-inset-bottom));
   transform: translateX(-50%);
-<<<<<<< HEAD
-  z-index: 50;
-=======
   /* Above the modal backdrop (screens.css, z-index: 60) so a toast fired
      while a modal is open — e.g. the work-update confirmation — is still
      visible instead of hiding underneath it. */
   z-index: 70;
->>>>>>> master
   display: flex;
   align-items: center;
   gap: 10px;

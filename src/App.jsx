@@ -2,13 +2,6 @@
  * App.jsx — the app's tiny state-based router (no react-router).
  *
  * Flow:
-<<<<<<< HEAD
- *   Part 1 (auth)       login (phone + supervisor-issued Employee ID)
- *   Part 2 (attendance) login → attendance (simulated GPS check-in)
- *                       → machine allotment (today's assigned machine)
- *   Part 3 (homepage)   allotment → home ⇄ { input-errors, machine-defect,
- *                       output-errors } → product-submission (shift end)
-=======
  *   Part 1 (auth)       login: credentials (phone + supervisor-issued
  *                       Employee ID) → attendance. The FIRST successful
  *                       login also seeds the app lock (utils/appLock.js):
@@ -36,7 +29,6 @@
  *                       approved half-day request shortens the running
  *                       shift to HALF, an approved overtime request
  *                       stretches it (demo: +1 min per approved hour))
->>>>>>> master
  *
  * The whole tree is wrapped in one <I18nProvider> so every screen can
  * translate its strings and the language choice persists across screens.
@@ -45,10 +37,6 @@
 import { useState } from 'react'
 import { I18nProvider } from './i18n.jsx'
 import LoginScreen from './screens/LoginScreen.jsx'
-<<<<<<< HEAD
-import AttendanceScreen from './screens/AttendanceScreen.jsx'
-import MachineAllotmentScreen from './screens/MachineAllotmentScreen.jsx'
-=======
 import AppLockScreen from './screens/AppLockScreen.jsx'
 import EnterPinScreen from './screens/EnterPinScreen.jsx'
 import FingerprintAuthScreen from './screens/FingerprintAuthScreen.jsx'
@@ -62,27 +50,11 @@ import HalfDayRequestScreen from './screens/HalfDayRequestScreen.jsx'
 import OvertimeRequestScreen from './screens/OvertimeRequestScreen.jsx'
 import WorkActivitiesScreen from './screens/WorkActivitiesScreen.jsx'
 import MachineMaintenanceScreen from './screens/MachineMaintenanceScreen.jsx'
->>>>>>> master
 import HomeScreen from './screens/HomeScreen.jsx'
 import InputErrorScreen from './screens/InputErrorScreen.jsx'
 import MachineDefectScreen from './screens/MachineDefectScreen.jsx'
 import OutputErrorScreen from './screens/OutputErrorScreen.jsx'
 import ProductSubmissionScreen from './screens/ProductSubmissionScreen.jsx'
-<<<<<<< HEAD
-import {
-  clearAllDemoData,
-  clearAllotment,
-  clearLastReminderAt,
-  clearSession,
-  clearShiftStart,
-  getRegisteredUser,
-  getSession,
-  getTodayAllotment,
-  getTodayAttendance,
-  saveSession,
-  todayKey,
-} from './utils/storage.js'
-=======
 import SupervisorDashboardScreen from './screens/SupervisorDashboardScreen.jsx'
 import SupervisorAssignMachineScreen from './screens/SupervisorAssignMachineScreen.jsx'
 import SupervisorLabourUpdatesScreen from './screens/SupervisorLabourUpdatesScreen.jsx'
@@ -124,23 +96,12 @@ import {
   getAttendanceFor,
   saveCurrentUser,
 } from './data/db.js'
->>>>>>> master
 
 /**
  * Where should the app open? A returning visitor resumes mid-flow:
  *   live session + attendance + machine allotment → the labour homepage
  *   live session + attendance                     → the machine allotment
  *   live session only                             → the attendance screen
-<<<<<<< HEAD
- *   anything else                                 → the login screen
- */
-function resolveStartScreen() {
-  if (getSession()) {
-    if (!getTodayAttendance()) return 'attendance'
-    return getTodayAllotment() ? 'home' : 'machine-allotment'
-  }
-  return 'login'
-=======
  *   logged in once, no live session               → the app lock screen
  *   anything else                                 → the login screen
  *
@@ -162,7 +123,6 @@ function resolveStartScreen() {
     return getTodayAllotment() ? 'home' : 'machine-allotment'
   }
   return hasLoggedInOnce() ? 'app-lock' : 'login'
->>>>>>> master
 }
 
 export default function App() {
@@ -170,49 +130,28 @@ export default function App() {
   // the homepage's cards navigate to ('input-errors', …).
   const [screen, setScreen] = useState(resolveStartScreen)
 
-<<<<<<< HEAD
-=======
   // NOTE: no useI18n() here. App renders the <I18nProvider> itself, so a
   // hook call in App's body would run ABOVE the provider and throw
   // 'useI18n must be used inside an <I18nProvider>' during the first
   // render — unmounting the whole tree (the blank page on every screen).
   // The ErrorBoundary translates its own fallback (see ErrorBoundary.jsx).
 
->>>>>>> master
   // The account saved on this device (survives refreshes via localStorage).
   // Nothing creates it anymore — signup was removed — but a device that
   // still carries one gets the mockup's personalised greeting.
   const [registeredUser] = useState(getRegisteredUser)
 
-<<<<<<< HEAD
-  // Today's attendance record — null until the worker checks in.
-  const [attendanceRecord, setAttendanceRecord] = useState(getTodayAttendance)
-=======
   // Today's attendance record for the logged-in labour — null until they
   // check in. Read from the data layer (one record per account per day).
   const [attendanceRecord, setAttendanceRecord] = useState(() =>
     getAttendanceFor(getSession()?.employeeId),
   )
->>>>>>> master
 
   // Today's machine allotment — null until the worker confirms it.
   const [machineAllotment, setMachineAllotment] = useState(getTodayAllotment)
 
   /* ---- navigation helpers ---- */
 
-<<<<<<< HEAD
-  /** Login succeeded: open the session and go to the attendance screen. */
-  function handleLogin(phone, employeeId) {
-    // Session shape matches utils/storage.js: who signed in, when, and on
-    // which day (the day key lets a future "one login per day" check in).
-    saveSession({
-      mobile: phone,
-      employeeId,
-      loginTimestamp: new Date().toISOString(),
-      dayKey: todayKey(),
-    })
-    setScreen('attendance')
-=======
   /** Open the session for an identity and route by role (labour →
       attendance, supervisor → the supervisor dashboard). */
   function openSession(identity) {
@@ -284,7 +223,6 @@ export default function App() {
     clearBiometricEnrolment()
     clearCurrentUser() // the mirrored account belongs to the forgotten identity
     setScreen('login')
->>>>>>> master
   }
 
   /** A check-in was saved (or already existed) → the machine allotment. */
@@ -299,21 +237,6 @@ export default function App() {
     setScreen('home')
   }
 
-<<<<<<< HEAD
-  /** "Start New Shift" on the product submission screen → fresh allotment. */
-  function handleStartNewShift() {
-    clearShiftStart()
-    clearLastReminderAt()
-    clearAllotment()
-    setMachineAllotment(null)
-    setScreen('machine-allotment')
-  }
-
-  /** End the session (logout / end shift) → back to the login screen. */
-  function handleLogout() {
-    clearSession()
-    setScreen('login')
-=======
   /** "Start New Shift" on the product submission screen → the app lock.
       The new shift is a full shift again at its base length — any
       half-day approval and approved overtime applied to the shift that
@@ -337,17 +260,12 @@ export default function App() {
     // The device has logged in once, so the lock screen — not the
     // credential form — guards the next reopen.
     setScreen(hasLoggedInOnce() ? 'app-lock' : 'login')
->>>>>>> master
   }
 
   /** Wipe every persisted value and restart the demo at the login screen. */
   function handleResetDemo() {
-<<<<<<< HEAD
-    clearAllDemoData()
-=======
     clearAllDemoData() // also clears the encrypted PIN vault (secureStore)
     clearBiometricEnrolment() // forget the enrolled OS passkey too
->>>>>>> master
     setAttendanceRecord(null)
     setMachineAllotment(null)
     setScreen('login')
@@ -358,9 +276,6 @@ export default function App() {
   function renderScreen() {
     switch (screen) {
       case 'login':
-<<<<<<< HEAD
-        return <LoginScreen registeredUser={registeredUser} onLogin={handleLogin} />
-=======
         return (
           <LoginScreen
             registeredUser={registeredUser}
@@ -382,7 +297,6 @@ export default function App() {
 
       case 'face-id':
         return <FaceIdAuthScreen onUnlocked={handleUnlocked} onFallback={() => setScreen('enter-pin')} />
->>>>>>> master
 
       case 'attendance':
         return (
@@ -398,11 +312,6 @@ export default function App() {
           <MachineAllotmentScreen
             onBack={() => setScreen('attendance')}
             onConfirm={handleMachineAllotted}
-<<<<<<< HEAD
-          />
-        )
-
-=======
             onOpenScreen={setScreen}
           />
         )
@@ -460,7 +369,6 @@ export default function App() {
       case 'machine-maintenance':
         return <MachineMaintenanceScreen onBack={() => setScreen('other')} />
 
->>>>>>> master
       case 'home':
         return (
           <HomeScreen
@@ -488,8 +396,6 @@ export default function App() {
           />
         )
 
-<<<<<<< HEAD
-=======
       /* Supervisor dashboard — reached only when the login's Employee ID is
          the supervisor's (9977, see getRoleForEmployeeId). Logout reuses the
          same session teardown as the labour flow. "Assign Machine" opens
@@ -584,7 +490,6 @@ export default function App() {
       case 'supervisor-sos':
         return <SupervisorSosScreen onBack={() => setScreen('supervisor')} />
 
->>>>>>> master
       default:
         return null
     }
@@ -592,12 +497,6 @@ export default function App() {
 
   /* The app-frame shell (index.css) is the flex-column parent every screen's
      `flex: 1` layout expects: full phone height, 430px column on desktop,
-<<<<<<< HEAD
-     and it clips the decorative background shapes. */
-  return (
-    <I18nProvider>
-      <div className="app-frame">{renderScreen()}</div>
-=======
      and it clips the decorative background shapes. A boundary wraps ONLY the
      routed screen: a crash in one screen (e.g. a malformed update record)
      shows a recoverable message instead of unmounting the whole tree — the
@@ -609,7 +508,6 @@ export default function App() {
           {renderScreen()}
         </ErrorBoundary>
       </div>
->>>>>>> master
     </I18nProvider>
   )
 }

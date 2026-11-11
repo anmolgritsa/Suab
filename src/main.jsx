@@ -3,15 +3,6 @@ import { createRoot } from 'react-dom/client'
 import './index.css' // design tokens, reset, app shell
 import './styles/components.css' // reusable pieces (fields, buttons, keypad…)
 import './styles/screens.css' // per-screen layout
-<<<<<<< HEAD
-import App from './App.jsx'
-
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
-=======
 import './styles/supervisor-assign.css' // supervisor assign-machine screen + labour job banner
 import './styles/supervisor-updates.css' // supervisor labour-updates screen
 import './styles/supervisor-attendance.css' // supervisor attendance screen
@@ -34,4 +25,3 @@ startSyncBridge().finally(() => {
     </StrictMode>,
   )
 })
->>>>>>> master

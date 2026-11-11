@@ -3,20 +3,6 @@
  *
  * Layout, top to bottom:
  *   1. top bar      SUAB company logo + language dropdown
-<<<<<<< HEAD
- *   2. shift timer  pale-blue pill counting up from the shift start
- *   3. action cards Raw Material Issue · Machine Breakdown (2 columns)
- *                   Output Defect (full width)
- *   4. SOS          red emergency button pinned near the bottom
- *
- * Behaviour:
- *   - The shift starts the first time the homepage is opened and is
- *     persisted, so a refresh keeps counting from the same moment.
- *   - Every DEMO_INTERVAL_MINUTES a "Work update needed" reminder pops
- *     up (mockup 6.2). Sending or dismissing it snoozes it a full cycle.
- *   - When the shift reaches SHIFT_DURATION_MINUTES it ends automatically
- *     and the app moves to the Product Submission screen.
-=======
  *   2. back chip    small ← pill ("Back to Machine Allotment") — reopens
  *                   the Machine Allotment screen to review the machine
  *                   details again
@@ -49,21 +35,12 @@
  *     clock-plus icon — appears ONLY once the REGULAR shift duration has
  *     elapsed (isRegularShiftComplete, which ignores the extension): no
  *     overtime badge shows while the regular shift is still running.
->>>>>>> master
  *
  * Props:
  *  - allottedMachine      today's confirmed machine allotment record
  *                         ({ machineId, machineName, … }) — shown in the
  *                         banner under the shift timer
  *  - onShiftEnd()        shift reached its full length → product submission
-<<<<<<< HEAD
- *  - onOpenScreen(key)   open a report screen: 'input-errors' |
- *                        'machine-defect' | 'output-errors'
- *  - onResetDemo()       wipe all demo data (small link at the very bottom)
- */
-
-import { useCallback, useEffect, useState } from 'react';
-=======
  *  - onOpenScreen(key)   open a screen: 'input-errors' |
  *                        'machine-defect' | 'output-errors' | 'other' |
  *                        'machine-allotment' (the back chip)
@@ -71,7 +48,6 @@ import { useCallback, useEffect, useState } from 'react';
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
->>>>>>> master
 import BrandLogo from '../components/BrandLogo.jsx';
 import LanguageDropdown from '../components/LanguageDropdown.jsx';
 import ShiftTimer from '../components/ShiftTimer.jsx';
@@ -81,42 +57,16 @@ import WorkUpdateReminder from '../components/WorkUpdateReminder.jsx';
 import Toast from '../components/Toast.jsx';
 import {
   AlertTriangleIcon,
-<<<<<<< HEAD
-  // CogIcon,
-=======
   ArrowLeftIcon,
   CheckCircleIcon,
   ClockPlusIcon,
   CogIcon,
   DotsIcon,
->>>>>>> master
   PackageIcon,
   WrenchIcon,
 } from '../components/icons.jsx';
 import { useI18n } from '../i18n.jsx';
 import {
-<<<<<<< HEAD
-  clearLastReminderAt,
-  clearShiftStart,
-  getLastReminderAt,
-  getShiftStart,
-  saveLastReminderAt,
-  saveShiftStart,
-  saveWorkUpdate,
-} from '../utils/storage.js';
-import {
-  REMINDER_INTERVAL_MS,
-  isReminderDue,
-} from '../utils/shift.js';
-
-/* How often the homepage re-checks "is a reminder due now?". Capped so a
-   tiny demo interval still fires promptly, and bounded so the real 3-hour
-   interval doesn't wake the timer needlessly often. */
-const REMINDER_CHECK_MS = Math.max(
-  1000,
-  Math.min(30000, Math.floor(REMINDER_INTERVAL_MS / 4)),
-);
-=======
   clearShiftAlertsShown,
   clearShiftStart,
   clearShiftType,
@@ -148,15 +98,12 @@ import { overtimeExtensionMs, isRegularShiftComplete, shiftDurationMs } from '..
 /** How long after a half-day approval the "Half-Day End Shift" button
     appears (the worker gets a confirmation window before it shows up). */
 const HALF_DAY_BUTTON_DELAY_MS = 3 * 60 * 1000;
->>>>>>> master
 
 export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
   const { t } = useI18n();
   const [toast, setToast] = useState(null);
   const [reminderOpen, setReminderOpen] = useState(false);
 
-<<<<<<< HEAD
-=======
   // The supervisor's assignment for THIS worker (data/assignments.js —
   // written by the supervisor's "Assign Machine" screen). Read once per
   // mount: screens remount on navigation, so the read is always current.
@@ -167,7 +114,6 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
   // refresh never repeats one).
   const [alertsShown, setAlertsShown] = useState(getShiftAlertsShown);
 
->>>>>>> master
   /* ---- shift lifecycle ----------------------------------------------------
      The first visit starts the shift; later visits (and refreshes) reuse
      the persisted start time. The write happens inside the lazy
@@ -181,34 +127,6 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
     return now;
   });
 
-<<<<<<< HEAD
-  /* ---- work-update reminder ---------------------------------------------- */
-  const checkReminder = useCallback(() => {
-    const shiftStart = getShiftStart();
-    if (!shiftStart) return;
-    if (isReminderDue(shiftStart, getLastReminderAt())) {
-      saveLastReminderAt(new Date().toISOString());
-      setReminderOpen(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    // The first check is deferred with a timeout so no state is set
-    // synchronously inside the effect body (it also lets the first
-    // paint settle before a dialog pops over the homepage).
-    const catchUp = setTimeout(checkReminder, 250);
-    const id = setInterval(checkReminder, REMINDER_CHECK_MS);
-    return () => {
-      clearTimeout(catchUp);
-      clearInterval(id);
-    };
-  }, [checkReminder]);
-
-  /* ---- shift end ---------------------------------------------------------- */
-  const handleShiftComplete = useCallback(() => {
-    clearShiftStart();
-    clearLastReminderAt();
-=======
   // Full or half shift — an APPROVED half-day request makes the same
   // single timer end the shift at the half-shift length instead. The
   // persisted type is the fallback; the live approval below (shared data
@@ -447,31 +365,21 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
     clearShiftStart();
     clearShiftAlertsShown();
     clearShiftType();
->>>>>>> master
     setReminderOpen(false);
     onShiftEnd();
   }, [onShiftEnd]);
 
   /* ---- card actions -------------------------------------------------------
      Each card opens its report screen (Input Errors / Machine Defect /
-<<<<<<< HEAD
-     Output Errors). */
-=======
      Output Errors / Other). */
->>>>>>> master
   const handleSendUpdate = useCallback((attachment) => {
     // Persist the update with the picked photo/video's metadata. The
     // reminder modal only calls this AFTER its mandatory-attachment check,
     // so `attachment` is always present here. The modal itself switches to
     // its "Update sent!" stage and closes when the worker taps Done — so
-<<<<<<< HEAD
-    // we only record + toast here.
-    saveWorkUpdate({ at: new Date().toISOString(), attachment });
-=======
     // we only record + toast + chime here.
     saveWorkUpdate({ at: new Date().toISOString(), attachment });
     playUpdateChime(); // synthesised "sent" chime (utils/sound.js)
->>>>>>> master
     setToast(t('updateSent'));
   }, [t]);
 
@@ -486,10 +394,6 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
         <LanguageDropdown />
       </header>
 
-<<<<<<< HEAD
-      {startedAt && (
-        <ShiftTimer startedAt={startedAt} onComplete={handleShiftComplete} />
-=======
       {/* Back to the machine allotment — review today's machine details
           again. Same white-chip language as the detail screens' back
           button, widened into a small left-aligned pill (icon + short
@@ -546,7 +450,6 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
             <span>{t('halfDayEndShift')}</span>
           </button>
         </div>
->>>>>>> master
       )}
 
       {/* Today's machine — confirmed on the allotment screen. */}
@@ -575,8 +478,6 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
   </div>
 )} */}
 
-<<<<<<< HEAD
-=======
       {/* Assigned job — set by the supervisor's "Assign Machine" screen
           (data/assignments.js). Additive banner: shows the assigned
           machine, the job's priority and the raw material + target
@@ -608,7 +509,6 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
         </div>
       )}
 
->>>>>>> master
       <main className="home__grid">
         <ActionCard
           color="amber"
@@ -623,14 +523,6 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
           onClick={() => onOpenScreen('machine-defect')}
         />
         <ActionCard
-<<<<<<< HEAD
-          wide
-          color="green"
-          icon={<AlertTriangleIcon size={38} />}
-          label={t('outputDefect')}
-          onClick={() => onOpenScreen('output-errors')}
-        />
-=======
           color="green"
           icon={<AlertTriangleIcon size={40} />}
           label={t('outputDefect')}
@@ -642,7 +534,6 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
           label={t('other')}
           onClick={() => onOpenScreen('other')}
         />
->>>>>>> master
       </main>
 
       <div className="home__sos">

@@ -197,7 +197,7 @@ console.log('# SOS alert sync seam (labour → supervisor)');
   ok('remove: alert keeps its place in the feed', db.getSosAlerts().some((x) => x.id === holder.id));
   ok('remove: removed alert still active in the Alerts page', db.getActiveSosAlerts().some((x) => x.id === holder.id));
   const fourth = db.addSosAlert({ labourId: 'LAB004' }).record;
-  ok('remove: removal does NOT free the daily quota', fourth.home?.shownDate === null && db.getHomeSosAlert()?.id === fourth.id);
+  ok('remove: removal does NOT free the daily quota', fourth.home?.shownDate === null && db.getHomeSosAlert() === null);
   void a;
 }
 

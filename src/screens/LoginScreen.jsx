@@ -7,13 +7,6 @@
  * SUAB-1024). On success App.jsx opens a session record and routes by the
  * day-keyed flow flags: attendance → machine allotment → homepage.
  *
-<<<<<<< HEAD
- * "Use Fingerprint", "Forgot Password?" and "Help" are mock-only — they
- * show a toast instead of doing anything real.
- *
- * All visible text comes from t() (see i18n.jsx), so it follows the
- * language chosen in <LanguageDropdown /> in the top bar.
-=======
  * When this device already has a PIN (secureStore.hasPinAuth()), the form
  * is joined by quick-unlock options: fingerprint and Face ID (the mock
  * biometric scanners) and an "Unlock with PIN" link. Without a saved PIN
@@ -30,7 +23,6 @@
  *  - onUnlockWithPin()            quick-unlock: the PIN pad screen
  *  - onFingerprint()              quick-unlock: the fingerprint scanner
  *  - onFaceId()                   quick-unlock: the Face ID scanner
->>>>>>> master
  */
 
 import { useState } from 'react'
@@ -41,26 +33,6 @@ import PrimaryButton from '../components/PrimaryButton.jsx'
 import Toast from '../components/Toast.jsx'
 import {
   BadgeIcon,
-<<<<<<< HEAD
-  FingerprintIcon,
-  HelpIcon,
-  KeyIcon,
-  PhoneIcon,
-} from '../components/icons.jsx'
-import { useI18n } from '../i18n.jsx'
-import { DEMO_EMPLOYEE_ID, checkLogin, validatePhone } from '../utils/validation.js'
-
-/* Replace {placeholders} in a translated string: fill('Hi {id}', { id: 1 }) */
-function fill(text, vars) {
-  return Object.entries(vars).reduce(
-    (out, [key, value]) => out.replaceAll(`{${key}}`, String(value)),
-    text,
-  )
-}
-
-export default function LoginScreen({ registeredUser, onLogin }) {
-  const { t } = useI18n()
-=======
   FaceIdIcon,
   FingerprintIcon,
   HelpIcon,
@@ -84,7 +56,6 @@ export default function LoginScreen({
   // A PIN saved on this device (checked here, not passed in) enables the
   // quick-unlock options below — fingerprint, Face ID and the PIN pad.
   const hasPinSaved = hasPinAuth()
->>>>>>> master
   const [phone, setPhone] = useState('')
   const [employeeId, setEmployeeId] = useState('')
   // { field: 'phone' | 'employeeId', message } — shown under the field the
@@ -105,8 +76,6 @@ export default function LoginScreen({
       })
       return
     }
-<<<<<<< HEAD
-=======
     // Authenticate against the account database (data/db.js): the mobile +
     // Employee ID must BOTH belong to a seeded account — LAB001–LAB010 are
     // the labourers (mobiles 9876540010–9876540019), SUP001 the supervisor
@@ -119,7 +88,6 @@ export default function LoginScreen({
       })
       return
     }
->>>>>>> master
     onLogin(phone.replace(/\D/g, ''), employeeId.trim())
   }
 
@@ -178,37 +146,13 @@ export default function LoginScreen({
             spellCheck={false}
           />
 
-<<<<<<< HEAD
-          <p className="demo-chip">
-            {fill(t('loginDemoHint'), { id: DEMO_EMPLOYEE_ID })}
-          </p>
-=======
           {/* <p className="demo-chip">
             {fill(t('loginDemoHint'), { id: DEMO_EMPLOYEE_ID })}
           </p> */}
->>>>>>> master
 
           <PrimaryButton type="submit">{t('loginButton')}</PrimaryButton>
         </form>
 
-<<<<<<< HEAD
-        {/* Mock biometric login — shows a toast, unlocks nothing. */}
-        <button
-          type="button"
-          className="fingerprint"
-          onClick={() => mockAction('loginFingerprintNA')}
-        >
-          <span className="fingerprint__icon" aria-hidden="true">
-            <FingerprintIcon size={30} />
-          </span>
-          {t('loginFingerprint')}
-        </button>
-
-        <div className="login__divider" aria-hidden="true" />
-
-        {/* Mock-only footer actions. */}
-        <div className="login__footer">
-=======
         {/* Quick unlock — only once this device has a PIN to protect.
             Without a saved PIN the fingerprint button stays mock-only. */}
         {hasPinSaved ? (
@@ -249,7 +193,6 @@ export default function LoginScreen({
               {t('loginPinUnlock')}
             </button>
           )}
->>>>>>> master
           <button
             type="button"
             className="link-button"

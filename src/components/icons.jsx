@@ -84,8 +84,6 @@ export function FingerprintIcon(props) {
   )
 }
 
-<<<<<<< HEAD
-=======
 /** Face inside corner brackets — the mock Face ID login option. */
 export function FaceIdIcon(props) {
   return (
@@ -112,7 +110,6 @@ export function PadlockIcon(props) {
   )
 }
 
->>>>>>> master
 /** Question mark in a circle — the Help action. */
 export function HelpIcon(props) {
   return (
@@ -197,8 +194,6 @@ export function ClockIcon(props) {
   )
 }
 
-<<<<<<< HEAD
-=======
 /** Clock with a plus — the overtime tail of the shift timer (homepage). */
 export function ClockPlusIcon(props) {
   return (
@@ -211,7 +206,6 @@ export function ClockPlusIcon(props) {
   )
 }
 
->>>>>>> master
 /** Closed box — raw material / product actions. */
 export function PackageIcon(props) {
   return (
@@ -232,8 +226,6 @@ export function WrenchIcon(props) {
   )
 }
 
-<<<<<<< HEAD
-=======
 /** Chevron right — "this card opens something" affordance on tappable cards. */
 export function ChevronRightIcon(props) {
   return (
@@ -252,7 +244,6 @@ export function ChevronLeftIcon(props) {
   )
 }
 
->>>>>>> master
 /** Warning triangle — defects and emergency alerts. */
 export function AlertTriangleIcon(props) {
   return (
@@ -314,8 +305,6 @@ export function TargetIcon(props) {
     </Svg>
   )
 }
-<<<<<<< HEAD
-=======
 
 /** Microphone — "speak your count" button on the product submission screen. */
 export function MicIcon(props) {
@@ -425,4 +414,3 @@ export function CalendarIcon(props) {
     </Svg>
   )
 }
->>>>>>> master

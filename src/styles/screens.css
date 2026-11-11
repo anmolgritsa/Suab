@@ -341,14 +341,8 @@
   margin-top: 22px;
 }
 
-<<<<<<< HEAD
-.att__actions .btn-primary {
-  min-height: 60px; /* the mockup's attendance button is taller than usual */
-}
-=======
 /* The check-in button keeps the shared .btn-primary standard height
    (--control-h), the same as every other primary action in the app. */
->>>>>>> master
 
 /* ---- Second section: "Today's Shift" summary card ----
    A quiet, read-only card under the check-in button. It mirrors the demo's
@@ -362,11 +356,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
-<<<<<<< HEAD
-  padding: 16px 18px;
-=======
   padding: var(--box-pad); /* standard card padding */
->>>>>>> master
 }
 
 .att__shift-title {
@@ -427,8 +417,6 @@
   background: var(--purple-dark);
 }
 
-<<<<<<< HEAD
-=======
 /* Success-green variant — the homepage's "Half-Day End Shift" button
    (green = finish & submit, the app's success colour). */
 .btn-primary--success {
@@ -440,7 +428,6 @@
   background: #26963a;
 }
 
->>>>>>> master
 /* Demo GPS strip: small chips so testers can switch the simulated state
    without touching the real UI a labourer would see. */
 .att__sim {
@@ -547,12 +534,8 @@
   display: flex;
   align-items: center;
   gap: 18px;
-<<<<<<< HEAD
-  padding: 24px 22px;
-=======
   padding: var(--box-pad); /* standard card padding */
   min-height: var(--row-min-h); /* same height as the wide action card */
->>>>>>> master
   border-radius: 26px;
   box-shadow: var(--shadow-card);
 }
@@ -613,8 +596,6 @@
   color: #e08a3c;
 }
 
-<<<<<<< HEAD
-=======
 /* Green = raw material (the input the machine runs on) */
 .allot-card--raw {
   background: #e2f6e5;
@@ -637,13 +618,10 @@
   color: var(--purple);
 }
 
->>>>>>> master
 .allot__actions {
   width: 100%;
   margin-top: 28px;
 }
-<<<<<<< HEAD
-=======
 
 /* The 4th button ("Other") sits below the primary Next CTA. */
 .allot__more {
@@ -1938,7 +1916,6 @@ button.allot-card:disabled:active {
   margin-top: 20px;
 }
 
->>>>>>> master
 .home {
   position: relative;
   z-index: 1;
@@ -2054,8 +2031,6 @@ button.allot-card:disabled:active {
   color: var(--text-soft);
 }
 
-<<<<<<< HEAD
-=======
 /* ---- back chip to the Machine Allotment screen ----
    The shared .back-button round chip, widened into a small pill
    (icon + short label) and left-aligned under the top bar — it reads
@@ -2075,7 +2050,6 @@ button.allot-card:disabled:active {
   white-space: nowrap; /* the label never wraps into two lines */
 }
 
->>>>>>> master
 /* ---- shift timer pill (clock + "00:00:00") ---- */
 .shift-timer {
   align-self: center;
@@ -2108,8 +2082,6 @@ button.allot-card:disabled:active {
   font-variant-numeric: tabular-nums; /* digits don't jitter as they tick */
 }
 
-<<<<<<< HEAD
-=======
 /* Overtime tail of the SAME single timer — once the REGULAR shift
    duration has elapsed (isRegularShiftComplete in utils/shift.js), the
    pill turns orange and the clock gains a plus, so the overtime shift
@@ -2156,22 +2128,15 @@ button.allot-card:disabled:active {
   flex-shrink: 0;
 }
 
->>>>>>> master
 /* ---- action cards (Raw Material Issue / Machine Breakdown / Output Defect)
    Each card picks its palette through the custom properties set inline by
    ActionCard.jsx: --card-badge (solid icon circle), --card-soft (card fill)
    and --card-text (label colour).
    The cards are the homepage's primary touch targets, so they are sized
-<<<<<<< HEAD
-   generously for iPhone 16: ~204px tall tiles with a 72px icon badge and
-   19px labels — far past the 44px minimum Apple recommends, so the three
-   report actions are impossible to miss and easy to hit with a thumb. ---- */
-=======
    generously for iPhone 16: --tile-min-h (204px) tall tiles with a 72px
    icon badge and 19px labels — far past the 44px minimum Apple recommends,
    so the report actions are impossible to miss and easy to hit with a
    thumb. ---- */
->>>>>>> master
 .home__grid {
   width: 100%;
   display: grid;
@@ -2187,13 +2152,8 @@ button.allot-card:disabled:active {
   gap: 18px;
   background: var(--card-soft);
   border-radius: 26px;
-<<<<<<< HEAD
-  padding: 26px 24px;
-  min-height: 204px;
-=======
   padding: var(--box-pad); /* standard card padding */
   min-height: var(--tile-min-h); /* standard grid tile height */
->>>>>>> master
   text-align: left;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.1s ease;
@@ -2227,11 +2187,7 @@ button.allot-card:disabled:active {
   grid-column: 1 / -1;
   flex-direction: row;
   align-items: center;
-<<<<<<< HEAD
-  min-height: 116px;
-=======
   min-height: var(--row-min-h); /* standard row-card height */
->>>>>>> master
   gap: 18px;
 }
 
@@ -2247,8 +2203,6 @@ button.allot-card:disabled:active {
   line-height: 1;
 }
 
-<<<<<<< HEAD
-=======
 /* Optional small status line under a tile's label (the Other screen's
    half-day tile: an amber "Pending…" pill / a green "Half Day Approved"
    pill with a check). */
@@ -2286,7 +2240,6 @@ button.allot-card:disabled:active {
   gap: 10px;
 }
 
->>>>>>> master
 /* ---- SOS button (pinned near the bottom of the homepage) ---- */
 .home__sos {
   width: 100%;
@@ -2333,8 +2286,6 @@ button.allot-card:disabled:active {
   padding-top: 6px;
 }
 
-<<<<<<< HEAD
-=======
 /* ---- supervisor bottom navigation (shared) ----
    Four tabs pinned to the bottom of every supervisor screen (mockup:
    Home · Reports · Alerts · Settings). Full-bleed white bar with a soft
@@ -2410,7 +2361,6 @@ button.allot-card:disabled:active {
   text-align: center;
 }
 
->>>>>>> master
 /* ---- shared modal pieces (SOS confirm, work-update reminder) ---- */
 .modal-backdrop {
   position: fixed;
@@ -2469,11 +2419,7 @@ button.allot-card:disabled:active {
   max-width: 320px;
   background: #ffffff;
   border-radius: 24px;
-<<<<<<< HEAD
-  padding: 26px 20px 20px;
-=======
   padding: var(--box-pad); /* standard card padding */
->>>>>>> master
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2512,11 +2458,7 @@ button.allot-card:disabled:active {
 
 .sos-dialog__cancel {
   flex: 1;
-<<<<<<< HEAD
-  min-height: 48px;
-=======
   min-height: var(--control-h); /* standard control height */
->>>>>>> master
   border-radius: 999px;
   background: var(--blue-soft);
   color: var(--blue);
@@ -2527,11 +2469,7 @@ button.allot-card:disabled:active {
 
 .sos-dialog__send {
   flex: 1.4;
-<<<<<<< HEAD
-  min-height: 48px;
-=======
   min-height: var(--control-h); /* standard control height */
->>>>>>> master
   border-radius: 999px;
   background: var(--danger);
   color: #ffffff;
@@ -2548,11 +2486,7 @@ button.allot-card:disabled:active {
   max-width: 320px;
   background: #fdeedd;
   border-radius: 24px;
-<<<<<<< HEAD
-  padding: 26px 20px 20px;
-=======
   padding: var(--box-pad); /* standard card padding */
->>>>>>> master
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2580,11 +2514,7 @@ button.allot-card:disabled:active {
 
 .update-reminder__send {
   width: 100%;
-<<<<<<< HEAD
-  min-height: 50px;
-=======
   min-height: var(--control-h); /* standard control height */
->>>>>>> master
   margin-top: 18px;
   border-radius: 999px;
   background: var(--blue);
@@ -2673,8 +2603,6 @@ button.allot-card:disabled:active {
 }
 .rtheme .report__attachment-icon { color: var(--t-badge); }
 
-<<<<<<< HEAD
-=======
 /* Voice note follows the screen's theme like the picker above it —
    except the recording state, which stays coral (it must read as
    "recording" on every screen, so it overrides the theme). */
@@ -2702,7 +2630,6 @@ button.allot-card:disabled:active {
   color: var(--t-text);
 }
 
->>>>>>> master
 /* Submit button = homepage card ka color */
 .rtheme .btn-primary {
   background: var(--t-badge);
@@ -2766,11 +2693,7 @@ button.allot-card:disabled:active {
   justify-content: center;
   gap: 10px;
   width: 100%;
-<<<<<<< HEAD
-  min-height: 52px;
-=======
   min-height: var(--control-h); /* standard control height */
->>>>>>> master
   padding: 0 18px;
   border-radius: 999px;
   /* Solid blue like the Submit button; the transparent border keeps the
@@ -2808,11 +2731,7 @@ button.allot-card:disabled:active {
   display: flex;
   align-items: center;
   gap: 10px;
-<<<<<<< HEAD
-  min-height: 52px;
-=======
   min-height: var(--control-h); /* standard control height */
->>>>>>> master
   padding: 8px 12px;
   border-radius: var(--radius-input);
   background: #f4f9fe;
@@ -2849,8 +2768,6 @@ button.allot-card:disabled:active {
   -webkit-tap-highlight-color: transparent;
 }
 
-<<<<<<< HEAD
-=======
 /* ---- voice note (ReportForm — the three defect report screens) ----
    An optional spoken description recorded with the shared engine
    (utils/voiceNote.js): a mic pill that records, then play / retake /
@@ -2986,7 +2903,6 @@ button.allot-card:disabled:active {
   text-align: left;
 }
 
->>>>>>> master
 .report__actions {
   width: 100%;
   display: flex;
@@ -3056,34 +2972,6 @@ button.allot-card:disabled:active {
   font-size: 14px;
 }
 
-<<<<<<< HEAD
-/* The quantity readout: huge digits, small caption underneath. */
-.product-submit__display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 18px 0 6px;
-}
-
-.product-submit__value {
-  font-size: 52px;
-  font-weight: 800;
-  line-height: 1.1;
-  color: var(--blue);
-  font-variant-numeric: tabular-nums; /* digits keep a steady width */
-  letter-spacing: 1px;
-}
-
-.product-submit__display-label {
-  margin-top: 4px;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--text-soft);
-}
-
-=======
 /* ---- the three count rows (Successful / Rejected / Reusable) ----
    Each row is a small card in the app's card style: coloured icon badge,
    the count's name, then [−] [input] [+] [🎤]. The mic pulses red while
@@ -3280,20 +3168,12 @@ button.allot-card:disabled:active {
   -webkit-tap-highlight-color: transparent;
 }
 
->>>>>>> master
 .product-submit__error {
   margin: 2px 0 8px;
   font-size: 13px;
   text-align: center;
 }
 
-<<<<<<< HEAD
-.product-submit .keypad {
-  margin-top: 4px;
-}
-
-=======
->>>>>>> master
 .product-submit__actions {
   width: 100%;
   max-width: 320px;
@@ -3311,12 +3191,6 @@ button.allot-card:disabled:active {
   margin-bottom: 18px;
 }
 
-<<<<<<< HEAD
-.product-submit__summary {
-  width: 100%;
-  max-width: 320px;
-  margin-top: 22px;
-=======
 /* ---- shift-completed confirmation: the counts as a small table ----
    A real <table> (header row + one row per product type + a footer row
    with the shift-end time) replaces the old stacked rows. Scoped to
@@ -3328,35 +3202,10 @@ button.allot-card:disabled:active {
   margin-top: 22px;
   border-collapse: separate;
   border-spacing: 0;
->>>>>>> master
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-input);
   box-shadow: var(--shadow-card);
-<<<<<<< HEAD
-  padding: 6px 16px;
-}
-
-.product-submit__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 0;
-  font-size: 13.5px;
-  color: var(--text-soft);
-}
-
-.product-submit__row + .product-submit__row {
-  border-top: 1px solid var(--border);
-}
-
-.product-submit__row strong {
-  font-size: 15px;
-  color: var(--text);
-}
-
-=======
   overflow: hidden; /* clip the header fill to the rounded corners */
   text-align: left;
 }
@@ -3472,7 +3321,6 @@ button.allot-card:disabled:active {
   }
 }
 
->>>>>>> master
 .product-submit__action {
   width: 100%;
   max-width: 320px;
@@ -3505,11 +3353,7 @@ button.allot-card:disabled:active {
 /* The attach pill inside the reminder sits between the text and Send. */
 .update-reminder__pick {
   margin-top: 14px;
-<<<<<<< HEAD
-  min-height: 48px;
-=======
   min-height: var(--control-h); /* standard control height */
->>>>>>> master
   background: #ffffff;
   border-color: rgba(224, 138, 60, 0.55);
   color: #e08a3c;
@@ -3549,11 +3393,7 @@ button.allot-card:disabled:active {
   width: 100%;
   max-width: 340px;
   margin-top: 22px;
-<<<<<<< HEAD
-  padding: 26px 22px 18px;
-=======
   padding: var(--box-pad); /* standard card padding */
->>>>>>> master
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
@@ -3638,10 +3478,7 @@ button.allot-card:disabled:active {
 /* Quiet full-width button under the primary action ("Report an Issue"). */
 .secondary-button {
   width: 100%;
-<<<<<<< HEAD
-=======
   min-height: var(--control-h); /* standard control height */
->>>>>>> master
   padding: 14px 18px;
   border-radius: var(--radius-input);
   border: 1px solid var(--border);
@@ -3694,8 +3531,6 @@ button.allot-card:disabled:active {
   font-size: 12.5px;
   color: var(--text-soft);
 }
-<<<<<<< HEAD
-=======
 
 /* ==========================================================================
    Auth: PIN unlock (returning login)
@@ -4253,4 +4088,3 @@ button.allot-card:disabled:active {
 .pattern--wrong .pattern__line {
   stroke: var(--danger);
 }
->>>>>>> master

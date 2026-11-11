@@ -29,20 +29,15 @@
   --purple: #8f7bfa;
   --purple-dark: #7a66f0;
   --purple-soft: #e6e0fd;
-<<<<<<< HEAD
-=======
   /* Mock biometric scanner art (fingerprint / Face ID screens). The
      BiometricArt component re-colours itself per state by overriding
      these two variables (see .bio-art--* in screens.css). */
   --bio: var(--blue);
   --bio-soft: var(--blue-soft);
->>>>>>> master
   --radius-card: 24px;
   --radius-input: 14px;
   --radius-key: 20px;
   --shadow-card: 0 10px 30px rgba(23, 35, 59, 0.07);
-<<<<<<< HEAD
-=======
   /* ---- standard box dimensions ----
      One padding for every card/tile container and one height for every
      input/control, so boxes line up across every screen. Applied to
@@ -52,7 +47,6 @@
   --control-h: 54px; /* standard input & control height */
   --tile-min-h: 204px; /* standard 2-column grid tile minimum height */
   --row-min-h: 120px; /* standard full-width row card minimum height */
->>>>>>> master
   /* System fonts only — no extra downloads, feels native on iPhone. */
   --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;

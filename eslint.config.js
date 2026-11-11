@@ -18,8 +18,6 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
-<<<<<<< HEAD
-=======
   {
     // The sync server + browser driver scripts run in Node, not a browser.
     files: ['server/**/*.js', '*.mjs'],
@@ -27,5 +25,4 @@ export default defineConfig([
       globals: { ...globals.browser, ...globals.node },
     },
   },
->>>>>>> master
 ])

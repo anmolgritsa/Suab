@@ -157,19 +157,12 @@ const AUTH_WALK = `
   const out = { steps: [] };
 
   // 1. Login with the supervisor-issued credentials (phone + Employee ID;
-<<<<<<< HEAD
-  //    React controlled inputs need the native value setter).
-  const inputs = $$('input');
-  setReactValue(inputs[0], '9876543210');
-  setReactValue(inputs[1], 'SUAB-1024');
-=======
   //    React controlled inputs need the native value setter). LAB001's
   //    seeded credentials (data/db.js) — the old SUAB-1024 account no
   //    longer exists in the roster.
   const inputs = $$('input');
   setReactValue(inputs[0], '9876540010');
   setReactValue(inputs[1], 'LAB001');
->>>>>>> master
   buttonByText('Login').click();
   for (let i = 0; i < 20 && !document.body.innerText.includes('Mark Attendance'); i += 1) {
     await sleep(100);

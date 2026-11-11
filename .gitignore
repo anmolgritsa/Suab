@@ -25,10 +25,7 @@ dist-ssr
 
 # Transient screenshots written by the browser test scripts
 .tmp-*.png
-<<<<<<< HEAD
-=======
 
 # Local cross-browser sync database (server/dataFile.js) — seed it again
 # any time with `npm run db:seed`; never commit per-machine data
 .data/
->>>>>>> master

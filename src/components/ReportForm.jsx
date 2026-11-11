@@ -8,10 +8,6 @@
  *   2. attachment    MANDATORY photo/video picker — only the file's
  *                    metadata (name, type, size) is kept; nothing is
  *                    uploaded. Submit is blocked until a file is picked.
-<<<<<<< HEAD
- *   3. actions       Submit (saves to suab.issueReports) / Cancel
- *   4. confirmation  after a successful submit: a "Report submitted!"
-=======
  *   3. voice note    OPTIONAL spoken description of the defect, recorded
  *                    with the shared engine in utils/voiceNote.js (the
  *                    same one the half-day request uses): record, play
@@ -19,7 +15,6 @@
  *                    the saved report when it fits MAX_SAVED_AUDIO_CHARS.
  *   4. actions       Submit (saves to suab.issueReports) / Cancel
  *   5. confirmation  after a successful submit: a "Report submitted!"
->>>>>>> master
  *                    state with "Back to Home" and "Submit another"
  *
  * Props:
@@ -33,25 +28,18 @@
 
 import { useRef, useState } from 'react';
 import { useI18n } from '../i18n.jsx';
-<<<<<<< HEAD
-import { saveIssueReport } from '../utils/storage.js';
-=======
 import { addDefectReport, getCurrentLabour } from '../data/db.js';
 import { saveIssueReport } from '../utils/storage.js';
 import { formatVoiceTime, useVoiceNote } from '../utils/voiceNote.js';
->>>>>>> master
 import PrimaryButton from './PrimaryButton.jsx';
 import {
   ArrowLeftIcon,
   CameraIcon,
   CheckCircleIcon,
-<<<<<<< HEAD
-=======
   MicIcon,
   PlayIcon,
   RefreshIcon,
   StopIcon,
->>>>>>> master
   XIcon,
 } from './icons.jsx';
 
@@ -70,13 +58,10 @@ export default function ReportForm({ category, icon, title, subtitle, onBack }) 
   // null until a report is submitted, then the saved record
   const [submitted, setSubmitted] = useState(null);
 
-<<<<<<< HEAD
-=======
   // Optional voice note — the shared recording engine (utils/voiceNote.js):
   // record → play back / retake / delete, persisted as a data URL on submit.
   const voice = useVoiceNote();
 
->>>>>>> master
   // Hidden <input type="file"> — the visible pill button triggers it.
   const fileInputRef = useRef(null);
 
@@ -90,11 +75,6 @@ export default function ReportForm({ category, icon, title, subtitle, onBack }) 
     event.target.value = '';
   }
 
-<<<<<<< HEAD
-  /** Validate, persist to suab.issueReports, then show the confirmation.
-      The attachment is mandatory — a report without the photo/video is
-      rejected with a clear message. */
-=======
   /** Validate, persist, then show the confirmation.
       The attachment is mandatory — a report without the photo/video is
       rejected with a clear message. The voice note is optional: its data
@@ -111,24 +91,11 @@ export default function ReportForm({ category, icon, title, subtitle, onBack }) 
            METADATA ONLY (name/type/size): the picked image/video is
            deliberately NOT uploaded (images-only upload comes later), so
            no file data ever enters the shared DB from this form. */
->>>>>>> master
   function handleSubmit() {
     if (!attachment) {
       setError(t('attachmentRequired'));
       return;
     }
-<<<<<<< HEAD
-    setSubmitted(
-      saveIssueReport({
-        category,
-        timestamp: new Date().toISOString(),
-        attachment,
-      }),
-    );
-  }
-
-  /** "Submit another report" — back to a clean form. */
-=======
     const voiceDataUrl = voice.clip?.dataUrl || undefined;
     // 1) Device-local queue (existing behaviour, untouched).
     const saved = saveIssueReport({
@@ -154,15 +121,11 @@ export default function ReportForm({ category, icon, title, subtitle, onBack }) 
 
   /** "Submit another report" — back to a clean form (the voice note goes
       with it: the next report starts without the previous take). */
->>>>>>> master
   function handleReset() {
     setAttachment(null);
     setError('');
     setSubmitted(null);
-<<<<<<< HEAD
-=======
     voice.deleteClip();
->>>>>>> master
   }
 
   /* ---- confirmation state (after a successful submit) ---- */
@@ -255,13 +218,6 @@ export default function ReportForm({ category, icon, title, subtitle, onBack }) 
         )}
         {error && <p className="field__error">{error}</p>}
 
-<<<<<<< HEAD
-        {/* ---- actions ----
-            Submit wears the default primary style — the same solid blue as
-            the check-in / confirm buttons across the app. ---- */}
-        <div className="report__actions">
-          <PrimaryButton onClick={handleSubmit}>
-=======
         {/* ---- voice note (OPTIONAL — a spoken description of the defect).
              Same engine as the half-day request (utils/voiceNote.js): tap
              the mic pill to record (auto-stops after one minute), then
@@ -326,7 +282,6 @@ export default function ReportForm({ category, icon, title, subtitle, onBack }) 
             voice take is still recording so it can't be saved half-captured. ---- */}
         <div className="report__actions">
           <PrimaryButton onClick={handleSubmit} disabled={voice.recording}>
->>>>>>> master
             {t('submitReport')}
           </PrimaryButton>
           <button type="button" className="link-button" onClick={onBack}>

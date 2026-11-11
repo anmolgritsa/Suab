@@ -8,13 +8,6 @@
  *  - wide     full-width row (icon left, label right) — "Output Defect"
  *
  * Props:
-<<<<<<< HEAD
- *  - icon     SVG node drawn inside the colour badge
- *  - label    translated action name
- *  - color    'amber' | 'blue' | 'green' — picks the card's palette
- *  - wide     render the full-width row variant
- *  - onClick() open the matching report screen
-=======
  *  - icon      SVG node drawn inside the colour badge
  *  - label     translated action name
  *  - color     'amber' | 'blue' | 'green' | 'slate' | 'coral' | 'purple'
@@ -30,20 +23,12 @@
  * padding, --tile-min-h for the tile height and --row-min-h for the wide
  * row height (applied in screens.css). Keep it that way so all boxes
  * across the app stay the same size.
->>>>>>> master
  */
-
-/*hello world*/
 
 const PALETTES = {
   amber: { badge: '#f6a723', soft: '#fdf3d7', text: '#8a5a10' },
   blue: { badge: '#2e83f9', soft: '#e3effd', text: '#1b5fb8' },
   green: { badge: '#22b57f', soft: '#e0f6ec', text: '#157a55' },
-<<<<<<< HEAD
-};
-
-export default function ActionCard({ icon, label, color = 'blue', wide = false, onClick }) {
-=======
   // Neutral slate — the "Other" card's colours (matches allot-card--other).
   slate: { badge: '#7f8eb5', soft: '#edf1f9', text: '#7f8eb5' },
   // Coral & purple — the Other screen's maintenance / activities tiles
@@ -61,7 +46,6 @@ export default function ActionCard({
   note = null,
   onClick,
 }) {
->>>>>>> master
   const palette = PALETTES[color] ?? PALETTES.blue;
 
   const style = {
@@ -76,10 +60,7 @@ export default function ActionCard({
         type="button"
         className="action-card action-card--wide"
         style={style}
-<<<<<<< HEAD
-=======
         disabled={disabled}
->>>>>>> master
         onClick={onClick}
       >
         <span className="action-card__badge" aria-hidden="true">
@@ -94,9 +75,6 @@ export default function ActionCard({
   }
 
   return (
-<<<<<<< HEAD
-    <button type="button" className="action-card" style={style} onClick={onClick}>
-=======
     <button
       type="button"
       className="action-card"
@@ -104,15 +82,11 @@ export default function ActionCard({
       disabled={disabled}
       onClick={onClick}
     >
->>>>>>> master
       <span className="action-card__badge" aria-hidden="true">
         {icon}
       </span>
       <span className="action-card__label">{label}</span>
-<<<<<<< HEAD
-=======
       {note && <span className="action-card__note">{note}</span>}
->>>>>>> master
     </button>
   );
 }

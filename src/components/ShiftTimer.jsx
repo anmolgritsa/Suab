@@ -1,18 +1,4 @@
 /**
-<<<<<<< HEAD
- * ShiftTimer.jsx — the pale-blue pill under the homepage header.
- *
- * It counts up once per second from the shift's start time and calls
- * `onComplete()` exactly once when the shift reaches its full length —
- * the homepage then ends the shift and moves to product submission.
- *
- * The display is a 24-hour-style clock that starts at 00:00:00 when the
- * shift begins (hh:mm:ss, zero-padded so the digits never jitter).
- *
- * Props:
- *  - startedAt   ISO timestamp when the current shift began
- *  - onComplete() called once when the shift reaches SHIFT_DURATION
-=======
  * ShiftTimer.jsx — the pill under the homepage greeting that counts the
  * running shift up ("00:00:00").
  *
@@ -40,44 +26,10 @@
  *  - overtime     the REGULAR shift duration has elapsed — the overtime
  *                 tail of the same timer is running. Purely visual: the
  *                 pill turns orange and the clock gains a plus.
->>>>>>> master
  */
 
 import { useEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n.jsx';
-<<<<<<< HEAD
-import { ClockIcon } from './icons.jsx';
-import {
-  SHIFT_DURATION_MS,
-  formatShiftElapsed,
-  getShiftElapsedMs,
-} from '../utils/shift.js';
-
-export default function ShiftTimer({ startedAt, onComplete }) {
-  const { t } = useI18n();
-  const [elapsed, setElapsed] = useState(() => getShiftElapsedMs(startedAt));
-  const completedRef = useRef(false);
-
-  /* Tick every second so the seconds roll over promptly. */
-  useEffect(() => {
-    const id = setInterval(() => setElapsed(getShiftElapsedMs(startedAt)), 1000);
-    return () => clearInterval(id);
-  }, [startedAt]);
-
-  /* Fire the shift-end callback once, when the full length is reached. */
-  useEffect(() => {
-    if (completedRef.current || elapsed < SHIFT_DURATION_MS) return;
-    completedRef.current = true;
-    onComplete();
-  }, [elapsed, onComplete]);
-
-  const { hours, minutes, seconds } = formatShiftElapsed(elapsed);
-
-  return (
-    <div className="shift-timer" role="timer" aria-label={t('shiftTimerLabel')}>
-      <span className="shift-timer__icon" aria-hidden="true">
-        <ClockIcon size={22} />
-=======
 import { ClockIcon, ClockPlusIcon } from './icons.jsx';
 import {
   dueAlertIndex,
@@ -166,15 +118,10 @@ export default function ShiftTimer({
     >
       <span className="shift-timer__icon" aria-hidden="true">
         {overtime ? <ClockPlusIcon size={22} /> : <ClockIcon size={22} />}
->>>>>>> master
       </span>
       <span className="shift-timer__time">
         {hours}:{minutes}:{seconds}
       </span>
     </div>
-<<<<<<< HEAD
-  );
-=======
   )
->>>>>>> master
 }

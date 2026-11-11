@@ -10,10 +10,6 @@
  * to check that both are present and sensibly formatted.
  */
 
-<<<<<<< HEAD
-/** Example Employee ID shown on the login screen (any valid ID is accepted). */
-export const DEMO_EMPLOYEE_ID = 'SUAB-1024';
-=======
 import { findUserByEmployeeId, USER_ROLES } from '../data/db.js';
 
 /** Example Employee ID shown on the login screen (a seeded labour account). */
@@ -29,7 +25,6 @@ export const DEMO_EMPLOYEE_ID = 'LAB001';
 export function getRoleForEmployeeId(employeeId) {
   return findUserByEmployeeId(employeeId)?.role ?? USER_ROLES.LABOUR;
 }
->>>>>>> master
 
 /** Keep only the digits of a string: '+91 98765 43210' -> '9876543210'. */
 export function onlyDigits(value) {

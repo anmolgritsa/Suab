@@ -1,11 +1,8 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
-<<<<<<< HEAD
-=======
 import { createSyncServer } from './server/syncServer.js'
 
->>>>>>> master
 // https://vite.dev/config/
 //
 // `base` must match the public URL the app is served from. GitHub Pages
@@ -14,11 +11,6 @@ import { createSyncServer } from './server/syncServer.js'
 // Local dev, `vite preview` and the browser test scripts keep working —
 // they read the resolved URL from the Vite server, which already includes
 // the base path.
-<<<<<<< HEAD
-export default defineConfig({
-  base: '/Suab-deploy/',
-  plugins: [react()],
-=======
 //
 // Cross-browser sync: the dev server also mounts a tiny JSON API
 // (GET/PUT /api/db + SSE /api/db/events, persisted to .data/db.json) so
@@ -87,5 +79,4 @@ export default defineConfig(() => {
     // regardless of which URL form the client used.
     plugins: [react(), syncServerPlugin(base)],
   }
->>>>>>> master
 })

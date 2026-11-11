@@ -3,23 +3,6 @@
  *
  * A shift is a plain duration measured from the moment the worker first
  * opens the homepage (persisted in localStorage by storage.js so it
-<<<<<<< HEAD
- * survives a refresh). Two knobs drive the demo:
- *
- *   SHIFT_DURATION_MINUTES full shift length — the shift auto-ends here
- *   DEMO_INTERVAL_MINUTES  how often the "work update needed" reminder pops
- *
- * Both are plain constants so testers can shrink them (e.g. 0.05 = 3
- * seconds) and watch the whole flow without waiting real hours.
- *
- * DEMO TIMINGS (for testing): a real factory shift is 8 hours with a
- * work-update reminder every 3 hours (180 minutes). For the demo both
- * are shrunk — a 5-minute shift and a 2-minute reminder — so the whole
- * flow (check-in → reminder → shift end → product submission) can be
- * watched in a few minutes. Restore the real values with:
- *   SHIFT_DURATION_MINUTES = 8 * 60   (480)
- *   DEMO_INTERVAL_MINUTES  = 3 * 60   (180)
-=======
  * survives a refresh). The demo knobs:
  *
  *   SHIFT_DURATION_MINUTES   full shift length — the shift auto-ends here
@@ -54,26 +37,11 @@
  *   SHIFT_DURATION_MINUTES  = 480   HALF_SHIFT_MINUTES      = 240
  *   HALF_DAY_BUTTON_MINUTES = 240   ALERT_MILESTONES_MINUTES = [240, 420]
  *   OVERTIME_MINUTES_PER_HOUR = 60  (an approved hour really is an hour)
->>>>>>> master
  */
 
 /** Full shift length in minutes. A real factory shift is 8 hours (480). */
 export const SHIFT_DURATION_MINUTES = 5;
 
-<<<<<<< HEAD
-/**
- * How often the "Work update needed" reminder appears, in minutes.
- * The mockup asks for every 3 hours (180 minutes); the demo shrinks it
- * to 3 minutes so the reminder pops during a short test run.
- *
- * FOR QUICK TESTING: set this to a fraction — `0.05` is 3 seconds,
- * `1` is one minute — and the reminder will pop almost immediately.
- */
-export const DEMO_INTERVAL_MINUTES = 3;
-
-export const SHIFT_DURATION_MS = SHIFT_DURATION_MINUTES * 60 * 1000;
-export const REMINDER_INTERVAL_MS = DEMO_INTERVAL_MINUTES * 60 * 1000;
-=======
 /** Half shift length in minutes. A real half-day is 4 hours (240). */
 export const HALF_SHIFT_MINUTES = 3;
 
@@ -149,7 +117,6 @@ export function shiftDurationMinutes(type, overtimeHours = 0) {
   const base = type === 'half' ? HALF_SHIFT_MINUTES : SHIFT_DURATION_MINUTES;
   return base + overtimeExtensionMs(overtimeHours) / (60 * 1000);
 }
->>>>>>> master
 
 /** Milliseconds elapsed since the shift started (never negative). */
 export function getShiftElapsedMs(startIso) {
@@ -158,26 +125,6 @@ export function getShiftElapsedMs(startIso) {
   return Math.max(0, Date.now() - start);
 }
 
-<<<<<<< HEAD
-/** Has the shift reached its full length? */
-export function isShiftComplete(startIso) {
-  return getShiftElapsedMs(startIso) >= SHIFT_DURATION_MS;
-}
-
-/**
- * Is it time to show the work-update reminder again?
- *
- * Rule: the first reminder waits one full interval of WORK time, and
- * after that a new one is due once a full interval has passed since the
- * last one was shown (whether it was sent or dismissed).
- */
-export function isReminderDue(startIso, lastReminderIso) {
-  const elapsed = getShiftElapsedMs(startIso);
-  if (elapsed < REMINDER_INTERVAL_MS) return false;
-  const anchor = lastReminderIso ? new Date(lastReminderIso).getTime() : new Date(startIso).getTime();
-  if (Number.isNaN(anchor)) return true;
-  return Date.now() - anchor >= REMINDER_INTERVAL_MS;
-=======
 /** Has the shift reached its full length (including approved overtime)? */
 export function isShiftComplete(startIso, type = 'full', overtimeHours = 0) {
   return getShiftElapsedMs(startIso) >= shiftDurationMs(type, overtimeHours);
@@ -211,7 +158,6 @@ export function dueAlertIndex(elapsedMs, alertsShown) {
     due = i;
   }
   return due;
->>>>>>> master
 }
 
 /**

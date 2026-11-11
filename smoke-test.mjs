@@ -1,13 +1,4 @@
 /**
-<<<<<<< HEAD
- * smoke-test.mjs — quick node check of the pure validation logic.
- * Run with:  node smoke-test.mjs
- * (Not part of the app bundle — just a developer sanity check.)
- *
- * There is no signup and no PIN: a worker logs in with the mobile number
- * and Employee ID their supervisor handed out, so the validators only have
- * to check that both are present and sensibly formatted.
-=======
  * smoke-test.mjs — quick node check of the pure logic layers.
  * Run with:  node smoke-test.mjs
  * (Not part of the app bundle — just a developer sanity check.)
@@ -19,7 +10,6 @@
  *   2. the PIN vault (utils/secureStore.js) — save / read / verify / clear
  *      round-trip, plus the "the PIN is never stored as plain text" and
  *      "a corrupted vault degrades to no-PIN" guarantees.
->>>>>>> master
  */
 
 import {
@@ -56,8 +46,6 @@ t('login bad phone reported first', checkLogin('12345', 'SUAB-1024'), 'Phone num
 t('login ok', checkLogin('9876543210', 'SUAB-1024'), '')
 console.log('DEMO_EMPLOYEE_ID =', DEMO_EMPLOYEE_ID)
 
-<<<<<<< HEAD
-=======
 /* ---- async flavour of t() for the PIN vault ----
    every ta(...) call below is awaited: t() bumps `failures` from inside
    a microtask, so an un-awaited call would settle after the exit-code
@@ -127,7 +115,6 @@ clearPinAuth()
 await ta('hasPinAuth after clear', hasPinAuth(), false)
 await ta('getPinAuth after clear', getPinAuth(), null)
 
->>>>>>> master
 if (failures > 0) {
   console.log(`\n${failures} test(s) FAILED`)
   process.exit(1)
