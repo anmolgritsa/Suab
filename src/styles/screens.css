@@ -2240,6 +2240,30 @@ button.allot-card:disabled:active {
   gap: 10px;
 }
 
+/* ---- End Shift button (manual early shift end) ----
+   Always visible while a shift is running: lets the worker end the shift
+   at any moment and go straight to Product Submission (the same route the
+   timer's auto-end uses). Reuses the shared .btn-primary pill (54px
+   control height, 999px radius, 16px/700 label, --blue fill) so it matches
+   every other primary button in the app; only the placement wrapper is
+   new. Sits directly under the shift timer, above the overtime badge and
+   the action grid — the SOS button and everything below stay untouched. */
+.home__endshift {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.home__endshift .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.home__endshift .btn-primary svg {
+  flex-shrink: 0; /* the stop icon never squashes on narrow screens */
+}
+
 /* ---- SOS button (pinned near the bottom of the homepage) ---- */
 .home__sos {
   width: 100%;

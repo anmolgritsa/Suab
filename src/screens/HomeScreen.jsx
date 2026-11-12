@@ -63,6 +63,7 @@ import {
   CogIcon,
   DotsIcon,
   PackageIcon,
+  StopIcon,
   WrenchIcon,
 } from '../components/icons.jsx';
 import { useI18n } from '../i18n.jsx';
@@ -418,6 +419,29 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
           onComplete={endShiftNow}
           overtime={overtimeShiftStarted}
         />
+      )}
+
+      {/* End Shift — ALWAYS available while a shift is running. Lets the
+          worker end the shift manually at any moment (no waiting for the
+          timer's auto-end) and goes straight to Product Submission, the
+          same route the timer's auto-end uses (onShiftEnd → App's
+          setScreen('product-submission')). endShiftNow is the ONE shared
+          shift-end path (clears the shift, closes the reminder, navigates),
+          so this button adds no new teardown logic. Blue pill + stop icon,
+          matching the app's .btn-primary standard (54px control height,
+          999px pill radius, 16px/700 label). Sits directly under the timer
+          so the SOS button and the action grid below stay untouched. */}
+      {startedAt && (
+        <div className="home__endshift">
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={endShiftNow}
+          >
+            <StopIcon size={18} aria-hidden="true" />
+            <span>{t('endShiftEarly')}</span>
+          </button>
+        </div>
       )}
 
       {/* Overtime indicator — the ONLY overtime badge on this screen, and
