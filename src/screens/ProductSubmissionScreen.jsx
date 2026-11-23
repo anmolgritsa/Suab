@@ -2,6 +2,8 @@
  * ProductSubmissionScreen.jsx — the product-count screen the worker lands
  * on when the shift ends.
  *
+ * Updated: 2026-11-20
+ *
  * Layout, top to bottom:
  *   1. header      SUAB logo + language dropdown
  *   2. title       "Product Submission" + shift-complete subtitle
@@ -22,7 +24,8 @@
  * suab.productSubmissions as { successful, rejected, reusable, quantity,
  * shiftEndTime, endedEarly? } (the shift-completed confirmation reads it —
  * the three counts presented as a small table (.output__table* rules:
- * header row, one row per product type, the shift-end time in its footer)
+ * header row, one row per product type, the shift-end date and time in
+ * separate footer rows)
  * with "Start New Shift" / "Logout"), AND to the SHARED DB document
  * (data/db.js addProductSubmission → collections.productSubmissions) so
  * the supervisor's Reports screen shows the submission live via the sync
@@ -45,6 +48,7 @@ import BrandLogo from '../components/BrandLogo.jsx';
 import LanguageDropdown from '../components/LanguageDropdown.jsx';
 import QuantityField from '../components/QuantityField.jsx';
 import {
+  CalendarIcon,
   CheckCircleIcon,
   ClockIcon,
   PackageIcon,
@@ -59,6 +63,7 @@ import {
 import {
   clearShiftAlertsShown,
   clearShiftStart,
+  formatDateShort,
   formatTime12h,
   getAssignedQuantity,
   getShiftStart,
@@ -268,7 +273,8 @@ export default function ProductSubmissionScreen({ onStartNewShift }) {
 
           {/* The submitted counts as a small table: header row, one row
               per product type (icon + label + count), and the shift-end
-              time in the footer. Styling: .output__table* rules. */}
+              date + time together in the footer. Styling: .output__table*
+              rules. */}
           <table className="output__table">
             <thead>
               <tr>
@@ -324,6 +330,19 @@ export default function ProductSubmissionScreen({ onStartNewShift }) {
             <tfoot>
               <tr>
                 <td colSpan={2} className="output__foot">
+                  {/* Date row: calendar icon + the translated label with the
+                      formatted date in bold. */}
+                  <span className="output__foot-inner">
+                    <CalendarIcon size={14} />
+                    {t('shiftEndedOn')}:
+                    <strong>{formatDateShort(completed.shiftEndTime)}</strong>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td colSpan={2} className="output__foot">
+                  {/* Time row: clock icon + the translated label with the
+                      12-hour time in bold. */}
                   <span className="output__foot-inner">
                     <ClockIcon size={14} />
                     {t('shiftEndedAt')}:

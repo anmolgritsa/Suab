@@ -187,7 +187,10 @@ export default function SupervisorRequestsScreen({ onBack }) {
   function decide(request, status) {
     if (request.live) {
       const decided = setRequestDecision(request.id, status);
-      if (!decided) return; // already decided (another tab won the race)
+      // decided.decided is false when the store refused the decision —
+      // already handled in another tab, or (mutual exclusion) the other
+      // request type is already approved. The card keeps its real status.
+      if (!decided?.decided) return;
     } else {
       setRequestStatus(request.id, status);
     }

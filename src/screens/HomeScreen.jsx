@@ -255,8 +255,20 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
       // The approval toast is scheduled (0 ms) rather than set
       // synchronously in the effect body — same immediate behaviour,
       // without the cascading render that
-      // react-hooks/set-state-in-effect warns about.
-      const toastTimer = setTimeout(() => setToast(t('halfDayApproved')), 0);
+      // react-hooks/set-state-in-effect warns about. It fires ONCE per
+      // approval: the approvedNotified flag is patched into the SHARED
+      // record (data/db.js — the same one-shot pattern the overtime
+      // toast uses), so the sync resync's fresh record objects (a new
+      // identity every poll) never repeat it.
+      const toastTimer = setTimeout(() => {
+        if (!halfDayRequest.approvedNotified) {
+          const announced = patchRequest(halfDayRequest.id, {
+            approvedNotified: true,
+          });
+          if (announced) setHalfDayRequest(announced);
+          setToast(t('halfDayApproved'));
+        }
+      }, 0);
       const timer = setTimeout(() => setHalfDayButtonReady(true), remaining);
       return () => {
         clearTimeout(toastTimer);
@@ -421,29 +433,6 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
         />
       )}
 
-      {/* End Shift — ALWAYS available while a shift is running. Lets the
-          worker end the shift manually at any moment (no waiting for the
-          timer's auto-end) and goes straight to Product Submission, the
-          same route the timer's auto-end uses (onShiftEnd → App's
-          setScreen('product-submission')). endShiftNow is the ONE shared
-          shift-end path (clears the shift, closes the reminder, navigates),
-          so this button adds no new teardown logic. Blue pill + stop icon,
-          matching the app's .btn-primary standard (54px control height,
-          999px pill radius, 16px/700 label). Sits directly under the timer
-          so the SOS button and the action grid below stay untouched. */}
-      {startedAt && (
-        <div className="home__endshift">
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={endShiftNow}
-          >
-            <StopIcon size={18} aria-hidden="true" />
-            <span>{t('endShiftEarly')}</span>
-          </button>
-        </div>
-      )}
-
       {/* Overtime indicator — the ONLY overtime badge on this screen, and
           it appears exclusively once the REGULAR shift duration has
           elapsed (isRegularShiftComplete ignores the approved overtime
@@ -559,6 +548,30 @@ export default function HomeScreen({  onShiftEnd, onOpenScreen, onResetDemo }) {
           onClick={() => onOpenScreen('other')}
         />
       </main>
+
+      {/* End Shift — ALWAYS available while a shift is running. Lets the
+          worker end the shift manually at any moment (no waiting for the
+          timer's auto-end) and goes straight to Product Submission, the
+          same route the timer's auto-end uses (onShiftEnd → App's
+          setScreen('product-submission')). endShiftNow is the ONE shared
+          shift-end path (clears the shift, closes the reminder, navigates),
+          so this button adds no new teardown logic. Blue pill + stop icon,
+          matching the app's .btn-primary standard (54px control height,
+          999px pill radius, 16px/700 label). Sits right above the SOS
+          button — the SOS keeps its margin-top:auto pin, so this button
+          renders immediately before it at the bottom of the screen. */}
+      {startedAt && (
+        <div className="home__endshift">
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={endShiftNow}
+          >
+            <StopIcon size={18} aria-hidden="true" />
+            <span>{t('endShiftEarly')}</span>
+          </button>
+        </div>
+      )}
 
       <div className="home__sos">
         <SosButton onNotify={setToast} />

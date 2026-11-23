@@ -206,6 +206,17 @@ export function formatTime12h(isoString) {
     .toUpperCase();
 }
 
+/** '2026-11-20T16:12:00.000Z' -> '20 Nov 2026' in the device's local time. */
+export function formatDateShort(isoString) {
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleDateString([], {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
 /* ---- Active shift (Part 3 — labour homepage) ----
  *
  * A shift starts the first time the worker opens the homepage and keeps

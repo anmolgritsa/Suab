@@ -2,12 +2,17 @@
  * i18n.jsx — tiny translation layer (no i18n library).
  *
  * One provider holds the active language (persisted in localStorage so the
- * choice survives refreshes) and hands every screen a t(key) lookup. All
- * five demo languages currently ship the English copy for keys without a
- * dedicated translation; the structure (and the language dropdown) is
- * ready for per-language strings to be filled in.*/
+ * choice survives refreshes) and hands every screen a t(key) lookup. The
+ * English dictionary lives here; the Hindi, Bengali, Punjabi and Telugu
+ * dictionaries live in src/i18n/translations.js and are merged in below. */
 import { createContext, useCallback, useContext, useState } from 'react';
 import { getLanguage, setLanguage } from './utils/storage.js';
+import {
+  hi as hiDict,
+  bn as bnDict,
+  pa as paDict,
+  te as teDict,
+} from './i18n/translations.js';
 
 /* An i18n module is a provider + hook + constants by design: the language
    list (LANGUAGES), the context hook (useI18n) and the <I18nProvider>
@@ -140,6 +145,7 @@ const en = {
     shiftCompletedSub: "Your product count has been submitted.",
     submittedQuantity: "Quantity submitted",
     shiftEndedAt: "Shift ended at",
+    shiftEndedOn: "Shift ended on",
     logout: "Logout",
     backToHome: "Back to Home",
     startNewShift: "Start New Shift",
@@ -224,14 +230,12 @@ const en = {
     inputSpec3: "IS 2062",
     materialLabel: "Material",
     productDimensionsTitle: "Product Dimensions",
-    productDimensionsSub: "Finished output of this machine",
-    widthLabel: "Width",
+    productDimensionsSub: "Stainless Steel Welded Pipes & Tubes",
+    lengthLabel: "Length",
     thicknessLabel: "Thickness",
     coilWeightLabel: "Coil Weight",
-    dimWidth: "1250 mm",
-    dimThickness: "0.5 mm",
-    dimCoilWeight: "2.5 t",
-    dimGrade: "SS 304",
+    outerDiameterLabel: "Outer Diameter",
+    wallThicknessLabel: "Wall Thickness",
     other: "Other",
     otherTitle: "Other",
     otherSub: "Requests & updates",
@@ -430,10 +434,10 @@ const en = {
   };
 const translations = {
   en,
-  hi: { ...en },
-  bn: { ...en },
-  pa: { ...en },
-  te: { ...en },
+  hi: hiDict,
+  bn: bnDict,
+  pa: paDict,
+  te: teDict,
 };
 
 const I18nContext = createContext(null);

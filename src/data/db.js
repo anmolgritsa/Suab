@@ -550,6 +550,68 @@ const REQUEST_MIN_HOURS = 1;
 const REQUEST_MAX_HOURS = 8;
 
 /**
+ * Demo auto-approval delay: a freshly filed request approves ITSELF this
+ * long after submission, so the labour homepage's approval reactions (the
+ * "Half Day Approved" / "Overtime Started" toasts, the shortened or
+ * stretched timer) play out without waiting for the supervisor. The
+ * supervisor can still decide earlier from the Requests inbox — whichever
+ * decision lands first wins (the timer re-checks the status before acting).
+ */
+const AUTO_APPROVAL_DELAY_MS = 5000;
+
+/** The counterpart request type — the two approvals are mutually exclusive. */
+function oppositeRequestType(type) {
+  return type === REQUEST_TYPES.HALF_DAY
+    ? REQUEST_TYPES.OVERTIME
+    : REQUEST_TYPES.HALF_DAY;
+}
+
+/**
+ * Auto-approval timers armed by THIS browser, keyed by request id (a Map:
+ * several requests can be filed in one session, and each is armed at most
+ * once — addRequest's duplicate guard refuses a repeat). They live at module
+ * scope so a timer keeps running when the submission screen unmounts; a page
+ * refresh mid-window simply leaves the request pending for the supervisor.
+ */
+const autoApprovalTimers = new Map();
+
+/**
+ * Arm the automatic approval for a freshly created request: after
+ * AUTO_APPROVAL_DELAY_MS the pending record is approved (status, decidedAt,
+ * decidedBy 'auto', approvedAt) — the same write path as the supervisor's
+ * decision, so every screen and browser sees it live. Fire-time guards:
+ * a request the supervisor already decided is left untouched, and if the
+ * counterpart type is already approved the pending request is CANCELLED
+ * instead (only one request type may be active at a time — see
+ * setRequestDecision).
+ */
+function scheduleRequestAutoApproval(record) {
+  if (typeof window === 'undefined') return; // non-browser tooling
+  const armed = autoApprovalTimers.get(record.id);
+  if (armed) clearTimeout(armed);
+  const timer = setTimeout(() => {
+    autoApprovalTimers.delete(record.id);
+    // Re-read the record: the supervisor may have decided while the timer
+    // ran — only a still-pending request is auto-decided here.
+    const fresh = getRequestById(record.id);
+    if (!fresh || fresh.status !== REQUEST_STATUSES.PENDING) return;
+    const counterpart = findActiveRequest(
+      fresh.labourId,
+      oppositeRequestType(fresh.type),
+      fresh.date,
+    );
+    if (counterpart && counterpart.status === REQUEST_STATUSES.APPROVED) {
+      // The counterpart type already won — cancel this one so the two
+      // request types can never be active together.
+      setRequestDecision(fresh.id, REQUEST_STATUSES.REJECTED, 'auto');
+      return;
+    }
+    setRequestDecision(fresh.id, REQUEST_STATUSES.APPROVED, 'auto');
+  }, AUTO_APPROVAL_DELAY_MS);
+  autoApprovalTimers.set(record.id, timer);
+}
+
+/**
  * File a half-day / overtime request from a labourer — IDEMPOTENT.
  *
  * payload: { labourId, labourName, type (REQUEST_TYPES), hours (overtime),
@@ -600,6 +662,17 @@ export function addRequest(payload = {}) {
   const date = todayKey();
   const duplicate = findActiveRequest(labourId, type, date);
   if (duplicate) return { record: duplicate, created: false };
+  // One request type at a time: a pending or approved request of the OTHER
+  // type blocks a fresh application (the two approvals are mutually
+  // exclusive — see setRequestDecision). record is null (like an invalid
+  // payload) so the caller never adopts another type's record into its
+  // state; created: false makes it show the "already requested" message.
+  const otherActive = findActiveRequest(
+    labourId,
+    oppositeRequestType(type),
+    date,
+  );
+  if (otherActive) return { record: null, created: false };
 
   const requestedAt = payload.requestedAt ?? new Date().toISOString();
   const stamp = new Date().toISOString();
@@ -624,6 +697,10 @@ export function addRequest(payload = {}) {
   const db = getDb();
   db.collections.requests.push(record);
   saveDb(db);
+  // Demo auto-approval: the pending request approves itself 5 s after
+  // submission (scheduleRequestAutoApproval above) — the supervisor can
+  // still decide first, and whichever decision lands first wins.
+  scheduleRequestAutoApproval(record);
   return { record, created: true };
 }
 
@@ -634,6 +711,11 @@ export function addRequest(payload = {}) {
  * be decided; an already approved/rejected one is returned untouched
  * ({ record, decided: false }), so a double-tap or two supervisors can never
  * flip a decision twice. The write syncs to every browser via saveDb().
+ *
+ * Mutually exclusive approvals: approving one request type CANCELS the
+ * labourer's pending request of the other type in the same write (and
+ * refuses to approve when the other type is ALREADY approved), so a
+ * half-day and an overtime approval can never be active together.
  *
  * Returns { record, decided } — record is null for unknown ids / bad status.
  */
@@ -650,9 +732,42 @@ export function setRequestDecision(id, status, decidedBy = null) {
   if (record.status !== REQUEST_STATUSES.PENDING) {
     return { record, decided: false }; // already decided — never re-decide
   }
+  if (status === REQUEST_STATUSES.APPROVED) {
+    const counterpart = findActiveRequest(
+      record.labourId,
+      oppositeRequestType(record.type),
+      record.date,
+    );
+    // Only one request type may be active at a time: an already-approved
+    // counterpart blocks this approval (the caller keeps its pending card).
+    if (counterpart && counterpart.status === REQUEST_STATUSES.APPROVED) {
+      return { record, decided: false };
+    }
+    // A pending counterpart is cancelled with this approval — the two
+    // types can never overlap. The cancellation is attributed to the same
+    // actor as the approval itself.
+    if (counterpart && counterpart.status === REQUEST_STATUSES.PENDING) {
+      const pending = db.collections.requests.find(
+        (r) => r.id === counterpart.id,
+      );
+      if (pending) {
+        pending.status = REQUEST_STATUSES.REJECTED;
+        pending.decidedAt = new Date().toISOString();
+        pending.decidedBy = decidedBy == null ? null : String(decidedBy);
+        pending.updatedAt = new Date().toISOString();
+      }
+    }
+  }
   record.status = status;
   record.decidedAt = new Date().toISOString();
   record.decidedBy = decidedBy == null ? null : String(decidedBy);
+  // The approval stamp the labour homepage anchors its reactions on (the
+  // half-day button delay and the overtime window both count from it).
+  // setRequestDecision never wrote it before — the homepage fell back to
+  // Date.now() for records approved without one (see HomeScreen.jsx).
+  if (status === REQUEST_STATUSES.APPROVED && !record.approvedAt) {
+    record.approvedAt = record.decidedAt;
+  }
   record.updatedAt = new Date().toISOString();
   saveDb(db);
   return { record, decided: true };
