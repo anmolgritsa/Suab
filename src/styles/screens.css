@@ -662,7 +662,9 @@ button.allot-card:active {
    ========================================================================== */
 
    /* ProductDimensionsScreen.css
-   Everything is prefixed with .pd so it won't clash with existing styles. */
+   Everything is prefixed with .pd so it won't clash with existing styles.
+   Rebuilt 2026-11-23 to match the new UI mockup: lavender product card
+   with a purple coil illustration, then white dimension tiles. */
 
 /* Make the main area a column so the content block can sit in the
    vertical centre of the screen (below the header). */
@@ -676,17 +678,33 @@ button.allot-card:active {
   --pd-muted: #6b7194;
   --pd-purple: #8b6cf6;
   --pd-purple-deep: #6a4de0;
-  --pd-tint: #ece6ff;
+  --pd-tint: #ebe5fe;
   --pd-card: #ffffff;
 
   width: 100%;
   max-width: 420px;
   margin: auto;                 /* centres vertically + horizontally */
-  padding: 8px 20px 32px;
+  padding: 0 20px 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+/* ---------- Back chevron (no chip, per mockup) ---------- */
+.pd-back {
+  align-self: flex-start;
+  margin: 2px 0 6px;
+  padding: 4px;
+  border: 0;
+  background: none;
+  color: var(--pd-ink, #141a3a);
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.pd-back:active {
+  opacity: 0.6;
 }
 
 /* ---------- Title ---------- */
@@ -699,85 +717,68 @@ button.allot-card:active {
   letter-spacing: -0.01em;
 }
 .pd__subtitle {
-  margin: 6px 0 24px;
+  margin: 6px 0 18px;
   font-size: 16px;
   color: var(--pd-muted);
 }
 
-/* ---------- Product figure (CSS-drawn pipe with callouts) ---------- */
-.pd-figure {
-  position: relative;
+/* ---------- Product card (lavender panel) ---------- */
+.pd-card {
   width: 100%;
-  height: 210px;
-  margin-top: 4px;
-  border-radius: 28px;
-  background: linear-gradient(160deg, #e6defe 0%, #f3efff 100%);
-  box-shadow: 0 14px 34px rgba(106, 77, 224, 0.18);
-}
-/* The pipe itself: a horizontal cylinder with rounded ends and a
-   highlight stripe to suggest the steel sheen. */
-.pd-figure__pipe {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 62%;
-  height: 64px;
-  transform: translate(-50%, -50%);
-  border-radius: 32px;
-  background: linear-gradient(180deg, #b9aefc 0%, #8b6cf6 55%, #6a4de0 100%);
-  box-shadow: inset 0 6px 12px rgba(255, 255, 255, 0.45),
-    inset 0 -8px 14px rgba(60, 34, 150, 0.35),
-    0 10px 22px rgba(106, 77, 224, 0.35);
-}
-/* Flanges: vertical caps at both ends of the pipe. */
-.pd-figure__flange {
-  position: absolute;
-  top: 50%;
-  width: 16px;
-  height: 96px;
-  transform: translateY(-50%);
-  border-radius: 8px;
-  background: linear-gradient(180deg, #d4c9ff 0%, #9d85f8 100%);
-  box-shadow: 0 6px 14px rgba(106, 77, 224, 0.35);
-}
-.pd-figure__flange--left {
-  left: 15%;
-}
-.pd-figure__flange--right {
-  right: 15%;
-}
-
-/* Callouts: label + value pairs pinned around the drawing. */
-.pd-callout {
-  position: absolute;
+  padding: 18px 16px 20px;
+  border-radius: 24px;
+  background: var(--pd-tint);
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  text-align: left;
+  align-items: center;
 }
-.pd-callout--length {
-  left: 8%;
-  bottom: 12px;
-}
-.pd-callout--diameter {
-  right: 6%;
-  top: 12px;
-  text-align: right;
-}
-.pd-callout--wall {
-  right: 6%;
-  bottom: 12px;
-  text-align: right;
-}
-.pd-callout__label {
-  font-size: 12.5px;
+.pd-card__label {
+  font-size: 15px;
   font-weight: 600;
   color: var(--pd-muted);
 }
-.pd-callout__value {
-  font-size: 17px;
+.pd-card__name {
+  margin-top: 2px;
+  font-size: 19px;
   font-weight: 800;
   color: var(--pd-ink);
+}
+/* Big coil illustration */
+.pd-card__art {
+  width: 128px;
+  height: 128px;
+  margin: 14px 0 6px;
+  display: block;
+}
+
+/* ---------- Grade row (white disc + side-view coil pill) ---------- */
+.pd-grade {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* White disc carrying the "Grade" label */
+.pd-grade__disc {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--pd-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pd-grade__disc-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pd-muted);
+}
+/* Side-view coil carrying the grade value */
+.pd-grade__pill {
+  width: 118px;
+  height: 52px;
+  margin-left: -14px; /* tucks the coil into the disc, as in the mockup */
+  display: block;
 }
 
 /* ---------- Dimension tiles ---------- */
@@ -787,18 +788,23 @@ button.allot-card:active {
   padding: 0;
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* one row of three tiles */
-  gap: 10px;
+  grid-template-columns: repeat(2, 1fr); /* two half-width tiles */
+  gap: 12px;
+}
+/* The full-width tile row (Coil Weight) */
+.pd-grid--full {
+  grid-template-columns: 1fr;
+  margin-top: 12px;
 }
 .pd-tile {
-  padding: var(--box-pad); /* standard card padding */
-  border-radius: 22px;
+  padding: 16px 12px;
+  border-radius: 18px;
   background: var(--pd-card);
   box-shadow: 0 8px 22px rgba(20, 26, 58, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 .pd-tile__label {
   font-size: 15px;
@@ -806,42 +812,19 @@ button.allot-card:active {
   color: var(--pd-muted);
 }
 .pd-tile__value {
-  font-size: 28px;
+  font-size: 26px;
   line-height: 1.1;
   font-weight: 800;
   color: var(--pd-ink);
 }
 
-/* ---------- Grade pill ---------- */
-.pd-grade {
-  margin-top: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 8px 8px 16px;
-  border-radius: 999px;
-  background: var(--pd-card);
-  box-shadow: 0 4px 12px rgba(20, 26, 58, 0.08);
-}
-.pd-grade__label {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--pd-muted);
-}
-.pd-grade__value {
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 17px;
-  font-weight: 800;
-  color: #fff;
-  background: var(--pd-purple-deep);
-}
-
 /* Small phones */
 @media (max-width: 360px) {
   .pd__title { font-size: 24px; }
-  .pd-callout__value { font-size: 15px; }
-  .pd-tile__value { font-size: 24px; }
+  .pd-card__art { width: 108px; height: 108px; }
+  .pd-grade__disc { width: 84px; height: 84px; }
+  .pd-grade__pill { width: 104px; height: 46px; }
+  .pd-tile__value { font-size: 22px; }
 }
 
 .detail__main {
